@@ -1,0 +1,214 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "banner-image",
+      "settings": {
+        "full_width": true,
+        "banner_height": 400
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "page_alignment": "a-left"
+      }
+    },
+    "rich_text_rB4nz9": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "title": "Partner with Mash SuperFood",
+        "rich_text": "<p>By partnering with <strong>Mash SuperFood,</strong> you’re promoting products that align with a modern, health-conscious lifestyle while earning commissions for recommending something you truly believe in.</p>",
+        "heading_size": 40,
+        "text_size": 20,
+        "page": "",
+        "alignment": "a-center",
+        "content_width": 65,
+        "section_padding": "both",
+        "color_scheme": "3"
+      }
+    },
+    "image_with_text_cLLWLN": {
+      "type": "image-with-text",
+      "name": "Image with text",
+      "settings": {
+        "iwt_image": "shopify://shop_images/generated_image2.png",
+        "iwt_layout": "image_left",
+        "iwt_heading": "Join Our Affiliate Program",
+        "iwt_text": "<p>At <strong>Mash SuperFood,</strong> we’re more than syrups – we’re about bringing joy and flavor to everyday moments. As an <strong>affiliate</strong>, you’ll join a community of passionate individuals who share their love for coffee, desserts, and creativity</p>",
+        "iwt_button": "Get More Rewards",
+        "iwt_link": "https://af.uppromote.com/kjwxud-sa/register",
+        "show_box_shadow": false,
+        "color_scheme": "2",
+        "iwt_section_height": 500,
+        "section_padding": "both"
+      }
+    },
+    "hero_image_with_text_fxzmwQ": {
+      "type": "hero-image-with-text",
+      "name": "Hero image with text",
+      "settings": {
+        "image": "shopify://shop_images/Scherm_afbeelding_2025-10-13_om_15.46.51.png",
+        "image_height": "fixed",
+        "desktop_height": 550,
+        "mobile_height": 400,
+        "desktop_image_placement": "right",
+        "text_align": "left",
+        "section_width": "narrow",
+        "vertical_align": "top",
+        "title": "How It Works – Simple & Fun",
+        "text": "<p><strong>Sign Up for Free:</strong> It takes less than 5 minutes to start your <strong>Mash SuperFood </strong>affiliate journey.</p><p><strong>Share the Flavor:</strong> Promote  <strong>Mash SuperFood</strong> with your unique link on social media, blogs, or with your friends.</p><p><strong>Earn Rewards:</strong> Your friends get <strong>20% off</strong> their first order, and you earn <strong>10% commission</strong> on every order they place. Sharing great flavors has never been so rewarding</p>",
+        "heading_size": 41,
+        "text_size": 18,
+        "button": "Join Us Now",
+        "link": "https://af.uppromote.com/kjwxud-sa/register",
+        "section_padding": "bottom",
+        "color_scheme": "3",
+        "color_header": false
+      }
+    },
+    "text_with_icons_kKNKK4": {
+      "type": "text-with-icons",
+      "blocks": {
+        "text_block_QGKaMi": {
+          "type": "text_block",
+          "settings": {
+            "icon": "chat",
+            "link": "",
+            "title": "Invite your Friends",
+            "subheading": "<p>Send your referral link to friends who love coffee, smoothies, or sweet treats</p>"
+          }
+        },
+        "text_block_3imbkP": {
+          "type": "text_block",
+          "settings": {
+            "icon": "credit-card",
+            "link": "",
+            "title": "They Get a Discount",
+            "subheading": "<p>Your friend enjoys a special deal on their first order through your referral</p>"
+          }
+        },
+        "text_block_38zCx7": {
+          "type": "text_block",
+          "settings": {
+            "icon": "cart",
+            "link": "",
+            "title": "You Earn $5",
+            "subheading": "<p>After they place an order, you earn a reward. It’s as simple as that</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_block_QGKaMi",
+        "text_block_3imbkP",
+        "text_block_38zCx7"
+      ],
+      "name": "Text with icons",
+      "settings": {
+        "title": "It’s Easy to Share the Love",
+        "text_align": "center",
+        "size": 20,
+        "color_scheme": "3",
+        "section_padding": "both"
+      }
+    },
+    "1626883542b88f92db": {
+      "type": "editorial-columns",
+      "blocks": {
+        "1626883542b88f92db-0": {
+          "type": "text_block",
+          "disabled": true,
+          "settings": {
+            "title": "Our collections",
+            "subheading": "<p>Pair text with an image to give focus to your chosen content. Add details on availability, style, or even provide a review.</p>",
+            "button": "Learn More",
+            "link": ""
+          }
+        },
+        "1626883542b88f92db-1": {
+          "type": "text_block",
+          "settings": {
+            "title": "Our collections",
+            "subheading": "<p>Pair text with an image to give focus to your chosen content. Add details on availability, style, or even provide a review.</p>",
+            "button": "Learn More",
+            "link": ""
+          }
+        },
+        "1626883542b88f92db-2": {
+          "type": "text_block",
+          "settings": {
+            "title": "Our collections",
+            "subheading": "<p>Pair text with an image to give focus to your chosen content. Add details on availability, style, or even provide a review.</p>",
+            "button": "Learn More",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "1626883542b88f92db-0",
+        "1626883542b88f92db-1",
+        "1626883542b88f92db-2"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "Text columns with images",
+        "image_height": "natural",
+        "desktop_height": 450,
+        "mobile_height": 300,
+        "text_align": "left",
+        "section_padding": "both"
+      }
+    },
+    "162688359266c09739": {
+      "type": "image-with-text",
+      "disabled": true,
+      "settings": {
+        "iwt_layout": "image_left",
+        "iwt_heading": "Heading",
+        "iwt_text": "<p>Pair text with an image to give focus to your chosen content. Add details on availability, style, or even provide a review.</p>",
+        "iwt_button": "Button",
+        "iwt_link": "",
+        "show_box_shadow": false,
+        "color_scheme": "3",
+        "iwt_section_height": 500,
+        "section_padding": "both"
+      }
+    },
+    "16268836031fe513b3": {
+      "type": "image-with-text",
+      "disabled": true,
+      "settings": {
+        "iwt_layout": "image_right",
+        "iwt_heading": "Heading",
+        "iwt_text": "<p>Pair text with an image to give focus to your chosen content. Add details on availability, style, or even provide a review.</p>",
+        "iwt_button": "Button",
+        "iwt_link": "",
+        "show_box_shadow": false,
+        "color_scheme": "3",
+        "iwt_section_height": 500,
+        "section_padding": "both"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "main",
+    "rich_text_rB4nz9",
+    "image_with_text_cLLWLN",
+    "hero_image_with_text_fxzmwQ",
+    "text_with_icons_kKNKK4",
+    "1626883542b88f92db",
+    "162688359266c09739",
+    "16268836031fe513b3"
+  ]
+}

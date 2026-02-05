@@ -1,0 +1,333 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "bd3c6fe5-1fbc-44c5-b0a7-a248c6bc997c": {
+      "type": "background-video",
+      "settings": {
+        "video": "shopify://files/videos/Ad_Matcha_v2(compressed).mp4",
+        "height": "large",
+        "title": "MASH. DELIVERING NATURES FINEST SUPERFOOD",
+        "subheading_text": "<h4>Organic and super nutrients hand picked from all over the globe to deliver you the best natural and effective health benefits you can get. Revive, refresh and reset with MASH.<br/><br/><br/><strong>Tryout MASH? Get 25% off your first order on us. <br/>Use code TRYMASH25XQTY </strong></h4>",
+        "link": "",
+        "button_text": "",
+        "text_color": "#ffffff",
+        "button_text_color": "#3b5442",
+        "button_bg": "#fffbf2",
+        "bg_color": "rgba(0,0,0,0)",
+        "show_overlay_color": true,
+        "full_width": true,
+        "section_padding": "none"
+      }
+    },
+    "ss_video_slider_9YTxRm": {
+      "type": "ss-video-slider",
+      "blocks": {
+        "slide_iqAbV4": {
+          "type": "slide",
+          "settings": {
+            "video": "shopify://files/videos/sophie-ugc-carrousel-matcha.mp4",
+            "video_url": "",
+            "title": "Sofie",
+            "stars_count": 5
+          }
+        },
+        "slide_NJDqDx": {
+          "type": "slide",
+          "settings": {
+            "video": "shopify://files/videos/compress Ontwerp zonder titel (6) (1).mp4",
+            "video_url": "",
+            "title": "Alain",
+            "stars_count": 5
+          }
+        },
+        "slide_JLfygG": {
+          "type": "slide",
+          "settings": {
+            "video": "shopify://files/videos/a8629730-a058-47f4-933b-f9d7e5a6168c.MOV",
+            "video_url": "",
+            "title": "Imre",
+            "stars_count": 5
+          }
+        },
+        "slide_kTtcLr": {
+          "type": "slide",
+          "settings": {
+            "video": "shopify://files/videos/Ontwerp zonder titel (compressed).mp4",
+            "video_url": "",
+            "title": "Karolina & Lukas",
+            "stars_count": 4.5
+          }
+        },
+        "slide_8qYQwr": {
+          "type": "slide",
+          "settings": {
+            "video": "shopify://files/videos/Ontwerp zonder titel (5) (compressed).mp4",
+            "video_url": "",
+            "title": "Magdalena S",
+            "stars_count": 5
+          }
+        }
+      },
+      "block_order": [
+        "slide_iqAbV4",
+        "slide_NJDqDx",
+        "slide_JLfygG",
+        "slide_kTtcLr",
+        "slide_8qYQwr"
+      ],
+      "name": "SS - Video slider",
+      "settings": {
+        "slider_view": 5,
+        "slider_view_mobile": 1.5,
+        "slider_gap": 2,
+        "slider_gap_mobile": 0,
+        "slider_rotate": 0,
+        "card_padding_vertical": 18,
+        "card_padding_vertical_mobile": 20,
+        "card_padding_horizontal": 20,
+        "card_padding_horizontal_mobile": 20,
+        "card_radius": 14,
+        "card_border_thickness": 0,
+        "card_shadow": true,
+        "card_ratio": "portrait",
+        "card_ratio_mobile": "portrait",
+        "card_overlay": 0.2,
+        "content_horizontal_position": "center",
+        "content_horizontal_position_mobile": "center",
+        "content_vertical_position": "end",
+        "content_vertical_position_mobile": "end",
+        "title_custom": true,
+        "title_font": "fredoka_n4",
+        "title_size": 16,
+        "title_size_mobile": 16,
+        "title_height": 100,
+        "stars_size": 16,
+        "stars_size_mobile": 16,
+        "stars_mt": 16,
+        "stars_mt_mobile": 16,
+        "hide_stars": false,
+        "use_action": true,
+        "action_size": 40,
+        "action_size_mobile": 40,
+        "action_icon_size": 24,
+        "action_icon_size_mobile": 24,
+        "action_border_thickness": 0,
+        "use_sound": true,
+        "sound_size": 40,
+        "sound_size_mobile": 40,
+        "sound_icon_size": 24,
+        "sound_icon_size_mobile": 24,
+        "sound_border_thickness": 0,
+        "arrow_size": 48,
+        "arrow_size_mobile": 48,
+        "arrow_icon_size": 8,
+        "arrow_icon_size_mobile": 8,
+        "arrow_border_thickness": 0,
+        "arrow_radius": 100,
+        "arrow_hover_effect": "arrow",
+        "arrow_show_desktop": true,
+        "arrow_show_mobile": true,
+        "title_color": "#ffffff",
+        "stars_color": "#ffffff",
+        "card_border_color": "#121212",
+        "card_shadow_color": "#121212",
+        "card_overlay_color": "#121212",
+        "action_color": "#ffffff",
+        "action_hover_color": "#ffffff",
+        "action_bg_color": "#ffffff",
+        "action_bg_hover_color": "#ffffff",
+        "action_border_color": "#ffffff",
+        "action_border_hover_color": "#ffffff",
+        "arrow_color": "#ffffff",
+        "arrow_hover_color": "#434343",
+        "arrow_bg_color": "#303030",
+        "arrow_bg_hover_color": "#ffffff",
+        "arrow_border_color": "#121212",
+        "arrow_border_hover_color": "#121212",
+        "background_color": "#ffffff",
+        "background_gradient": "",
+        "border_color": "#121212",
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_horizontal": 0,
+        "padding_horizontal_mobile": 0,
+        "full_width": true,
+        "content_width": 1200,
+        "border_thickness": 0,
+        "lazy": true
+      }
+    },
+    "16260997139ae0f76a": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "MASH Premium superdrinks",
+        "collection": "frontpage",
+        "display_type": "carousel",
+        "items_per_row": 5,
+        "mobile_items_per_row": "2",
+        "items_per_page": 8,
+        "show_view_all": true,
+        "section_padding": "both"
+      }
+    },
+    "rich_text_mqm4EE": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "title": "Experience MASH.",
+        "rich_text": "<p>We at MASH. superfood think that what you eat is the most important part of being healthy.  That's why we promise to only give you the best superfood nutrients, which we carefully source, expertly make, and always support with the most up-to-date nutritional science. </p><p>Our goal is to give you the tools you need to succeed every day.  You can be sure that you're giving your body the best that nature and science have to offer with MASH Superfoods products because they are made with only the best ingredients that have been shown to be safe and effective.</p>",
+        "heading_size": 40,
+        "text_size": 20,
+        "page": "",
+        "alignment": "a-center",
+        "content_width": 60,
+        "section_padding": "none",
+        "color_scheme": "1"
+      }
+    },
+    "ebe49b3e-a9b9-4038-82f5-87140adf767d": {
+      "type": "countdown",
+      "blocks": {
+        "template--16222438424746__ebe49b3e-a9b9-4038-82f5-87140adf767d-text-1": {
+          "type": "text",
+          "settings": {
+            "countdown_text": "<p>Renewed superfood formulas launch</p>",
+            "hide_after_countdown": true
+          }
+        },
+        "template--16222438424746__ebe49b3e-a9b9-4038-82f5-87140adf767d-countdown-1": {
+          "type": "countdown",
+          "settings": {
+            "year": "2025",
+            "month": "october",
+            "day": "31",
+            "hour": "12",
+            "minute": "0",
+            "after_countdown_message": "Countdown has ended"
+          }
+        },
+        "template--16222438424746__ebe49b3e-a9b9-4038-82f5-87140adf767d-button-1": {
+          "type": "button",
+          "settings": {
+            "countdown_button": "Shop now",
+            "countdown_link": "",
+            "hide_after_countdown": true
+          }
+        }
+      },
+      "block_order": [
+        "template--16222438424746__ebe49b3e-a9b9-4038-82f5-87140adf767d-text-1",
+        "template--16222438424746__ebe49b3e-a9b9-4038-82f5-87140adf767d-countdown-1",
+        "template--16222438424746__ebe49b3e-a9b9-4038-82f5-87140adf767d-button-1"
+      ],
+      "disabled": true,
+      "settings": {
+        "full_width": false,
+        "image_position": "left",
+        "layout": "center",
+        "section_padding": "both",
+        "background_color": "#ece2cc",
+        "text_color": "#262b2c",
+        "button_color": "#262b2c",
+        "button_background": "#faf4e8"
+      }
+    },
+    "4ec3a736-3aa5-441d-a0ea-8ce76685c0fa": {
+      "type": "scrolling-text",
+      "blocks": {
+        "template--16222438424746__4ec3a736-3aa5-441d-a0ea-8ce76685c0fa-text-1": {
+          "type": "text",
+          "settings": {
+            "scrolling_text": "<p><strong>Fair trade sources</strong></p>",
+            "text_style": "filled",
+            "icon": "favorite",
+            "icon_both_sides": false
+          }
+        },
+        "template--16222438424746__4ec3a736-3aa5-441d-a0ea-8ce76685c0fa-text-2": {
+          "type": "text",
+          "settings": {
+            "scrolling_text": "<p>7 Days Customer Support</p>",
+            "text_style": "filled",
+            "icon": "headphones",
+            "icon_both_sides": false
+          }
+        },
+        "template--16222438424746__4ec3a736-3aa5-441d-a0ea-8ce76685c0fa-text-3": {
+          "type": "text",
+          "settings": {
+            "scrolling_text": "<p><strong>Continuous formula improvements</strong></p>",
+            "text_style": "filled",
+            "icon": "new-release",
+            "icon_both_sides": false
+          }
+        },
+        "759f6937-5888-4a3c-8d1b-9632b127b3fa": {
+          "type": "text",
+          "settings": {
+            "scrolling_text": "<p>Verified open user reviews</p>",
+            "text_style": "filled",
+            "icon": "chat",
+            "icon_both_sides": false
+          }
+        }
+      },
+      "block_order": [
+        "template--16222438424746__4ec3a736-3aa5-441d-a0ea-8ce76685c0fa-text-1",
+        "template--16222438424746__4ec3a736-3aa5-441d-a0ea-8ce76685c0fa-text-2",
+        "template--16222438424746__4ec3a736-3aa5-441d-a0ea-8ce76685c0fa-text-3",
+        "759f6937-5888-4a3c-8d1b-9632b127b3fa"
+      ],
+      "settings": {
+        "text_size": 20,
+        "speed": 15,
+        "icon_height": 20,
+        "padding": 30,
+        "color": "#745d4a",
+        "background": "#faf4e8"
+      }
+    },
+    "17516329803a111058": {
+      "type": "apps",
+      "settings": {
+        "full_width": true,
+        "section_padding": "both"
+      }
+    },
+    "rich_text_7hzBbJ": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "title": "MASH. Superfood Philosophy",
+        "rich_text": "<h3>A New Era of Superfoods</h3><p>With every cup, blend, or spoonful of MASH, a new superfood brand, you'll have a great time. People who want real, healthy, and tasty functional nutrition all in a delicious homemade drink love MASH because of its unique product line, which includes organic matcha, moringa leaf superfood, Himalayan shilajit, mushroom coffee, and ketogenic coffee.  </p><h3>A Wide Range of Superfood Products</h3><p>MASH sells a lot of different things, like matcha powder, moringa superfood, pure Himalayan shilajit, mushroom coffee, and a mix of ketogenic coffee. People who care about clean energy, adaptogenic support, and natural health will love each item. The ceremonial-grade leaves used to make the matcha powder give lattes, smoothies, and teas a bright color and a smooth taste. The moringa leaf blend has a lot of micronutrients and antioxidants that are good for smoothies and other healthy foods.  </p><h3>Shilajit and High-Performance Blends</h3><p>The idea behind MASH's supplements is shilajit, which is made from pure Himalayan resin. Customers can trust it because it has a lot of minerals, can adapt to different situations, and has been carefully cleaned. This is in line with European standards for natural supplements.  </p><p>Mushroom coffee is a drink that is good for your health every day and gives you a little boost. It has organic Arabica beans and useful fungi like Lion's Mane, Chaga, and Cordyceps in it. The ketogenic coffee is made with high-quality coffee, MCT oil, and superfood ingredients that keep you focused and full of energy without losing taste.  </p><h3>Quality Ingredients and Responsible Sourcing</h3><p>The purpose of getting the ingredients and how good they are MASH is all about \"superfood\" and \"premium nutrition,\" so they make sure to know where each ingredient comes from. The way matcha is grown is good for the environment, Himalayan shilajit is picked from the wild with care for the ecosystem, and all the mushrooms used in the mushroom coffee are organic and have been tested by a third party to make sure they are pure.  </p><p>We get the moringa leaf from farmers we trust so that it has the most nutrients. This coffee blend for the ketogenic diet only uses the best coffee beans and MCTs. MASH products are honest about what they are: they are natural, non-GMO, and don't have any artificial additives. This makes it a safe and reliable choice for people who care about their health today.  </p><h3>A Focus on Taste and Experience</h3><p>MASH is committed to taste, so their matcha, ketogenic coffee, and mushroom coffee blends taste great every day and are good for you. The search for better nutrients is just as strong as the focus on taste, which means finding a balance between taste and bioavailability.  </p><p>We check the sensory profile of moringa blends and shilajit to make sure they always taste fresh and real when you use them.  </p><h3>Wellness for Everyone</h3><p>MASH makes organic matcha powder, moringa leaf superfood, functional mushroom coffee, pure Himalayan shilajit, and ketogenic coffee blend available to a wide range of people by putting quality and taste first. These products are for the wellness market, but they don't make people feel like they can't get them or that they're better than everyone else.  </p><p>This way, everyone can eat and drink premium and enjoy MASH.</p>",
+        "heading_size": 30,
+        "text_size": 14,
+        "page": "",
+        "alignment": "a-center",
+        "content_width": 80,
+        "section_padding": "both",
+        "color_scheme": "none"
+      }
+    }
+  },
+  "order": [
+    "bd3c6fe5-1fbc-44c5-b0a7-a248c6bc997c",
+    "16260997139ae0f76a",
+    "ss_video_slider_9YTxRm",
+    "rich_text_mqm4EE",
+    "ebe49b3e-a9b9-4038-82f5-87140adf767d",
+    "4ec3a736-3aa5-441d-a0ea-8ce76685c0fa",
+    "17516329803a111058",
+    "rich_text_7hzBbJ"
+  ]
+}

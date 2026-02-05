@@ -1,0 +1,1764 @@
+<!doctype html>
+<html class="no-js supports-no-cookies" lang="{{ request.locale.iso_code }}">
+  <head>
+	<!-- Added by AVADA SEO Suite -->
+	{% include 'avada-seo' %}
+	<!-- /Added by AVADA SEO Suite -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.announcement_bg }}">
+    {%- if canonical_url != blank -%}
+      <link rel="canonical" href="{{ canonical_url }}">
+    {%- endif -%}
+
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    {%- unless settings.main_font.system? and settings.heading_font.system? and settings.nav_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+
+    <!-- Preload onDomain stylesheets and script libraries -->
+    <link rel="preload" href="{{ 'theme.css' | asset_url }}" as="style">
+    <link rel="preload" href="{{ 'theme.js' | asset_url }}" as="script">
+    <link rel="preload" href="{{ 'vendor-flickity.js' | asset_url }}" as="script">
+    <link rel="preload" href="{{ 'vendor-masonry.js' | asset_url }}" as="script">
+
+    {% if settings.favicon %}
+      <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 32, height: 32 }}" type="image/png">
+    {% endif %}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    <meta name="description" content="{{ page_description | escape }}">
+
+    {% render 'snip-social-meta-tags' %}
+    {% render 'snip-structured-data' %}
+
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+    {{ content_for_header }}
+
+    {% render 'css-variables' %}
+
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+    {%- unless settings.main_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.main_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+    {%- unless settings.heading_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.heading_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+    {%- unless settings.nav_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.nav_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+    {{ 'vendor-flickity.js' | asset_url | script_tag }}
+
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-5ZJ8DVCW');
+    </script>
+    <!-- End Google Tag Manager -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  </head>
+
+  <body
+    id="{{ page_title | handle }}"
+    class="template-{{ template.name | handle }} js-slideout-toggle-wrapper js-modal-toggle-wrapper {{ settings.scroll_animation }} {{ settings.text_animation }} section-fade-in buttons--{{ settings.button_animation }}"
+  >
+    {% render 'snip-skip-link' %}
+
+    {% if settings.enable_age_verify %}
+      {% render 'snip-age-verification' %}
+    {% endif %}
+
+    {%- if template == 'index' -%}
+      <h1 class="visually-hidden">{{ page_title }}</h1>
+    {%- endif -%}
+
+    <div class="js-slideout-overlay site-overlay"></div>
+    <div class="js-modal-overlay site-overlay"></div>
+
+    {% sections 'mobile-navigation-group' %}
+
+    <main id="main-content" class="site-wrap" role="main" tabindex="-1">
+      {% sections 'header-group' %}
+
+      <div class="page-wrap {% unless template == 'index' %}mb10{% endunless %}">
+        {{ content_for_layout }}
+      </div>
+
+      {% sections 'footer-group' %}
+    </main>
+
+    {% section 'mailing-popup' %}
+    {% section 'quickshop' %}
+
+    {%- if settings.cart_type == 'drawer' -%}
+      <aside
+        popover="auto"
+        class="slideout slideout__drawer-right mini-cart"
+        data-wau-slideout="ajax-cart"
+        id="slideout-ajax-cart"
+      >
+        {% render 'cart-mini' %}
+      </aside>
+    {% elsif settings.cart_type == 'modal_cart' %}
+      <div
+        popover="auto"
+        class="modal__container"
+        data-wau-modal="ajax-cart"
+        id="modal-ajax-cart"
+      >
+        <div class="modal__inner-wrapper">
+          {% render 'cart-mini' %}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {% render 'cart-config' %}
+
+    <script type="text/javascript">
+      var jsAssets = {
+        "zoom": {{ 'vendor-zoom.js' | asset_url | json }},
+        "flickity": {{ 'vendor-flickity.js' | asset_url | json }},
+        "product": {{ 'product.js' | asset_url | json }},
+        "productModel": {{ 'product-model.js' | asset_url | json }},
+        "productVideo": {{ 'product-video.js' | asset_url | json }},
+        "productPickupAvailability": {{ 'pickup-availability.js' | asset_url | json }},
+        "productComplementaryProducts": {{ 'complementary-products.js' | asset_url | json }}
+      }
+    </script>
+
+    <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+
+    {%- if settings.product_grid_video -%}
+      <script src="{{ 'vendor-video.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    {%- render 'snip-photoswipe' -%}
+
+    <aside
+      class="slideout slideout__drawer-right"
+      data-wau-slideout="store-availability"
+      id="slideout-store-availability"
+    ></aside>
+
+    <wau-popover-loader
+      data-asset-url="{{ 'vendor-popover-polyfill.js' | asset_url }}"
+      data-css-class="popover"
+    ></wau-popover-loader>
+    <script>
+      function waitForElement(selector, callback) {
+        const element = document.querySelector(selector);
+        if (element) {
+          callback(element);
+        } else {
+          setTimeout(() => waitForElement(selector, callback), 100);
+        }
+      }
+    
+      function formatCurrency(value) {
+        return `€${value.toFixed(2).replace('.', ',')}`;
+      }
+    
+      function parsePrice(priceString) {
+        // Remove currency symbol and convert to number
+        return parseFloat(priceString.replace(/[^0-9.,]/g, '').replace(',', '.'));
+      }
+    
+      const lang = document.documentElement.lang || 'en';
+      const translations = {
+        en: {
+          discountOff: 'off',
+          nowInsteadOf: 'Now {regular} instead of {compare}',
+          packLabels: {
+            pack2: 'Get 2nd bag at',
+            pack3: 'Get 3rd bag at',
+            pack4: 'Get 4th bag at',
+          }
+        },
+        de: {
+          discountOff: 'Rabatt',
+          nowInsteadOf: 'Jetzt {regular} statt {compare}',
+          packLabels: {
+            pack2: '2. Beutel erhalten für',
+            pack3: '3. Beutel erhalten für',
+            pack4: '4. Beutel erhalten für',
+          }
+        },
+        nl: {
+          discountOff: 'korting',
+          nowInsteadOf: 'Nu {regular} in plaats van {compare}',
+          packLabels: {
+            pack2: '2e zak krijgen voor',
+            pack3: '3e zak krijgen voor',
+            pack4: '4e zak krijgen voor',
+          }
+        },
+        fr: {
+          discountOff: 'de réduction',
+          nowInsteadOf: 'Maintenant {regular} au lieu de {compare}',
+          packLabels: {
+            pack2: 'Obtenez le 2ème sac à',
+            pack3: 'Obtenez le 3ème sac à',
+            pack4: 'Obtenez le 4ème sac à',
+          }
+        }
+      };
+    
+      waitForElement('.appstle_subscription_wrapper', (container) => {
+        // Method 1: Try to get prices from data attributes (most reliable)
+        function getProductPrices() {
+          let regularPrice, comparePrice;
+          
+          // Method 1A: Try to get from regular price element
+          const regularPriceEl = document.querySelector('[data-regular-price], .price--regular .money, .product__price .price-item--regular');
+          if (regularPriceEl) {
+            regularPrice = parsePrice(regularPriceEl.textContent);
+          }
+          
+          // Method 1B: Try to get from compare price element
+          const comparePriceEl = document.querySelector('[data-compare-price], .price--compare .money, .product__price .price-item--compare');
+          if (comparePriceEl) {
+            comparePrice = parsePrice(comparePriceEl.textContent);
+          }
+          
+          // Method 2: Try to get from Shopify product JSON (if available)
+          if (!regularPrice || !comparePrice) {
+            const productJsonEl = document.querySelector('[data-product-json]');
+            if (productJsonEl) {
+              try {
+                const productData = JSON.parse(productJsonEl.textContent);
+                regularPrice = productData.price / 100; // Shopify stores price in cents
+                comparePrice = productData.compare_at_price ? productData.compare_at_price / 100 : regularPrice;
+              } catch (e) {
+                console.log('Could not parse product JSON');
+              }
+            }
+          }
+          
+          // Method 3: Try to get from variant data
+          if (!regularPrice || !comparePrice) {
+            const variantSelect = document.querySelector('[name="id"], select[name="id"]');
+            if (variantSelect) {
+              const variantId = variantSelect.value;
+              const variantOption = variantSelect.querySelector(`option[value="${variantId}"]`);
+              if (variantOption) {
+                const dataPrice = variantOption.getAttribute('data-price');
+                const dataComparePrice = variantOption.getAttribute('data-compare-price');
+                
+                if (dataPrice) regularPrice = parseFloat(dataPrice) / 100;
+                if (dataComparePrice) comparePrice = parseFloat(dataComparePrice) / 100;
+              }
+            }
+          }
+          
+          // Method 4: Fallback to window.product object (common in Shopify themes)
+          if (!regularPrice && window.product) {
+            regularPrice = window.product.price / 100;
+            comparePrice = window.product.compare_at_price ? window.product.compare_at_price / 100 : regularPrice;
+          }
+          
+          // Method 5: Last resort - try to extract from any price element
+          if (!regularPrice) {
+            const anyPrice = document.querySelector('.price, .product__price, .money');
+            if (anyPrice) {
+              const priceText = anyPrice.textContent;
+              const prices = priceText.match(/[\d,.]+/g);
+              if (prices && prices.length > 0) {
+                regularPrice = parsePrice(prices[0]);
+                comparePrice = prices.length > 1 ? parsePrice(prices[1]) : regularPrice;
+              }
+            }
+          }
+          
+          // Final fallback to your original values if nothing found
+          return {
+            regularPrice: regularPrice || 29.50,
+            comparePrice: comparePrice || 39.95
+          };
+        }
+        
+        const prices = getProductPrices();
+        const baseRegularPrice = prices.regularPrice;
+        const baseComparePrice = prices.comparePrice || baseRegularPrice;
+    
+        console.log('Detected prices:', { baseRegularPrice, baseComparePrice });
+    
+        const discountSettings = window.bundleDiscounts || {};
+        const pack2Discount = discountSettings.pack2 || 15;
+        const pack3Discount = discountSettings.pack3 || 20;
+        const pack4Discount = discountSettings.pack4 || 25;
+    
+        const packs = [
+          {
+            id: 'pack2',
+            labelKey: 'pack2',
+            qty: 2,
+            discount: `${pack2Discount}%`,
+            discountRate: (100 - pack2Discount) / 100,
+            default: true
+          },
+          {
+            id: 'pack3',
+            labelKey: 'pack3',
+            qty: 3,
+            discount: `${pack3Discount}%`,
+            discountRate: (100 - pack3Discount) / 100,
+            default: false
+          },
+          {
+            id: 'pack4',
+            labelKey: 'pack4',
+            qty: 4,
+            discount: `${pack4Discount}%`,
+            discountRate: (100 - pack4Discount) / 100,
+            default: false
+          }
+        ].map(pack => {
+          return {
+            ...pack,
+            regular: baseRegularPrice * pack.qty * pack.discountRate,
+            compare: baseComparePrice * pack.qty * pack.discountRate,
+            originalRegular: baseRegularPrice * pack.qty,
+            originalCompare: baseComparePrice * pack.qty
+          };
+        });
+    
+        const mainWrapper = document.createElement('div');
+        mainWrapper.className = 'appstle_subscription_wrapper_option';
+        Object.assign(mainWrapper.style, {
+          border: '1px solid #000',
+          marginTop: '15px',
+          borderRadius: '15px',
+          padding: '16px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
+        });
+    
+        packs.forEach(pack => {
+          const option = document.createElement('div');
+          option.className = 'single_pack_option';
+          Object.assign(option.style, {
+            display: 'flex',
+            alignItems: 'center',
+            border: '1px solid #ccc',
+            padding: '10px',
+            borderRadius: '10px',
+            cursor: 'pointer'
+          });
+    
+          const label = translations[lang]?.packLabels?.[pack.labelKey] || translations.en.packLabels[pack.labelKey];
+          const discountLabel = translations[lang]?.discountOff || translations.en.discountOff;
+          const priceText = (translations[lang]?.nowInsteadOf || translations.en.nowInsteadOf)
+            .replace('{regular}', formatCurrency(pack.regular))
+            .replace('{compare}', formatCurrency(pack.originalRegular));
+    
+          option.innerHTML = `
+            <div class="appstle_subscription_radio_wrapper" style="display:flex; align-items:center;">
+              <input type="radio" id="${pack.id}" name="selling_plan" value="" style="display:none;" ${pack.default ? 'checked' : ''} />
+              <label for="${pack.id}" class="appstle_radio_label flex" style="cursor:pointer; display:flex; align-items:center;">
+                <span class="appstle_circle" style="display:inline-block; width:16px; height:16px; border:2px solid black; border-radius:50%; position:relative; margin-right:10px;">
+                  <span class="appstle_dot" style="display:${pack.default ? 'block' : 'none'}; width:8px; height:8px; background:black; border-radius:50%; position:absolute; top:2px; left:2px;"></span>
+                </span>
+                <div style="flex:1;">
+                  ${label} <span style="color:red;">${pack.discount} ${discountLabel}</span><br>
+                  <span style="font-size: 0.9em;">${priceText}</span>
+                </div>
+              </label>
+            </div>
+          `;
+          mainWrapper.appendChild(option);
+        });
+    
+        container.appendChild(mainWrapper);
+    
+        waitForElement('input[name="quantity"]', (hiddenQtyInput) => {
+          // Handle variant changes to update prices dynamically
+          const variantSelect = document.querySelector('[name="id"], select[name="id"]');
+          if (variantSelect) {
+            variantSelect.addEventListener('change', () => {
+              // Re-fetch prices when variant changes
+              const newPrices = getProductPrices();
+              baseRegularPrice = newPrices.regularPrice;
+              baseComparePrice = newPrices.comparePrice || baseRegularPrice;
+              
+              // Update pack prices
+              packs.forEach(pack => {
+                pack.regular = baseRegularPrice * pack.qty * pack.discountRate;
+                pack.compare = baseComparePrice * pack.qty * pack.discountRate;
+                pack.originalRegular = baseRegularPrice * pack.qty;
+                pack.originalCompare = baseComparePrice * pack.qty;
+                
+                // Update displayed prices
+                const optionEl = document.getElementById(pack.id);
+                if (optionEl) {
+                  const priceText = (translations[lang]?.nowInsteadOf || translations.en.nowInsteadOf)
+                    .replace('{regular}', formatCurrency(pack.regular))
+                    .replace('{compare}', formatCurrency(pack.originalRegular));
+                  
+                  const priceSpan = optionEl.closest('.single_pack_option').querySelector('span[style*="font-size: 0.9em"]');
+                  if (priceSpan) {
+                    priceSpan.textContent = priceText;
+                  }
+                }
+              });
+            });
+          }
+        });
+      });
+    
+      document.addEventListener("DOMContentLoaded", function () {
+        function initPackRadios() {
+          const radios = document.querySelectorAll('input[name="selling_plan"]');
+          const qtyInput = document.querySelector(".product__quantity input.product__quantity-input");
+    
+          if (!radios.length || !qtyInput) {
+            setTimeout(initPackRadios, 300);
+            return;
+          }
+    
+          function updateQuantity(radio) {
+            if (radio.id === "pack2") {
+              qtyInput.value = 2;
+            } else if (radio.id === "pack3") {
+              qtyInput.value = 3;
+            } else if (radio.id === "pack4") {
+              qtyInput.value = 4;
+            } else {
+              qtyInput.value = 1;
+            }
+    
+            qtyInput.dispatchEvent(new Event("input", { bubbles: true }));
+            qtyInput.dispatchEvent(new Event("change", { bubbles: true }));
+          }
+    
+          const checkedRadio = document.querySelector('input[name="selling_plan"]:checked');
+          if (checkedRadio) {
+            updateQuantity(checkedRadio);
+          }
+    
+          radios.forEach(radio => {
+            radio.addEventListener("change", function () {
+              updateQuantity(this);
+            });
+          });
+        }
+    
+        initPackRadios();
+      });
+    </script>
+{% comment %} old one {% endcomment %}
+    {% comment %} <script>
+      function translateAppstleText() {
+        const locale = Shopify.locale;
+
+        const translations = {
+          de: {
+            'Buy Once': 'Einmal kaufen',
+            Subscribe: 'Abonnieren',
+            'Discount 20%': '20% Rabatt',
+            'Subscribe and save': 'Abonnieren und sparen',
+            'One-time purchase': 'Einmalkauf',
+            'Choose your purchase option': 'Wählen Sie Ihre Kaufoption',
+            'Every 8 weeks': 'Alle 8 Wochen',
+            'Now €47.20 instead of €59.00': 'Jetzt nur 47,20 € statt 59,00 €',
+            'Now €70.80 instead of €88.50': 'Jetzt nur 70,80 € statt 88,50 €',
+            'Now €94.40 instead of €118.00': 'Jetzt nur 94,40 € statt 118,00 €',
+          },
+          nl: {
+            'Buy Once': 'Eenmalige aankoop',
+            Subscribe: 'Abonneren',
+            'Discount 20%': '20% korting',
+            'Subscribe and save': 'Abonneer en bespaar',
+            'One-time purchase': 'Eenmalige aankoop',
+            'Choose your purchase option': 'Kies je aankoopoptie',
+            'Every 8 weeks': 'Elke 8 weken',
+            'Now €47.20 instead of €59.00': 'Nu €47,20 in plaats van €59,00',
+            'Now €70.80 instead of €88.50': 'Nu €70,80 in plaats van €88,50',
+            'Now €94.40 instead of €118.00': 'Nu €94,40 in plaats van €118,00',
+          },
+          fr: {
+            'Buy Once': 'Achat unique',
+            Subscribe: "S'abonner",
+            'Discount 20%': '20 % de réduction',
+            'Subscribe and save': 'Abonnez-vous et économisez',
+            'One-time purchase': 'Achat unique',
+            'Choose your purchase option': "Choisissez votre option d'achat",
+            'Every 8 weeks': 'Toutes les 8 semaines',
+            'Now €47.20 instead of €59.00': 'Maintenant à 47,20 € au lieu de 59,00 €',
+            'Now €70.80 instead of €88.50': 'Maintenant à 70,80 € au lieu de 88,50 €',
+            'Now €94.40 instead of €118.00': 'Maintenant à 94,40 € au lieu de 118,00 €',
+          },
+        };
+
+        const localeTexts = translations[locale];
+        if (!localeTexts) return;
+
+        const elements = document.querySelectorAll('body *:not(script):not(style)');
+
+        elements.forEach((el) => {
+          if (el.children.length === 0 && el.textContent.trim()) {
+            let text = el.textContent.trim();
+            Object.keys(localeTexts).forEach((original) => {
+              if (text.includes(original)) {
+                el.textContent = text.replace(original, localeTexts[original]);
+              }
+            });
+          }
+        });
+      }
+
+      function setupAppstleTranslationObserver() {
+        const observer = new MutationObserver(() => {
+          translateAppstleText();
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+        });
+
+        setTimeout(translateAppstleText, 1000);
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        setupAppstleTranslationObserver();
+      });
+
+      document.addEventListener('shopify:section:load', () => {
+        setupAppstleTranslationObserver();
+      });
+
+      document.addEventListener('turbo:load', () => {
+        setupAppstleTranslationObserver();
+      });
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        function updateStrikePriceVisibility() {
+          const activeOption = document.querySelector('.appstle_subscription_wrapper_option.appstle-active-option');
+          const regularPrice = document.querySelector('span[data-regular-price]');
+          const strikePrice = document.querySelector('.strike.ml1');
+
+          if (regularPrice) {
+            if (activeOption && activeOption.textContent.includes('Subscribe')) {
+              regularPrice.style.textDecoration = 'line-through';
+            } else {
+              regularPrice.style.textDecoration = 'none';
+            }
+          }
+
+          if (strikePrice) {
+            if (activeOption && activeOption.textContent.includes('Subscribe')) {
+              strikePrice.style.display = 'none';
+            } else {
+              strikePrice.style.display = '';
+            }
+          }
+        }
+
+        const observer = new MutationObserver(() => {
+          const appstleLoaded = document.querySelector('.appstle_subscription_wrapper_option');
+
+          if (appstleLoaded) {
+            updateStrikePriceVisibility();
+
+            document.querySelectorAll('.appstle_subscription_wrapper_option').forEach((option) => {
+              option.addEventListener('click', function () {
+                setTimeout(updateStrikePriceVisibility, 100);
+              });
+            });
+
+            const wrapper = document.querySelector('.appstle_subscription_wrapper');
+            if (wrapper) {
+              const subObserver = new MutationObserver(() => {
+                updateStrikePriceVisibility();
+              });
+
+              subObserver.observe(wrapper, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class'],
+              });
+            }
+
+            observer.disconnect();
+          }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+      });
+    </script>
+
+    <script>
+      window.bundleDiscounts = {
+        pack2: {{ settings.pack2_discount | default: 15 }},
+        pack3: {{ settings.pack3_discount | default: 20 }},
+        pack4: {{ settings.pack4_discount | default: 25 }}
+      };
+    </script>
+    <script>
+  function waitForElement(selector, callback) {
+    const element = document.querySelector(selector);
+    if (element) {
+      callback(element);
+    } else {
+      setTimeout(() => waitForElement(selector, callback), 100);
+    }
+  }
+
+  function formatCurrency(value) {
+    return `€${value.toFixed(2).replace('.', ',')}`;
+  }
+
+  const lang = document.documentElement.lang || 'en';
+  const translations = {
+    en: {
+      discountOff: 'off',
+      nowInsteadOf: 'Now {regular} instead of {compare}',
+      packLabels: {
+        pack2: 'Get 2nd bag at',
+        pack3: 'Get 3rd bag at',
+        pack4: 'Get 4th bag at',
+      }
+    },
+    de: {
+      discountOff: 'Rabatt',
+      nowInsteadOf: 'Jetzt {regular} statt {compare}',
+      packLabels: {
+        pack2: '2. Beutel erhalten für',
+        pack3: '3. Beutel erhalten für',
+        pack4: '4. Beutel erhalten für',
+      }
+    },
+    nl: {
+      discountOff: 'korting',
+      nowInsteadOf: 'Nu {regular} in plaats van {compare}',
+      packLabels: {
+        pack2: '2e zak krijgen voor',
+        pack3: '3e zak krijgen voor',
+        pack4: '4e zak krijgen voor',
+      }
+    },
+    fr: {
+      discountOff: 'de réduction',
+      nowInsteadOf: 'Maintenant {regular} au lieu de {compare}',
+      packLabels: {
+        pack2: 'Obtenez le 2ème sac à',
+        pack3: 'Obtenez le 3ème sac à',
+        pack4: 'Obtenez le 4ème sac à',
+      }
+    }
+  };
+
+  waitForElement('.appstle_subscription_wrapper', (container) => {
+    const baseRegularPrice = 29.50;
+    const baseComparePrice = 39.95;
+
+    const discountSettings = window.bundleDiscounts || {};
+    const pack2Discount = discountSettings.pack2 || 15;
+    const pack3Discount = discountSettings.pack3 || 20;
+    const pack4Discount = discountSettings.pack4 || 25;
+
+    const packs = [
+      {
+        id: 'pack2',
+        labelKey: 'pack2',
+        qty: 2,
+        discount: `${pack2Discount}%`,
+        discountRate: (100 - pack2Discount) / 100,
+        default: true
+      },
+      {
+        id: 'pack3',
+        labelKey: 'pack3',
+        qty: 3,
+        discount: `${pack3Discount}%`,
+        discountRate: (100 - pack3Discount) / 100,
+        default: false
+      },
+      {
+        id: 'pack4',
+        labelKey: 'pack4',
+        qty: 4,
+        discount: `${pack4Discount}%`,
+        discountRate: (100 - pack4Discount) / 100,
+        default: false
+      }
+    ].map(pack => {
+      return {
+        ...pack,
+        regular: baseRegularPrice * pack.qty * pack.discountRate,
+        compare: baseComparePrice * pack.qty * pack.discountRate,
+        originalRegular: baseRegularPrice * pack.qty,
+        originalCompare: baseComparePrice * pack.qty
+      };
+    });
+
+    const mainWrapper = document.createElement('div');
+    mainWrapper.className = 'appstle_subscription_wrapper_option';
+    Object.assign(mainWrapper.style, {
+      border: '1px solid #000',
+      marginTop: '15px',
+      borderRadius: '15px',
+      padding: '16px',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '10px'
+    });
+
+    packs.forEach(pack => {
+      const option = document.createElement('div');
+      option.className = 'single_pack_option';
+      Object.assign(option.style, {
+        display: 'flex',
+        alignItems: 'center',
+        border: '1px solid #ccc',
+        padding: '10px',
+        borderRadius: '10px',
+        cursor: 'pointer'
+      });
+
+      const label = translations[lang]?.packLabels?.[pack.labelKey] || translations.en.packLabels[pack.labelKey];
+      const discountLabel = translations[lang]?.discountOff || translations.en.discountOff;
+      const priceText = (translations[lang]?.nowInsteadOf || translations.en.nowInsteadOf)
+        .replace('{regular}', formatCurrency(pack.regular))
+        .replace('{compare}', formatCurrency(pack.originalRegular));
+
+      option.innerHTML = `
+        <div class="appstle_subscription_radio_wrapper" style="display:flex; align-items:center;">
+          <input type="radio" id="${pack.id}" name="selling_plan" value="" style="display:none;" ${pack.default ? 'checked' : ''} />
+          <label for="${pack.id}" class="appstle_radio_label flex" style="cursor:pointer; display:flex; align-items:center;">
+            <span class="appstle_circle" style="display:inline-block; width:16px; height:16px; border:2px solid black; border-radius:50%; position:relative; margin-right:10px;">
+              <span class="appstle_dot" style="display:${pack.default ? 'block' : 'none'}; width:8px; height:8px; background:black; border-radius:50%; position:absolute; top:2px; left:2px;"></span>
+            </span>
+            <div style="flex:1;">
+              ${label} <span style="color:red;">${pack.discount} ${discountLabel}</span><br>
+              <span style="font-size: 0.9em;">${priceText}</span>
+            </div>
+          </label>
+        </div>
+      `;
+      mainWrapper.appendChild(option);
+    });
+
+    container.appendChild(mainWrapper);
+
+    waitForElement('input[name="quantity"]', (hiddenQtyInput) => {
+        {% comment %} waitForElement('[data-regular-price]', (mainRegularPriceSpan) => {
+        waitForElement('[data-compare-price]', (mainComparePriceSpan) => {
+          const originalRegular = mainRegularPriceSpan.innerText;
+          const originalCompare = mainComparePriceSpan.innerText;
+
+          const updatePrices = (regular, compare) => {
+            document.querySelectorAll('[data-regular-price]').forEach(el => el.innerText = formatCurrency(regular));
+            document.querySelectorAll('[data-compare-price]').forEach(el => el.innerText = formatCurrency(compare));
+          };
+
+          const restorePrices = () => {
+            document.querySelectorAll('[data-regular-price]').forEach(el => el.innerText = originalRegular);
+            document.querySelectorAll('[data-compare-price]').forEach(el => el.innerText = originalCompare);
+          };
+
+          const handleSelection = () => {
+            const selected = document.querySelector('input[name="selling_plan"]:checked');
+            if (!selected) return restorePrices();
+
+            const selectedPack = packs.find(p => p.id === selected.value);
+            if (selectedPack) {
+              hiddenQtyInput.value = selectedPack.qty;
+              updatePrices(selectedPack.regular, selectedPack.compare);
+            } else {
+              hiddenQtyInput.value = 1;
+              restorePrices();
+            }
+
+            document.querySelectorAll('.appstle_dot').forEach(dot => dot.style.display = 'none');
+            const activeDot = selected.closest('label').querySelector('.appstle_dot');
+            if (activeDot) activeDot.style.display = 'block';
+          };
+
+          document.querySelectorAll('input[name="selling_plan"]').forEach(radio => {
+            radio.addEventListener('change', handleSelection);
+          });
+
+          const productForm = hiddenQtyInput.closest('form');
+          if (productForm) {
+            productForm.addEventListener('submit', () => {
+              const selected = document.querySelector('input[name="selling_plan"]:checked');
+              const selectedPack = packs.find(p => p.id === selected?.value);
+              hiddenQtyInput.value = selectedPack ? selectedPack.qty : 1;
+            });
+          }
+
+          handleSelection();
+        });
+      });{% endcomment %}
+
+    });
+  });
+/*
+  document.addEventListener("DOMContentLoaded", function () {
+    function initPackRadios() {
+      const radios = document.querySelectorAll('input[name="selling_plan"]');
+      const qtyInput = document.querySelector(".product__quantity input.product__quantity-input");
+      if (!radios.length || !qtyInput) {
+        setTimeout(initPackRadios, 300);
+        return;
+      }
+
+      radios.forEach(radio => {
+        radio.addEventListener("change", function () {
+          if (this.id === "pack2") {
+            qtyInput.value = 2;
+          } else if (this.id === "pack3") {
+            qtyInput.value = 3;
+          } else if (this.id === "pack4") {
+            qtyInput.value = 4;
+          }
+
+          qtyInput.dispatchEvent(new Event("input", { bubbles: true }));
+          qtyInput.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+      });
+    }
+    initPackRadios();
+  });*/
+
+  document.addEventListener("DOMContentLoaded", function () {
+  function initPackRadios() {
+    const radios = document.querySelectorAll('input[name="selling_plan"]');
+    const qtyInput = document.querySelector(".product__quantity input.product__quantity-input");
+
+    if (!radios.length || !qtyInput) {
+      setTimeout(initPackRadios, 300);
+      return;
+    }
+
+    function updateQuantity(radio) {
+      if (radio.id === "pack2") {
+        qtyInput.value = 2;
+      } else if (radio.id === "pack3") {
+        qtyInput.value = 3;
+      } else if (radio.id === "pack4") {
+        qtyInput.value = 4;
+      } else {
+        qtyInput.value = 1;
+      }
+
+      qtyInput.dispatchEvent(new Event("input", { bubbles: true }));
+      qtyInput.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    const checkedRadio = document.querySelector('input[name="selling_plan"]:checked');
+    if (checkedRadio) {
+      updateQuantity(checkedRadio);
+    }
+
+    radios.forEach(radio => {
+      radio.addEventListener("change", function () {
+        updateQuantity(this);
+      });
+    });
+  }
+
+  initPackRadios();
+});
+    </script> {% endcomment %}
+
+    <!--
+      <script src="https://app-sf.feedbackcompany.com:8443/api/v1/JgZ6UYgFmQth8yP6EcNpGMBnUlvtGP/feedback-script.js" type="application/javascript"></script>
+    -->
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5ZJ8DVCW"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+{% comment %} price change on click {% endcomment %}
+  <script>
+    $(document).ready(function () {
+
+      function updatePrice() {
+        
+        let discountedPrice = null;
+        let originalPrice = null;
+        let currency = '€';
+  
+        console.log("🔥 updatePrice() called");
+  
+        // -------------------------------------------
+        // 1️⃣ Detect which option is selected
+        // -------------------------------------------
+        const selectedSellingPlan = document.querySelector('input[name="selling_plan"]:checked');
+        
+        // Check if Buy Once is selected (empty selling_plan value)
+        const isBuyOnceSelected = selectedSellingPlan && selectedSellingPlan.value === "";
+        
+        // Check if Subscription is selected (has selling_plan value)
+        const isSubscriptionSelected = selectedSellingPlan && selectedSellingPlan.value === "691310330183";
+        
+        // Check if Pack option is selected (custom packs with empty selling_plan but in pack container)
+        const isPackSelected = selectedSellingPlan && selectedSellingPlan.closest(".single_pack_option");
+  
+        console.log("Buy Once Selected:", isBuyOnceSelected);
+        console.log("Subscription Selected:", isSubscriptionSelected);
+        console.log("Pack Selected:", isPackSelected);
+  
+        // -------------------------------------------
+        // 2️⃣ Handle BUY ONCE pricing
+        // -------------------------------------------
+        if (isBuyOnceSelected && !isPackSelected) {
+          const buyOnceContainer = document.querySelector('.appstle_one_time_price_wrapper');
+          if (buyOnceContainer) {
+            const priceEl = buyOnceContainer.querySelector('.appstle_subscription_amount.transcy-money');
+            if (priceEl) {
+              let raw = priceEl.textContent.trim();
+              discountedPrice = parsePrice(raw);
+              console.log("Buy Once price:", discountedPrice);
+            }
+          }
+        }
+  
+        // -------------------------------------------
+        // 3️⃣ Handle SUBSCRIPTION pricing
+        // -------------------------------------------
+        if (isSubscriptionSelected) {
+          const subscriptionContainer = document.querySelector('.appstle_subscription_amount_wrapper');
+          if (subscriptionContainer) {
+            const discountedEl = subscriptionContainer.querySelector('.appstle_subscription_amount.transcy-money');
+            const originalEl = subscriptionContainer.querySelector('.appstle_subscription_compare_amount.transcy-money');
+            
+            if (discountedEl) {
+              let raw = discountedEl.textContent.trim();
+              discountedPrice = parsePrice(raw);
+              console.log("Subscription discounted price:", discountedPrice);
+            }
+            
+            if (originalEl) {
+              let raw = originalEl.textContent.trim();
+              originalPrice = parsePrice(raw);
+              console.log("Subscription original price:", originalPrice);
+            }
+          }
+        }
+  
+        // -------------------------------------------
+        // 4️⃣ Handle PACK pricing
+        // -------------------------------------------
+        if (isPackSelected) {
+          const packWrapper = selectedSellingPlan.closest(".single_pack_option");
+          if (packWrapper) {
+            const labelText = packWrapper.innerText.replace(/\n+/g, " ").trim();
+            console.log(labelText + "   (normalized)");
+          
+            // Extract discounted price
+            const discountedMatch = labelText.match(
+              /(Now|Jetzt|Nu|Ab|À|A)[^€]*€\s*([\d.,]+)/i
+            );
+          
+            if (discountedMatch) {
+              discountedPrice = parsePrice(discountedMatch[2]);
+              console.log("Pack discounted price:", discountedPrice);
+            }
+          
+            // Extract original price
+            const originalMatch = labelText.match(
+              /(instead of|statt|plaats van|au lieu de|invece di)[^€]*€\s*([\d.,]+)/i
+            );
+          
+            if (originalMatch) {
+              originalPrice = parsePrice(originalMatch[2]);
+              console.log("Pack original price:", originalPrice);
+            }
+          }          
+        }
+  
+        // -------------------------------------------
+        // 5️⃣ Fallback: Get currency from any price element
+        // -------------------------------------------
+        const priceElements = document.querySelectorAll([
+          '.appstle_subscription_amount.transcy-money',
+          '.single_pack_option',
+          '.product__price-value',
+          'button.ajax-submit.js-ajax-submit span[data-regular-price]'
+        ].join(','));
+  
+        for (let el of priceElements) {
+          const text = el.textContent || el.innerText;
+          const currencyMatch = text.match(/[^\d\s.,]+/);
+          if (currencyMatch) {
+            currency = currencyMatch[0];
+            break;
+          }
+        }
+  
+        console.log("Detected currency:", currency);
+  
+        // -------------------------------------------
+        // 6️⃣ Update button prices - SPECIFIC TO ADD TO CART BUTTON
+        // -------------------------------------------
+        const addToCartButton = document.querySelector("button.ajax-submit.js-ajax-submit");
+        
+        if (addToCartButton) {
+          const btnPriceEl = addToCartButton.querySelector("span[data-regular-price]");
+          const btnCompareEl = addToCartButton.querySelector("span[data-compare-price]");
+          const btnCompareText = addToCartButton.querySelector("span[data-compare-text]");
+  
+          // Update discounted price
+          if (discountedPrice && btnPriceEl) {
+            const formattedPrice = formatPrice(discountedPrice, currency);
+            btnPriceEl.textContent = formattedPrice;
+            console.log("Updated add to cart button price:", formattedPrice);
+          }
+  
+          // Update compare price (show/hide based on whether original price exists)
+          if (btnCompareEl && btnCompareText) {
+            if (originalPrice) {
+              const formattedCompare = formatPrice(originalPrice, currency);
+              btnCompareEl.textContent = formattedCompare;
+              btnCompareText.classList.remove("hide");
+              btnCompareEl.classList.remove("hide");
+              console.log("Updated add to cart compare price:", formattedCompare);
+            } else {
+              btnCompareText.classList.add("hide");
+              btnCompareEl.classList.add("hide");
+            }
+          }
+        } else {
+          console.log("Add to cart button not found");
+        }
+  
+        return discountedPrice != null;
+      }
+  
+      // Helper function to parse prices in any currency format
+      function parsePrice(priceString) {
+        if (!priceString) return null;
+        
+        // Remove all non-numeric characters except dots and commas
+        let cleaned = priceString.replace(/[^\d,.]/g, '').trim();
+        
+        // Handle European format (1.000,00) vs US format (1,000.00)
+        if (cleaned.includes(',') && cleaned.includes('.')) {
+          // If both exist, comma is likely decimal separator (European)
+          if (cleaned.lastIndexOf(',') > cleaned.lastIndexOf('.')) {
+            cleaned = cleaned.replace(/\./g, '').replace(',', '.');
+          } else {
+            // Comma is thousands separator
+            cleaned = cleaned.replace(/,/g, '');
+          }
+        } else if (cleaned.includes(',')) {
+          // Check if comma is used as decimal separator
+          const parts = cleaned.split(',');
+          if (parts[1] && parts[1].length === 2) {
+            // Likely decimal separator (e.g., 28,99)
+            cleaned = cleaned.replace(',', '.');
+          } else {
+            // Likely thousands separator (e.g., 1,000)
+            cleaned = cleaned.replace(/,/g, '');
+          }
+        }
+        
+        const price = parseFloat(cleaned);
+        return isNaN(price) ? null : price;
+      }
+  
+      // Helper function to format price with currency symbol
+      function formatPrice(price, currency) {
+        // Format with 2 decimal places and proper decimal separator based on currency
+        let formattedPrice;
+        
+        // For European currencies, use comma as decimal separator
+        if (['€', '£', 'kr', 'zł', 'CHF', 'DKK', 'SEK', 'NOK'].includes(currency)) {
+          formattedPrice = price.toFixed(2).replace('.', ',');
+        } else {
+          // For others, use dot as decimal separator
+          formattedPrice = price.toFixed(2);
+        }
+        
+        return `${currency}${formattedPrice}`;
+      }
+  
+      // -------------------------------------------
+      // Wait for widgets to load and initialize
+      // -------------------------------------------
+      function runWhenReady(callback) {
+        function elementsExist() {
+          return (
+            document.querySelector(".appstle_subscription_wrapper") ||
+            document.querySelector(".single_pack_option") ||
+            document.querySelector('button.ajax-submit.js-ajax-submit')
+          );
+        }
+  
+        if (elementsExist()) {
+          callback();
+          return;
+        }
+  
+        const observer = new MutationObserver(() => {
+          if (elementsExist()) {
+            observer.disconnect();
+            callback();
+          }
+        });
+  
+        observer.observe(document.body, { childList: true, subtree: true });
+  
+        setTimeout(() => {
+          observer.disconnect();
+          callback();
+        }, 1000);
+      }
+  
+      // Initialize
+      runWhenReady(() => {
+        console.log("🔥 Initial price update after widgets load");
+        // Set Buy Once as default selection - MORE RELIABLE APPROACH
+        setTimeout(() => {
+          const buyOnceInput = document.querySelector('.appstle_one_time_details_wrapper input[value=""]');
+          if (buyOnceInput) {
+            // Method 1: Directly check the radio button
+            buyOnceInput.checked = true;
+            
+            // Method 2: Trigger both change and click events
+            buyOnceInput.dispatchEvent(new Event('change', { bubbles: true }));
+            
+            // Method 3: Also click the label for visual feedback
+            const buyOnceLabel = document.querySelector('.appstle_one_time_details_wrapper label');
+            if (buyOnceLabel) {
+              buyOnceLabel.click();
+            }
+            
+            console.log("✅ Buy Once option set as default");
+          }
+        }, 1500);
+        updatePrice();
+        
+        // Add event listeners for all relevant changes
+        document.addEventListener("change", (e) => {
+          if (e.target.name === "selling_plan") {
+            console.log("🔄 Selling plan changed:", e.target.value);
+            updatePrice();
+          }
+        });
+  
+        // Also listen for clicks on pack options (since they use hidden radios)
+        document.addEventListener("click", (e) => {
+          if (e.target.closest(".single_pack_option")) {
+            setTimeout(() => {
+              console.log("🔄 Pack option clicked");
+              updatePrice();
+            }, 50);
+          }
+        });
+  
+        // Listen for Appstle subscription changes
+        const appstleContainer = document.querySelector('.appstle_subscription_wrapper');
+        if (appstleContainer) {
+          appstleContainer.addEventListener('click', (e) => {
+            setTimeout(() => {
+              console.log("🔄 Appstle option clicked");
+              updatePrice();
+            }, 50);
+          });
+        }
+      });
+  
+      // Backup interval for safety
+      let tries = 0;
+      const interval = setInterval(() => {
+        tries++;
+        const ok = updatePrice();
+        if (ok || tries > 10) {
+          clearInterval(interval);
+          console.log("✅ Price updater initialized successfully");
+        }
+      }, 500);
+      
+    });
+  </script>
+  {% comment %} end price change {% endcomment %}
+<style>
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .inserted-block{
+    background: #DBD5CA;
+    border-radius: 15px;
+    padding: 2px 10px;
+    line-height: normal;
+    margin-left:auto;
+  }
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(2) .inserted-block{
+    background: #DBD5CA;
+    border-radius: 15px;
+    padding: 2px 10px;
+    line-height: normal;
+    margin-left:auto;
+  }
+.inserted-block p {
+  font-size: 14px;
+  margin:0px;
+  color:#fff;
+}
+.inserted-block p strong {
+  font-weight: bold;
+  color:#fff;
+  text-transform: uppercase;
+}
+.appstle_subscription_wrapper_option .single_pack_option:nth-child(1) {
+    justify-content: space-between;
+    align-items: flex-start !important;
+}
+.appstle_subscription_wrapper_option .single_pack_option:nth-child(2) {
+  justify-content: space-between;
+  align-items: flex-start !important;
+}
+  .appstle_subscription_wrapper_option.appstle_include_dropdown input + label .appstle-save-badge::after {
+    content: "{{settings.discount_text}}";
+    padding-right: 5px;
+}
+.appstle_subscription_wrapper_option.appstle_include_dropdown input + label .appstle-save-badge {
+  display: flex;
+  flex-direction: row-reverse;
+}
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(3) {
+    display: none !important;
+}
+  .processed-for-saving{
+    position:relative;
+  }
+  .processed-for-saving::before {
+    content: "";
+    width: 40px;
+    height: 1px;
+    background: #000;
+    position: absolute;
+    right: 0;
+    top: 50%;
+}
+  html[lang="de"] .appstle_subscription_wrapper_option .single_pack_option input + label span[style="color:red;"]::before {
+    display: none;
+}
+html[lang="nl"] .appstle_subscription_wrapper_option .single_pack_option input + label span[style="color:red;"]::before {
+  display: none;
+}
+
+.saving-text {
+    margin: 0;
+}
+.appstle_subscription_wrapper_option input + label .appstle_one_time_text p {
+  margin: 0;
+  text-transform: math-auto;
+  padding-left: 5px;
+  line-height: normal;
+  display:none;
+}
+.appstle_subscription_wrapper_option.appstle_include_dropdown input + label p.you-save {
+  margin: 0;
+}
+.appstle_subscription_wrapper_option input + label .appstle_one_time_text {
+  display: flex;
+  align-items: inherit;
+  justify-content: center;
+}
+.appstle_subscription_wrapper_option .single_pack_option input + label span[style="color:red;"] {
+    background: #000;
+    color: #fff !important;
+    font-weight: bold;
+    font-size: 11px;
+    border-radius: 12px;
+    padding: 2px 8px;
+}
+.appstle_subscription_wrapper_option.appstle_include_dropdown .appstle_radio_label .appstle-save-badge {
+  background: #000;
+  font-size: 11px;
+  padding: 0px 8px;
+  text-transform: initial;
+}
+.appstle_subscription_wrapper_option .single_pack_option input + label span[style="color:red;"]::before {
+  content: "{{settings.discount_text}}";
+  padding-right: 5px;
+}
+
+
+.product-block.product-block--price .product__price[style="text-decoration: line-through;"] .product__price-value span[style="text-decoration: none;"] {
+    display: none;
+}
+.template-product .product-block.product-block--price .product__price.appstle_subscription_final_price {
+  display: flex;
+  justify-content: flex-end;
+}
+.template-product .ajax-submit.js-ajax-submit span:nth-child(2) {
+  display: none;
+}
+.template-product .ajax-submit.js-ajax-submit {
+    background: #2A6D2E;
+}
+.template-product .ajax-submit.js-ajax-submit::after {
+  background-color: #2a6d2e !important;
+}
+.template-cart button#checkout {
+  background: #2A6D2E;
+}
+.template-cart button#checkout::after {
+  background-color: #2a6d2e !important;
+}
+@media only screen and (max-width: 575px) {
+
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .inserted-block {
+    {% comment %} position: absolute;
+    top: 0;
+    transform: translate(50%, -15px); {% endcomment %}
+    background: #DBD5CA;
+    border-radius: 15px;
+    padding: 4px 10px;
+    line-height: normal;
+    margin-left:auto;
+}
+
+.appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .inserted-block p {
+    color: #fff;
+}
+
+.appstle_subscription_wrapper_option .single_pack_option:nth-child(2) .inserted-block {
+  {% comment %} position: absolute;
+  top: 0;
+  transform: translate(50%, -15px); {% endcomment %}
+  background: #DBD5CA;
+  border-radius: 15px;
+  padding: 4px 10px;
+  line-height: normal;
+  margin-left:auto;
+}
+
+.appstle_subscription_wrapper_option .single_pack_option:nth-child(2) .inserted-block p {
+  color: #fff;
+}
+  .inserted-block p{
+    font-size:12px;
+  }
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) {
+    flex-wrap: wrap;
+    position:relative;
+  }
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(2) {
+    flex-wrap: wrap;
+    position:relative;
+  }
+  .appstle_subscription_wrapper_option input + label .appstle_one_time_text {
+      align-items: flex-start;
+      flex-direction: column;
+  }
+  .appstle_subscription_wrapper_option .single_pack_option input + label span[style="color:red;"] {
+    font-size: 11px;
+    padding: 2px 10px;
+    line-height: normal;
+  }
+  .appstle_subscription_wrapper_option.appstle_include_dropdown .appstle_radio_label .appstle-save-badge {
+    font-size: 11px;
+    padding: 2px 10px;
+    line-height: normal;
+  }
+}
+
+</style>
+<script>
+  window.config = {
+    save_text: "{{ settings.save_text }}",
+    most_chosen: "{{ settings.most_chosen }}",
+    best_value: "{{ settings.best_value }}",
+  };
+  console.log(window.config.save_text);
+  {% comment %}
+  ----------------------------------------------------------------------------------
+    one - time - code
+  ----------------------------------------------------------------------------------
+  {% endcomment %}
+
+  (function(){
+    // tiny helper: parse human price to number (supports 1.234,56 and 1,234.56)
+    function parsePrice(text){
+      if(!text) return NaN;
+      text = text.trim();
+      // remove non-number but keep . and ,
+      const cleaned = text.replace(/[^\d\.,]/g, '');
+      if(!cleaned) return NaN;
+      const lastDot = cleaned.lastIndexOf('.');
+      const lastComma = cleaned.lastIndexOf(',');
+      // decide decimal separator by last occurrence
+      let normalized;
+      if(lastComma > lastDot){
+        // comma is decimal (e.g. 1.234,56 or 12,34)
+        normalized = cleaned.replace(/\./g,'').replace(',', '.');
+      } else if(lastDot > lastComma){
+        // dot is decimal (e.g. 1,234.56)
+        normalized = cleaned.replace(/,/g,'');
+      } else {
+        // only one of them or none — assume dot decimal if present else comma decimal if present
+        if(cleaned.indexOf(',') !== -1 && cleaned.indexOf('.') === -1){
+          normalized = cleaned.replace(',', '.');
+        } else {
+          normalized = cleaned.replace(/,/g,'');
+        }
+      }
+      return parseFloat(normalized);
+    }
+  
+    // try multiple selectors so it's robust
+    function findPriceEls(){
+      const regular = document.querySelector('[data-regular-price]') ||
+                      // fallback: first non-strike span in price block
+                      document.querySelector('.product__price-value span:not(.strike)');
+      const compare = document.querySelector('[data-compare-price]') ||
+                      document.querySelector('.product__price-value .strike') ||
+                      document.querySelector('.product__price-value .strike.ml1');
+      return {regular, compare};
+    }
+  
+    // currency symbol detection: prefer symbol from compare, else regular
+    function detectCurrencySymbol(text){
+      if(!text) return '';
+      // find first non-digit character sequence (common for currency symbols)
+      const m = text.match(/[^0-9\s\.,]+/);
+      return m ? m[0] : '';
+    }
+  
+    function updateSavingsOnce(){
+      const {regular, compare} = findPriceEls();
+      if(!regular || !compare) return false;
+  
+      const rText = regular.textContent || regular.innerText || '';
+      const cText = compare.textContent || compare.innerText || '';
+  
+      const currency = detectCurrencySymbol(cText) || detectCurrencySymbol(rText) || '';
+  
+      const rVal = parsePrice(rText);
+      const cVal = parsePrice(cText);
+  
+      if(!isFinite(rVal) || !isFinite(cVal) || cVal <= rVal) return false;
+  
+      const savings = (cVal - rVal).toFixed(2);
+  
+      // find every target (in case you have multiple subscription labels)
+      const targets = document.querySelectorAll('.appstle_subscription_wrapper_option input + label .appstle_one_time_text');
+  
+      if(!targets || !targets.length) return false;
+  
+      targets.forEach(t => {
+        // remove old node
+        const old = t.querySelector('.you-save');
+        if(old) old.remove();
+        // append new node (use textContent to avoid HTML injection)
+        const p = document.createElement('p');
+        p.className = 'you-save';
+        p.textContent = `(${window.config.save_text} ${currency}${savings})`;
+        t.appendChild(p);
+      });
+  
+      return true;
+    }
+  
+    // Lightweight waiter: try to update for up to ~3 seconds (fast), then stop.
+    let attempts = 0;
+    function tryUntilSuccess(){
+      attempts++;
+      const ok = updateSavingsOnce();
+      if(ok) return;
+      if(attempts > 30) return; // ~30 * 100ms = 3s max
+      setTimeout(tryUntilSuccess, 100);
+    }
+  
+    // start
+    tryUntilSuccess();
+  
+    // also respond to common currency update events if present (safe no-op)
+    document.addEventListener('app:currency:converted', tryUntilSuccess);
+    document.addEventListener('currency:converted', tryUntilSuccess);
+    document.addEventListener('appstle:subscription:updated', tryUntilSuccess);
+  })();
+
+  {% comment %}
+  ----------------------------------------------------------------------------------
+    subscriber - code 
+  ----------------------------------------------------------------------------------
+  {% endcomment %}
+
+  (function () {
+
+    function parsePrice(text) {
+      if (!text) return NaN;
+      text = text.trim();
+      const cleaned = text.replace(/[^\d.,]/g, "");
+      if (!cleaned) return NaN;
+      const lastDot = cleaned.lastIndexOf(".");
+      const lastComma = cleaned.lastIndexOf(",");
+      let normalized;
+  
+      if (lastComma > lastDot) {
+        normalized = cleaned.replace(/\./g, "").replace(",", ".");
+      } else if (lastDot > lastComma) {
+        normalized = cleaned.replace(/,/g, "");
+      } else {
+        normalized = cleaned.includes(",") ? cleaned.replace(",", ".") : cleaned.replace(/,/g, "");
+      }
+  
+      return parseFloat(normalized);
+    }
+  
+    function currencySymbol(t) {
+      const m = t.match(/[^0-9\s\.,]+/);
+      return m ? m[0] : "";
+    }
+  
+    function updateOne(option) {
+      const saleEl = option.querySelector(".appstle_subscription_amount.transcy-money");
+      const compEl = option.querySelector(".appstle_subscription_compare_amount.transcy-money");
+      const badge = option.querySelector(".appstle-save-badge");
+  
+      if (!saleEl || !compEl || !badge) return;
+  
+      const sale = parsePrice(saleEl.textContent);
+      const comp = parsePrice(compEl.textContent);
+      if (!isFinite(sale) || !isFinite(comp) || comp <= sale) return;
+  
+      const cur = currencySymbol(saleEl.textContent) || currencySymbol(compEl.textContent);
+      const save = (comp - sale).toFixed(2);
+  
+      // REMOVE old you-save
+      const old = option.querySelector(".you-save");
+      if (old) old.remove();
+  
+      // INSERT AFTER badge
+      const p = document.createElement("p");
+      p.className = "you-save";
+      p.textContent = `(${window.config.save_text} ${cur}${save})`;
+      badge.insertAdjacentElement("afterend", p);
+    }
+  
+    function updateAll() {
+      document.querySelectorAll(".appstle_subscription_wrapper_option").forEach(updateOne);
+    }
+  
+    // run shortly until everything loads
+    let tries = 0;
+    function boot() {
+      tries++;
+      updateAll();
+      if (tries < 20) setTimeout(boot, 120);
+    }
+  
+    boot();
+  
+    // currency updates
+    document.addEventListener("app:currency:converted", updateAll);
+  
+  })();
+
+  {% comment %}
+  ----------------------------------------------------------------------------------
+    multi subscription - code 
+  ----------------------------------------------------------------------------------
+  {% endcomment %}
+
+function waitForAppstleHTML() {
+  const target = document.body;
+
+  const observer = new MutationObserver(() => {
+      const items = document.querySelectorAll(
+          '.appstle_subscription_wrapper_option .single_pack_option label div span[style*="font-size"]:not(.processed-for-saving)'
+      );
+
+      if (items.length > 0) {
+          observer.disconnect(); // stop observing after found
+          addSavingText(items);
+      }
+  });
+
+  observer.observe(target, { childList: true, subtree: true });
+}
+
+function addSavingText(items) {
+  items.forEach((spanEl) => {
+      let txt = spanEl.textContent.trim();  
+      const prices = txt.match(/€\s?([\d\.,]+).*€\s?([\d\.,]+)/);
+
+      if (prices) {
+          let nowPrice = parseFloat(prices[1].replace(',', '.'));
+          let oldPrice = parseFloat(prices[2].replace(',', '.'));
+          let savings = (oldPrice - nowPrice).toFixed(2).replace('.', ',');
+
+          // Insert AFTER this span
+          spanEl.insertAdjacentHTML(
+              'afterend',
+              `<p class="saving-text">
+                  (${window.config.save_text} €${savings})
+              </p>`
+          );
+      }
+
+      // Mark processed so it never repeats
+      spanEl.classList.add('processed-for-saving');
+  });
+}
+document.addEventListener("DOMContentLoaded", waitForAppstleHTML);
+
+{% comment %} add labels to subscription {% endcomment %}
+const wait = setInterval(() => {
+  const t1 = document.querySelector('.single_pack_option:nth-child(1) .appstle_subscription_radio_wrapper');
+  const t2 = document.querySelector('.single_pack_option:nth-child(2) .appstle_subscription_radio_wrapper');
+
+  // Don't stop until both exist AND config exists
+  if (!t1 || !t2 || !window.config) return;
+
+  // Insert only once
+  if (!t1.parentNode.querySelector('.inserted-block')) {
+    t1.insertAdjacentHTML("afterend", `<div class="inserted-block">${window.config.most_chosen}</div>`);
+  }
+
+  if (!t2.parentNode.querySelector('.inserted-block')) {
+    t2.insertAdjacentHTML("afterend", `<div class="inserted-block">${window.config.best_value}</div>`);
+  }
+
+  clearInterval(wait); // stop after success
+}, 200);
+
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  
+    const lang = document.documentElement.lang.toLowerCase();
+    const CLICK_SELECTOR = '.appstle_subscription_wrapper_option.appstle_include_dropdown';
+    const TEXT_SELECTOR =
+      '.appstle_subscription_wrapper_option.appstle_include_dropdown input + label span.appstle_subscribe_save_text';
+  
+    function getTextByLang() {
+      if (lang.startsWith("de")) return "Abonnieren";
+      if (lang.startsWith("nl")) return "Abonneren";
+      return "Subscribe";
+    }
+  
+    function updateText() {
+      const target = document.querySelector(TEXT_SELECTOR);
+      if (target) {
+        target.textContent = getTextByLang();
+      }
+    }
+  
+    /* ---------- 1️⃣ INITIAL LOAD (App HTML) ---------- */
+    const observer = new MutationObserver(function () {
+      const target = document.querySelector(TEXT_SELECTOR);
+      if (target) {
+        updateText();
+        observer.disconnect(); // stop after first successful update
+      }
+    });
+  
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  
+    /* ---------- 2️⃣ ON CLICK (App re-renders) ---------- */
+    document.addEventListener("click", function (e) {
+      if (e.target.closest(CLICK_SELECTOR)) {
+        setTimeout(updateText, 100); // wait for Appstle to re-render
+      }
+    });
+  
+  });
+  </script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    
+      const lang = document.documentElement.lang.toLowerCase();
+    
+      function getTextByLang() {
+        if (lang.startsWith("de")) return "Monatlich";
+        if (lang.startsWith("nl")) return "Maandelijks";
+        return "Monthly";
+      }
+    
+      const observer = new MutationObserver(function () {
+        const target = document.querySelector(
+          '.appstle_subscription_wrapper_option.appstle_include_dropdown .appstle_subscribe_option .appstle_single_option_text'
+        );
+    
+        if (target) {
+          target.textContent = getTextByLang();
+    
+          // ✅ Stop observing once updated
+          observer.disconnect();
+        }
+      });
+    
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    
+    });
+    </script>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+      
+        const lang = document.documentElement.lang.toLowerCase();
+      
+        function getTextByLang() {
+          if (lang.startsWith("de")) return "Wählen Sie Ihre Kaufoption";
+          if (lang.startsWith("nl")) return "Kies uw aankoopoptie";
+          return "Choose your purchase option";
+        }
+      
+        const observer = new MutationObserver(function () {
+          const target = document.querySelector(
+            '#appstle_subscription_widget0 .appstle_widget_title'
+          );
+      
+          if (target) {
+            target.textContent = getTextByLang();
+      
+            // ✅ Stop observing once updated
+            observer.disconnect();
+          }
+        });
+      
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      
+      });
+      </script>
+  
+  </body>
+</html>

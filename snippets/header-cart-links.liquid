@@ -1,0 +1,304 @@
+{% comment %}
+  This snippet is used to render the cart, search, and account links in the header.
+  It is used in the header.liquid snippet, header-block.liquid, and header-inline.liquid and header-mobile.liquid snippets.
+
+  Accepts:
+    - use_icons: Boolean, whether to use icons or text for the links
+    - classes: String, additional classes to add to the links
+    - fill_color: String, the fill color for the icons
+    - hover_color: String, the hover color for the icons
+    - is_mobile: Boolean, whether the current device is mobile
+    - shop: Object, the shop object
+    - customer: Object, the customer object
+    - routes: Object, the routes object
+    - cart: Object, the cart object
+    - settings: Object, the theme settings object
+
+  Usage:
+    {% render 'header-cart-links',
+      classes: 'm0 p0',
+      use_icons: true,
+      is_mobile: true,
+      fill_color: 'var(--header-text)',
+      hover_color: 'var(--header-hover)'
+    %}
+{% endcomment %}
+<li class="header__cart-links--search seeks {{ classes }}">
+  {%- if use_icons -%}
+    <a
+      class="px1 py4 js-search-toggle mb0 inline-block"
+      aria-label="{{ 'general.header.search' | t }}"
+      href="{% if is_mobile %}{{ routes.search_url }}{% else %}#{% endif %}"
+    >
+      {% render 'snip-icons',
+        wrapper: '.header__cart-links--search',
+        type: 'theme',
+        icon: 'search',
+        size: '20px',
+        classes: 'mr0',
+        fill: fill_color,
+        hover: hover_color
+      -%}
+    </a>
+  {%- else -%}
+    <a class="px1 py4 js-search-toggle" aria-label="{{ 'general.header.search' | t }}" href="#"
+      ><span class="navigation__top-level--hover no-pe">{{ 'general.header.search' | t }}</span></a
+    >
+  {%- endif -%}
+</li>
+{% if shop.customer_accounts_enabled %}
+  {% if customer %}
+    <li class="header__cart-links--account {{ classes }} sm-hide">
+      <a
+        class="px1 py4 {% if use_icons %}mb0 inline-block{% endif %}"
+        aria-label="{{'general.header.account' | t }}"
+        href="{{ routes.account_url }}"
+      >
+        {%- if use_icons -%}
+          {% render 'snip-icons',
+            wrapper: '.header__cart-links--account',
+            type: 'theme',
+            icon: 'user-circle',
+            size: '20px',
+            classes: 'mr0',
+            fill: fill_color,
+            hover: hover_color
+          %}
+        {%- else -%}
+          <span class="navigation__top-level--hover">{{ 'general.header.account' | t }}</span>
+        {%- endif -%}
+      </a>
+    </li>
+    {% comment %}
+    <li class="header__cart-links--logout {{ classes }} sm-hide">
+      <a
+        class="px1 py4 {% if use_icons %}mb0 inline-block{% endif %}"
+        href="{{ routes.account_logout_url }}"
+        aria-label="{{ 'general.header.logout' | t }}"
+      >
+        {%- if use_icons -%}
+          {% render 'snip-icons',
+            wrapper: '.header__cart-links--logout',
+            type: 'theme',
+            icon: 'user-circle-logout',
+            size: '20px',
+            classes: 'mr0',
+            fill: fill_color,
+            hover: hover_color
+          %}
+        {%- else -%}
+          <span class="navigation__top-level--hover sm-hide">{{ 'general.header.logout' | t }}</span>
+        {%- endif -%}
+      </a>
+    </li>
+    {% endcomment %}
+  {% else %}
+    <li class="header__cart-links--login {{ classes }} sm-hide" aria-label="{{ 'general.header.login' | t }}">
+      <a class="px1 py4 {% if use_icons %}mb0 inline-block{% endif %}" href="{{ routes.account_login_url }}">
+        {%- if use_icons -%}
+          {% render 'snip-icons',
+            wrapper: '.header__cart-links--login',
+            type: 'theme',
+            icon: 'user-circle',
+            size: '20px',
+            classes: 'mr0',
+            fill: fill_color,
+            hover: hover_color
+          %}
+        {%- else -%}
+          <span class="navigation__top-level--hover">{{ 'general.header.login' | t }}</span>
+        {%- endif -%}
+      </a>
+    </li>
+  {% endif %}
+{% endif %}
+{%- if has_language or has_currency -%}
+  <li class="header__cart-links--localization {{ classes }} sm-hide">
+    {%- if has_language -%}
+      {%- if localization.available_languages.size > 1 -%}
+        <div class="section-top-bar__lang v-center a-center">
+          <noscript>
+            {%- form 'localization', id: 'HeaderLanguageFormNoScript', class: 'localization-form' -%}
+              <div class="localization-form__select inline-block w60 v-center">
+                <h2 class="visually-hidden" id="HeaderLanguageLabelNoScript">{{ 'localization.language_label' | t }}</h2>
+                <select class="localization-selector link" name="locale_code" aria-labelledby="HeaderLanguageLabelNoScript">
+                  <option value="" disabled>{{ 'general.language.dropdown_label' | t }}</option>
+                  {%- for language in localization.available_languages -%}
+                    <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}" {%- if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                      {{ language.endonym_name | capitalize }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+              <button class="localization-form__noscript-btn button mb0 btn-as-link inline-block v-center">
+                {% render 'snip-icons',
+                    wrapper: '.section-top-bar__lang',
+                    type: 'theme',
+                    icon: 'checkmark',
+                    size: '12px',
+                    fill: 'var(--text-color)',
+                    hover: 'var(--text-color)' %}
+              </button>
+            {%- endform -%}
+          </noscript>
+          <div data-localization-form>
+            {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
+              <div class="no-js-hidden">
+                <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'general.language.dropdown_label' | t }}</h2>
+                <div class="disclosure">
+                  <button type="button" class="disclosure__button btn-as-link localization-form__select" aria-expanded="false" aria-controls="HeaderLanguageList" aria-describedby="HeaderLanguageLabel">
+                    {{ localization.language.iso_code }}
+                  </button>
+                  <div id="HeaderLanguageList" class="disclosure__list-container" hidden>
+                    <ul role="list" class="disclosure__list">
+                      {%- for language in localization.available_languages -%}
+                        <li class="disclosure__item" tabindex="-1">
+                          <a class="disclosure__link {% if language.iso_code == localization.language.iso_code %} disclosure__link--active{% endif %}" href="#" hreflang="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %} data-value="{{ language.iso_code }}">
+                            {{ language.endonym_name | capitalize }}
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                </div>
+                <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
+              </div>
+            {%- endform -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+    {%- if has_currency -%}
+      {%- if localization.available_countries.size > 1 -%}
+        <div class="section-top-bar__currency v-center a-center">
+          <noscript>
+            {%- form 'localization', id: 'HeaderCountryFormNoScript', class: 'localization-form' -%}
+              <div class="localization-form__select inline-block w50 v-center">
+                <h2 class="visually-hidden" id="HeaderCountryLabelNoScript">{{ 'general.currency.dropdown_label' | t }}</h2>
+                <select class="localization-selector link" name="country_code" aria-labelledby="HeaderCountryLabelNoScript">
+                  <option value="" disabled>{{ 'general.currency.dropdown_label' | t }}</option>
+                  {%- for country in localization.available_countries -%}
+                    <option value="{{ country.iso_code }}" {%- if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                      {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+              <button class="localization-form__noscript-btn button mb0 btn-as-link inline-block v-center">
+                {% render 'snip-icons',
+                    wrapper: '.section-top-bar__lang',
+                    type: 'theme',
+                    icon: 'checkmark',
+                    size: '12px',
+                    fill: 'var(--text-color)',
+                    hover: 'var(--text-color)' %}
+              </button>
+            {%- endform -%}
+          </noscript>
+          <div data-localization-form>
+            {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
+              <div class="no-js-hidden">
+                <h2 class="visually-hidden" id="HeaderCountryLabel">{{ 'general.currency.dropdown_label' | t }}</h2>
+                <div class="disclosure">
+                  <button type="button" class="disclosure__button btn-as-link localization-form__select localization-selector link link--text caption-large" aria-expanded="false" aria-controls="HeaderCountryList" aria-describedby="HeaderCountryLabel">
+                    {% if section.settings.show_flag %}
+                      <span class="country--flag">
+                        {{ localization.country | image_url: width: 32 | image_tag: class: 'disclosure__toggle__flag', loading: 'eager', fetchpriority: 'high', image_alt: country.name }}
+                      </span>
+                    {% endif %}
+                    {{ localization.country.currency.iso_code }} {{ localization.country.currency.symbol }}
+                  </button>
+                  <div id="HeaderCountryList" class="disclosure__list-container" hidden>
+                    <ul role="list" class="disclosure__list list-unstyled">
+                      {%- for country in localization.available_countries -%}
+                        <li class="disclosure__item" tabindex="-1">
+                          <a class="disclosure__link {% if country.iso_code == localization.country.iso_code %} disclosure__link--active{% endif %}" href="#"{% if country.iso_code == localization.country.iso_code %} aria-current="true"{% endif %} data-value="{{ country.iso_code }}">
+                            {% if section.settings.show_flag %}
+                              <span class="country--flag">
+                                {{ country | image_url: width: 32 | image_tag: class: 'disclosure__toggle__flag', loading: 'eager', fetchpriority: 'high', image_alt: country.name }}
+                              </span>
+                            {% endif %}
+                            {{ country.name }}
+                            <span class="localization-form__currency small">({{ country.currency.iso_code }} {{ country.currency.symbol }})</span>
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                </div>
+                <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+              </div>
+            {%- endform -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </li>
+{%- endif -%}
+<li class="header__cart-links--cart cart-link relative {{ classes }}">
+  {% if settings.cart_type == 'page_only' %}
+    <a
+      class="px1 py4 {% if use_icons %}mb0 inline-block{% endif %}"
+      aria-label="{{'general.header.cart' | t }}"
+      href="{{ routes.cart_url }}"
+    >
+      {%- if use_icons -%}
+        {% render 'snip-icons',
+          wrapper: '.header__cart-links--cart',
+          type: 'theme',
+          icon: 'bag',
+          size: '20px',
+          classes: 'mr0',
+          fill: fill_color,
+          hover: hover_color
+        %}
+        <span class="js-cart-count icon-only">{{ cart.item_count }}</span>
+      {%- else -%}
+        <span class="navigation__top-level--hover">
+          {{ 'general.header.bag' | t }}<span> (<span class="js-cart-count">{{ cart.item_count }}</span>)</span>
+         </span>
+      {%- endif -%}
+    </a>
+  {%- else -%}
+    {%- liquid
+      if settings.cart_type == 'drawer'
+        assign cart_classes = 'js-slideout-open'
+        assign cart_settings = 'data-wau-slideout-target="ajax-cart" data-slideout-direction="right"'
+        assign popover_target = 'slideout-ajax-cart'
+      elsif settings.cart_type == 'modal_cart'
+        assign cart_classes = 'js-modal-open'
+        assign cart_settings = 'data-wau-modal-target="ajax-cart"'
+        assign popover_target = 'modal-ajax-cart'
+      endif
+    -%}
+    <div class="slideout__trigger--open">
+      <a
+        class="js-mini-cart-trigger {{ cart_classes }} px1 py4 {% if use_icons %}mb0 inline-block{% endif %}"
+        {{ cart_settings }}
+        aria-label="Open cart"
+        href="{{ routes.cart_url }}"
+      >
+        {%- if use_icons -%}
+          {% render 'snip-icons',
+            wrapper: '.header__cart-links--cart',
+            type: 'theme',
+            icon: 'bag',
+            size: '20px',
+            classes: 'mr0',
+            fill: fill_color,
+            hover: hover_color
+          %}
+          <span class="js-cart-count icon-only">{{ cart.item_count }}</span>
+        {%- else -%}
+          <span class="navigation__top-level--hover">
+            {{- 'general.header.bag' | t -}}
+            <span
+              >&nbsp;(<span class="js-cart-count">{{ cart.item_count }}</span>)</span
+            ></span
+          >
+        {%- endif -%}
+
+      </a>
+    </div>
+  {%- endif -%}
+</li>

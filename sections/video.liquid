@@ -1,0 +1,215 @@
+{% comment %} Video Logic {% endcomment %}
+{% liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  if settings.section_title_align == 'left'
+    assign heading_align = 'a-left'
+  else
+    assign heading_align = 'a-center'
+  endif
+  %}
+
+{% comment %} Video Template {% endcomment %}
+
+<div
+  class="global__section featured-video-{{ section.id }} {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="featured-video"
+  data-asset-url="{{ 'section-featured-video.js' | asset_url }}"
+  {% unless request.visual_preview_mode %}
+    data-section-loaded="false"
+  {% endunless %}
+>
+
+  <div class="grid__wrapper {% if section.settings.full_width %} edge{% endif %}">
+    {% render 'snip-headings', align: heading_align, grid: 'span-12', heading: section.settings.heading %}
+
+    <div class="featured-video-wrapper span-12 auto">
+
+      {% capture poster_button %}
+        <div class="featured-video-image">
+          <button
+            class="featured-video-button play-button js-play-video btn-as-link absolute-center"
+            type="button"
+            name="button"
+          >
+          {% render 'snip-icons',
+              wrapper: '.featured-video-button',
+              type: 'media-icons',
+              icon: 'play',
+              size: '80px',
+              classes: 'no-pe m0',
+              fill: '#ffffff',
+              hover: '#ffffff' %}
+          </button>
+
+          {%- if section.settings.fallback_image != blank -%}
+            {% assign alt_text = section.settings.fallback_image.alt | escape | default: '' %}
+            {% assign zoom_src = section.settings.fallback_image | image_url: width: 2400 %}
+            {% capture sizes %}(min-width: 1601px) {{ lg_render | default: '2000px' }},(min-width: 768px) and (max-width: 1600px) {{ md_render | default: '1200px' }},(max-width: 767px) {{ sm_render | default: '100vw' }}, 900px{% endcapture %}
+            {{ section.settings.fallback_image | image_url: width: 2400 | image_tag:
+              loading: 'lazy',
+              width: section.settings.fallback_image.width,
+              height: section.settings.fallback_image.height,
+              alt: alt_text,
+              sizes: sizes,
+              zoom-src: zoom_src
+            }}
+          {%- else -%}
+            <div class="video onboard demo-1">
+              {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+        </div>
+      {% endcapture %}
+
+      {% if section.settings.fallback_image != blank %}
+        {{ poster_button }}
+      {% endif %}
+
+      <div class="video-wrapper">
+        {% if section.settings.video != blank %}
+          <div class="video-wrapper">
+
+            {{ section.settings.video | video_tag:
+              image_size: '2000x',
+              controls: true,
+              muted: false,
+              autoplay: false,
+              loop: false,
+              playsinline: true,
+              preload: 'metadata',
+              poster: section.settings.fallback_image,
+              class: 'section-content-grid__video js-video'
+            }}
+
+          </div>
+        {% else %}
+          {% if section.settings.video_url == blank %}
+            <iframe title="{{ section.settings.description | escape }}" src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720" loading="lazy" width="100%" frameborder="0" allowfullscreen></iframe>
+          {% else %}
+            {% if section.settings.video_url.type == "youtube" %}
+              <iframe title="{{ section.settings.description | escape }}" src="//www.youtube.com/embed/{{ section.settings.video_url.id }}?rel=0&showinfo=0&vq=720" loading="lazy" width="100%" frameborder="0" allowfullscreen></iframe>
+            {% endif %}
+            {% if section.settings.video_url.type == "vimeo" %}
+              <iframe title="{{ section.settings.description | escape }}" src="//player.vimeo.com/video/{{ section.settings.video_url.id }}?byline=0&portrait=0&badge=0" loading="lazy" width="100%" frameborder="0" allowfullscreen></iframe>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+
+  <style media="screen">
+    /* ---- Video ---- */
+    .featured-video-image {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0,0,0,0.3);
+      transition: opacity 0.3s ease;
+      overflow: hidden;
+    }
+
+    .featured-video-image.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .featured-video-wrapper {
+      z-index: 5;
+      position: relative;
+    }
+  </style>
+</div>
+
+{% schema %}
+{
+  "name":"Video",
+  "tag": "section",
+  "class": "dynamic-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Enable full width",
+      "default":true
+    },
+    {
+      "type":"paragraph",
+      "content": "Show a Shopify hosted video or alternatively embed a YouTube or Vimeo video."
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "A Shopify-hosted video"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "label": "YouTube or Vimeo link",
+      "accept": ["youtube", "vimeo"]
+    },
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Video poster image"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "default": "Describe the video for customers using screen readers",
+      "label": "Video alt text"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "presets": [
+	 {
+      "name": "Video"
+    }
+	],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

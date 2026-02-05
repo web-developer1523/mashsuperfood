@@ -1,0 +1,92 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Header",
+  "type": "header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement-bar-0": {
+          "type": "phone_number",
+          "settings": {
+            "phone_number": "<p>+31620668952</p>",
+            "alignment": "left"
+          }
+        },
+        "announcement-bar-2": {
+          "type": "announcement_text",
+          "settings": {
+            "announcement_text_1": "<p>Same Day Shipping</p>",
+            "announcement_text_2": "<p>Fair trade sources</p>",
+            "announcement_text_3": "<p>Quality guaranteed, refunds without debate</p>",
+            "alignment": "center"
+          }
+        },
+        "shop_note_aXkind": {
+          "type": "shop_note",
+          "settings": {
+            "shop_note": "<p>Order Pickup | Delivery</p>",
+            "alignment": "center"
+          }
+        }
+      },
+      "block_order": [
+        "announcement-bar-0",
+        "announcement-bar-2",
+        "shop_note_aXkind"
+      ],
+      "settings": {
+        "announcement_text_size": 13
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "3508d5ea-f741-46a3-b11c-bdc5b29879b8": {
+          "type": "linklist_with_images",
+          "settings": {
+            "linklist_images_menu_item": "Shop",
+            "image_ratio": "vertical",
+            "links_alignment": "left",
+            "featured_image_label_1": "",
+            "image_url_1": "",
+            "featured_image_label_2": "",
+            "image_url_2": "",
+            "featured_image_label_3": "",
+            "image_url_3": ""
+          }
+        }
+      },
+      "block_order": [
+        "3508d5ea-f741-46a3-b11c-bdc5b29879b8"
+      ],
+      "settings": {
+        "inline_layout": true,
+        "logo_align_left": false,
+        "enable_sticky": true,
+        "logo": "shopify://shop_images/Primary_Logo_-_Charcoal_1_58476128-8fe0-49b0-873c-774f06ddf316.png",
+        "logo_max_width": 270,
+        "logo_max_width_mobile": 165,
+        "logo_size": 32,
+        "main_nav": "main-menu",
+        "nav_alignment": "center",
+        "show_desktop_icons": true,
+        "show_locale_selector": true,
+        "show_country_selector": true,
+        "show_flag": true
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}

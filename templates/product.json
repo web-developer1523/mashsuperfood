@@ -1,0 +1,176 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "ali_reviews_widget_star_rating_fRRNCk": {
+          "type": "shopify://apps/ali-reviews/blocks/widget-star-rating/bf2eea72-0400-4db1-8908-44b7418f9a88",
+          "disabled": true,
+          "settings": {
+            "product": "{{product}}"
+          }
+        },
+        "richtext_d4ULxQ": {
+          "type": "richtext",
+          "disabled": true,
+          "settings": {
+            "richtext": "{{ product.metafields.custom.short_description | metafield_tag }}"
+          }
+        },
+        "subtitle": {
+          "type": "subtitle",
+          "settings": {
+            "subtitle": ""
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variants": {
+          "type": "variants",
+          "settings": {}
+        },
+        "quantity": {
+          "type": "quantity",
+          "settings": {}
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {
+            "show_price_in_button": true,
+            "show_gift_card_recipient": false
+          }
+        },
+        "social-share": {
+          "type": "social_share",
+          "disabled": true,
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "title",
+        "ali_reviews_widget_star_rating_fRRNCk",
+        "richtext_d4ULxQ",
+        "subtitle",
+        "price",
+        "variants",
+        "quantity",
+        "buttons",
+        "social-share"
+      ],
+      "settings": {
+        "form_bg_color": "#fdfdfd",
+        "gallery_style": "thumbnail_gallery",
+        "thumbnail_position": "left",
+        "large_product_media": false,
+        "grid_two_up": true,
+        "click_to_enlarge": false,
+        "enable_video_looping": true
+      }
+    },
+    "1747666945c9b04431": {
+      "type": "apps",
+      "blocks": {
+        "kudosi_ali_reviews_widget_box_Hqg94d": {
+          "type": "shopify://apps/ali-reviews/blocks/widget-box/bf2eea72-0400-4db1-8908-44b7418f9a88",
+          "settings": {
+            "product": "mash-japanese-ceramic-bamboo-whisk-holder-for-matcha-tea"
+          }
+        }
+      },
+      "block_order": [
+        "kudosi_ali_reviews_widget_box_Hqg94d"
+      ],
+      "settings": {
+        "full_width": true,
+        "section_padding": "both"
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "disabled": true,
+      "settings": {
+        "product_recommendations_heading": "Related Products",
+        "items_per_row": 4,
+        "items_shown": 4,
+        "section_padding": "both"
+      }
+    },
+    "product-details": {
+      "type": "main-product-details",
+      "blocks": {
+        "a3ec2846-2640-4d01-bcba-2a3e889128b8": {
+          "type": "product_description",
+          "settings": {}
+        },
+        "d1fafd22-8a86-4284-a422-a96fa258731c": {
+          "type": "product_inventory",
+          "disabled": true,
+          "settings": {}
+        },
+        "6f1f3608-16f5-4316-ae3c-31752e9d85c5": {
+          "type": "product_weight",
+          "disabled": true,
+          "settings": {}
+        },
+        "9baa0512-a43a-4ae2-8feb-e5ac17faadb3": {
+          "type": "product_type",
+          "disabled": true,
+          "settings": {}
+        },
+        "d12e3a4e-453a-4362-8144-0ffcf29965d7": {
+          "type": "product_sku",
+          "disabled": true,
+          "settings": {}
+        },
+        "87ab27ea-e73d-437e-897b-28d30835ed8b": {
+          "type": "product_vendor",
+          "settings": {}
+        },
+        "a739078f-4d98-4349-a399-c18c2f011733": {
+          "type": "product_collection",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "a3ec2846-2640-4d01-bcba-2a3e889128b8",
+        "d1fafd22-8a86-4284-a422-a96fa258731c",
+        "6f1f3608-16f5-4316-ae3c-31752e9d85c5",
+        "9baa0512-a43a-4ae2-8feb-e5ac17faadb3",
+        "d12e3a4e-453a-4362-8144-0ffcf29965d7",
+        "87ab27ea-e73d-437e-897b-28d30835ed8b",
+        "a739078f-4d98-4349-a399-c18c2f011733"
+      ],
+      "custom_css": [
+        "p {font-size: 1.3em;}"
+      ],
+      "settings": {}
+    },
+    "feedback_product_extended_widget": {
+      "type": "feedback-product-extended-widget",
+      "disabled": true,
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "1747666945c9b04431",
+    "product-recommendations",
+    "product-details",
+    "feedback_product_extended_widget"
+  ]
+}

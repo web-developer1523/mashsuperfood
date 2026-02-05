@@ -1,0 +1,182 @@
+{% comment %} Cart Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-main-cart.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-main-cart.css' | asset_url }}"></noscript>
+
+{% comment %} Cart template {% endcomment %}
+<section class="cart-page ajax-cart__page-wrapper pt8 mb8 cart-type--{{ settings.cart_type }} cart__section--main"
+  data-section-id="{{ section.id }}"
+  data-section-type="cart-template"
+  data-section-loaded="false">
+  <div class="loading-wrapper js-mini-cart-loader no-js-hidden">
+    <div class="loading-ripple"><div></div><div></div></div>
+  </div>
+  <div id="countdown-message" class="countdown-box"></div>
+
+  <script>
+    function updateCountdown() {
+      const now = new Date();
+      const cutoff = new Date();
+      cutoff.setHours(22, 0, 0, 0);
+
+      // Detect Shopify locale (fallback English)
+      const locale = Shopify?.locale || "en";
+
+      const translations = {
+        en: {
+          beforeCutoff: "<div class='timer-block'><img  src='https://cdn.shopify.com/s/files/1/0895/3973/9975/files/IMG_3386_1.png'/> Order within <span class='countdown-time'>%time%</span> and we will ship your order <strong>today</strong>!</div>",
+          afterCutoff: "⚠️ <strong>Order before 10pm</strong> and we will ship your order <strong>tomorrow</strong>!"
+        },
+        de: {
+          beforeCutoff: "<div class='timer-block'><img src='https://cdn.shopify.com/s/files/1/0895/3973/9975/files/IMG_3386_1.png'/> Bestellen Sie innerhalb von <span class='countdown-time'>%time%</span> und wir versenden Ihre Bestellung noch <strong>heute</strong>!</div>",
+          afterCutoff: "⚠️ <strong>Bestellen Sie vor 22 Uhr</strong> und wir versenden Ihre Bestellung <strong>morgen</strong>!"
+        },
+        nl: {
+          beforeCutoff: "<div class='timer-block'><img src='https://cdn.shopify.com/s/files/1/0895/3973/9975/files/IMG_3386_1.png'/> Bestel binnen <span class='countdown-time'>%time%</span> en wij verzenden je bestelling <strong>vandaag</strong>!</div>",
+          afterCutoff: "⚠️ <strong>Bestel voor 22:00</strong> en wij verzenden je bestelling <strong>morgen</strong>!"
+        },
+        fr: {
+          beforeCutoff: "<div class='timer-block'><img src='https://cdn.shopify.com/s/files/1/0895/3973/9975/files/IMG_3386_1.png'/> Commandez dans <span class='countdown-time'>%time%</span> et nous expédierons votre commande <strong>aujourd'hui</strong>!</div>",
+          afterCutoff: "⚠️ <strong>Commandez avant 22h</strong> et nous expédierons votre commande <strong>demain</strong> !"
+        }
+      };
+
+      const t = translations[locale] || translations["en"];
+
+      if (now > cutoff) {
+        document.getElementById("countdown-message").innerHTML = t.afterCutoff;
+        return;
+      }
+
+      const diff = cutoff - now;
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      const timeString = `${hours}h : ${minutes}m : ${seconds}s`;
+
+      document.getElementById("countdown-message").innerHTML = t.beforeCutoff.replace("%time%", timeString);
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+  <style>
+    div#countdown-message .timer-block {
+      display: flex;
+      flex-wrap: wrap;
+  }
+    .timer-block {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+    div#countdown-message strong {
+      padding: 0 2px;
+  }
+    div#countdown-message {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    div#countdown-message img {
+        width: auto;
+        height: 35px;
+        padding-right: 10px;
+    }
+    .countdown-box {
+      text-align: center;
+      background: #f2eee6;
+      padding: 12px 16px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+      border-radius: 8px;
+      margin: 0 auto !important;
+      max-width: 70%;
+    }
+
+    .countdown-time {
+      color: #d32f2f;
+      font-weight: 700;
+      font-size: 16px;
+      padding:0px 5px;
+    }
+
+    .countdown-box strong {
+      color: #000;
+    }
+    @media only screen and (max-width: 991px) {
+      .countdown-box {
+        max-width:100%;
+      }
+      .timer-block img {
+        height: 30px !important;
+    }
+    .timer-block {
+      display: block;
+  }
+    }
+
+  </style>
+  <div class="ajax-cart__header-wrapper grid__wrapper narrow">
+    <div class="span-4 sm-span-4 auto a-left v-center">
+      {%- if section.settings.link != blank -%}
+        {%- assign continue_link = section.settings.link -%}
+      {%- else -%}
+        {%- assign continue_link = routes.collections_url -%}
+      {%- endif -%}
+      <a class="ajax-cart__header__continue-link mb0" href="{{ continue_link }}">
+        {% render 'snip-icons',
+           wrapper: '.ajax-cart__header-wrapper',
+           type: 'theme',
+           icon: 'left-arrow',
+           size: '15px',
+           classes: 'vib-center',
+           fill: 'var(--text-color)',
+           hover: 'var(--text-color)' %}
+        <span class="ajax-cart__header__continue-link-text sm-hide vib-center">{{ 'products.product.continue' | t }}</span>
+      </a>
+    </div>
+    <div class="span-4 sm-span-4 auto v-center">
+      <h1 class="section-heading a-center mb0">{{ 'cart.general.title' | t }}</h1>
+    </div>
+    <div class="span-4 sm-span-4 auto a-right v-center">
+      <p class="ajax-cart__header__count mb0"><span class="js-cart-count inline-block">{{ cart.item_count }}</span> {{ 'cart.general.items' | t }}</p>
+    </div>
+  </div>
+
+  <div class="ajax-cart__form-wrapper--nojs js-ajax-cart-content-nojs">
+    {% render "cart-no-js", cart: cart %}
+  </div>
+  <div class="ajax-cart__form-wrapper cart-wrapper js-ajax-cart-content">
+  </div>
+  {%- unless request.design_mode -%}
+    {%- if additional_checkout_buttons -%}
+      <div class="ajax-cart__footer-wrapper grid__wrapper edge">
+        <div class="span-12 auto">
+          <p class="sm-caps or-divider mt2 mb2 a-center"><span>{{ 'cart.general.or' | t }}</span></p>
+          <div class="ajax-cart__buttons-additional">
+            {{ content_for_additional_checkout_buttons }}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  {%- endunless -%}
+
+</section>
+<style>
+  section.cart-page .ajax-cart__header-wrapper {
+    grid-template-columns: repeat(1,1fr) !important;
+}
+</style>
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Continue shopping link"
+    }
+  ]
+}
+{% endschema %}

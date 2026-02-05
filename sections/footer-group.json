@@ -1,0 +1,45 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Footer",
+  "type": "footer",
+  "sections": {
+    "pre-footer": {
+      "type": "pre-footer",
+      "settings": {
+        "show_prefooter": true,
+        "prefooter_heading": "Join the Club",
+        "prefooter_heading_size": 40,
+        "prefooter_heading_style": "italic",
+        "color_scheme": "2"
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "footer_logo": "shopify://shop_images/feedbackcompany.png",
+        "footer_text": "<p><a href=\"https://www.feedbackcompany.com/en-gb/reviews/mashsuperfood\" target=\"_blank\" title=\"https://www.feedbackcompany.com/en-gb/reviews/mashsuperfood\"><strong>MASH. Superfoods International.</strong></a> Delivering health since 2018. <a href=\"https://www.feedbackcompany.com/en-gb/reviews/mashsuperfood\" target=\"_blank\" title=\"https://www.feedbackcompany.com/en-gb/reviews/mashsuperfood\"><strong>Trusted by 10.000+ customers</strong></a></p>",
+        "show_social": true,
+        "enable_follow_on_shop": true,
+        "show_policy": false,
+        "footer_nav": "footer",
+        "show_credit_cards": true,
+        "show_copyright": true,
+        "show_locale_selector": true,
+        "show_country_selector": true,
+        "show_flag": true
+      }
+    }
+  },
+  "order": [
+    "pre-footer",
+    "footer"
+  ]
+}

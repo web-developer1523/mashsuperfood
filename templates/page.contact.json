@@ -1,0 +1,37 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "banner-image",
+      "settings": {
+        "full_width": true,
+        "banner_height": 400
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "settings": {}
+    },
+    "form": {
+      "type": "contact-form",
+      "settings": {
+        "title": "",
+        "width": 80,
+        "section_padding": "both"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "main",
+    "form"
+  ]
+}
