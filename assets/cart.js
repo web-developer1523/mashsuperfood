@@ -375,11 +375,156 @@ WAU.ThemeCart = (function (exports) {
 
 }({}));
 
+// Simple cart bulk discount upsell helper
+WAU.CartUpsell = {
+  /**
+   * Initialise upsell UI and messaging for all instances on the page/drawer.
+   * @param {Object} cart - Current cart object from /cart.js
+   */
+  init: function init(cart) {
+    if (!cart || !cart.items || !cart.items.length) return;
+
+    var containers = document.querySelectorAll('.js-cart-bulk-upsell');
+    if (!containers.length) return;
+
+    containers.forEach(function (container) {
+      WAU.CartUpsell._bind(container);
+      WAU.CartUpsell._update(container, cart);
+    });
+  },
+
+  _parseTiers: function _parseTiers(container) {
+    try {
+      var raw = container.getAttribute('data-tiers') || '[]';
+      var tiers = JSON.parse(raw);
+      return tiers
+        .map(function (tier) {
+          return {
+            min_qty: Number(tier.min_qty),
+            discount: Number(tier.discount)
+          };
+        })
+        .filter(function (t) {
+          return t.min_qty > 0 && t.discount > 0;
+        })
+        .sort(function (a, b) {
+          return a.min_qty - b.min_qty;
+        });
+    } catch (e) {
+      console.warn('Cart bulk upsell: invalid tiers data', e);
+      return [];
+    }
+  },
+
+  _getState: function _getState(cart, variantId, tiers) {
+    var qty = 0;
+
+    cart.items.forEach(function (item) {
+      if (String(item.variant_id) === String(variantId)) {
+        qty += item.quantity;
+      }
+    });
+
+    var currentTier = null;
+    var nextTier = null;
+
+    tiers.forEach(function (tier) {
+      if (qty >= tier.min_qty) {
+        currentTier = tier;
+      } else if (!nextTier && qty < tier.min_qty) {
+        nextTier = tier;
+      }
+    });
+
+    return {
+      qty: qty,
+      currentTier: currentTier,
+      nextTier: nextTier
+    };
+  },
+
+  _render: function _render(container, state) {
+    var messageEl = container.querySelector('.js-cart-bulk-upsell-message');
+    if (!messageEl) return;
+
+    // Only show when there is a higher tier the customer can reach
+    if (!state.nextTier) {
+      container.style.display = 'none';
+      return;
+    }
+
+    var missing = state.nextTier.min_qty - state.qty;
+    if (missing <= 0) {
+      container.style.display = 'none';
+      return;
+    }
+
+    var itemWord = missing === 1 ? 'item' : 'items';
+    messageEl.textContent =
+      'Add ' +
+      missing +
+      ' more ' +
+      itemWord +
+      ' to get ' +
+      state.nextTier.discount +
+      '% off.';
+
+    container.style.display = '';
+  },
+
+  _bind: function _bind(container) {
+    if (container.dataset.bulkUpsellBound === 'true') return;
+
+    var button = container.querySelector('.js-cart-bulk-upsell-add');
+    var variantId = container.getAttribute('data-upsell-variant-id');
+    if (!button || !variantId) return;
+
+    button.addEventListener('click', function () {
+      button.disabled = true;
+
+      // Use existing ThemeCart helper for consistency with other cart actions
+      WAU.ThemeCart.addItem(parseInt(variantId, 10), { quantity: 1 })
+        .then(function () {
+          return WAU.ThemeCart.getCart();
+        })
+        .then(function (cart) {
+          if (WAU.AjaxCart && WAU.AjaxCart.config) {
+            WAU.AjaxCart.updateView(WAU.AjaxCart.config, cart);
+          }
+        })
+        .catch(function (error) {
+          console.error('Cart bulk upsell error', error);
+        })
+        .finally(function () {
+          button.disabled = false;
+        });
+    });
+
+    container.dataset.bulkUpsellBound = 'true';
+  },
+
+  _update: function _update(container, cart) {
+    var variantId = container.getAttribute('data-upsell-variant-id');
+    if (!variantId) return;
+
+    var tiers = WAU.CartUpsell._parseTiers(container);
+    if (!tiers.length) {
+      container.style.display = 'none';
+      return;
+    }
+
+    var state = WAU.CartUpsell._getState(cart, variantId, tiers);
+    WAU.CartUpsell._render(container, state);
+  }
+};
+
 WAU.AjaxCart = {
   init: function init() {
     let config = document.getElementById('cart-config');
     if ( !config ) return false;
     config = JSON.parse(config.innerHTML || '{}');
+    // Make config available to helpers like CartUpsell
+    WAU.AjaxCart.config = config;
 
     var selectors = {
       cartTrigger: '.js-mini-cart-trigger',
@@ -1003,6 +1148,11 @@ WAU.AjaxCart = {
 
         // Reload events
         WAU.AjaxCart.cartEvents(config);
+
+        // Update last-minute bulk discount upsell messaging
+        if (WAU.CartUpsell && typeof WAU.CartUpsell.init === 'function') {
+          WAU.CartUpsell.init(Cart);
+        }
       }
 
       // Set Cart Loaded

@@ -545,6 +545,66 @@
             "label": "3"
           }
         ]
+      },
+      {
+        "type": "header",
+        "content": "Bulk discount upsell"
+      },
+      {
+        "type": "product",
+        "id": "upsell_bulk_product",
+        "label": "Upsell product for bulk discount",
+        "info": "Select a product that already has bulk/quantity discounts configured (e.g. volume pricing or automatic discounts)."
+      },
+      {
+        "type": "text",
+        "id": "upsell_bulk_headline",
+        "label": "Upsell headline",
+        "default": "Last-minute savings available"
+      },
+      {
+        "type": "text",
+        "id": "upsell_bulk_button_label",
+        "label": "Upsell button label",
+        "default": "Add to cart"
+      },
+      {
+        "type": "paragraph",
+        "content": "Configure tiers to mirror your existing bulk discount rules. These are display-only and do not create any new discounts."
+      },
+      {
+        "type": "number",
+        "id": "upsell_bulk_tier1_min",
+        "label": "Tier 1 minimum quantity",
+        "default": 3
+      },
+      {
+        "type": "number",
+        "id": "upsell_bulk_tier1_discount",
+        "label": "Tier 1 discount percent (display only)",
+        "default": 10
+      },
+      {
+        "type": "number",
+        "id": "upsell_bulk_tier2_min",
+        "label": "Tier 2 minimum quantity",
+        "default": 5
+      },
+      {
+        "type": "number",
+        "id": "upsell_bulk_tier2_discount",
+        "label": "Tier 2 discount percent (display only)",
+        "default": 15
+      },
+      {
+        "type": "number",
+        "id": "upsell_bulk_tier3_min",
+        "label": "Tier 3 minimum quantity"
+      },
+      {
+        "type": "number",
+        "id": "upsell_bulk_tier3_discount",
+        "label": "Tier 3 discount percent (display only)"
       }
     ]
   },
