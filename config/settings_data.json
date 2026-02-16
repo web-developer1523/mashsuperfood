@@ -933,6 +933,7 @@
     "show_shipping_note": true,
     "show_shipping_countdown": false,
     "free_shipping_scheme": "2",
+    "upsell_bulk_product": "mash-keto-coffee-powder-smart-energy-fat-burn",
     "focus_border_style": "solid",
     "image_ratio": "vertical",
     "product_grid_padding": false,

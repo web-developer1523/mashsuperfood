@@ -46,6 +46,8 @@
     {% render 'css-variables' %}
 
     {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ 'slick.css' | asset_url | stylesheet_tag }}
+    {{ 'slick-theme.css' | asset_url | stylesheet_tag }}
 
     {%- unless settings.main_font.system? -%}
       <link rel="preload" as="font" href="{{ settings.main_font | font_url }}" type="font/woff2" crossorigin>
@@ -77,6 +79,7 @@
     </script>
     <!-- End Google Tag Manager -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{ 'slick.min.js' | asset_url }}" defer></script>
   </head>
 
   <body

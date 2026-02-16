@@ -551,10 +551,41 @@
         "content": "Bulk discount upsell"
       },
       {
+        "type": "collection",
+        "id": "upsell_bulk_collection",
+        "label": "Upsell collection for bulk discount",
+        "info": "Select a collection — the first product in the collection will be used for the upsell."
+      },
+      {
         "type": "product",
         "id": "upsell_bulk_product",
         "label": "Upsell product for bulk discount",
         "info": "Select a product that already has bulk/quantity discounts configured (e.g. volume pricing or automatic discounts)."
+      },
+      {
+        "type": "number",
+        "id": "upsell_bulk_collection_limit",
+        "label": "Collection product fetch limit",
+        "default": 6,
+        "info": "Maximum number of products the theme will process from the selected collection."
+      },
+      {
+        "type": "number",
+        "id": "upsell_bulk_display_limit",
+        "label": "Visible upsell items",
+        "default": 3,
+        "info": "How many upsell products to show in the cart (per layout)."
+      },
+      {
+        "type": "select",
+        "id": "upsell_bulk_layout",
+        "label": "Upsell layout",
+        "default": "grid",
+        "options": [
+          { "value": "grid", "label": "Grid" },
+          { "value": "list", "label": "List" }
+        ],
+        "info": "Grid renders cards side-by-side (3 columns). List renders stacked cards."
       },
       {
         "type": "text",

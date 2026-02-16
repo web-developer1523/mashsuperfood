@@ -22,25 +22,37 @@ ShippingCalculator = {
 
     let container = document.querySelector('.shipping-calculator-0');
 
+    // If there's no shipping calculator container on the page, abort.
+    if (!container) return false;
+
     // Initialize observer on shipping address.
-    new Shopify.CountryProvinceSelector('address_country', 'address_province', {
-      hideElement: 'address_province_container'
-    } );
+    if (typeof Shopify !== 'undefined' && typeof Shopify.CountryProvinceSelector === 'function') {
+      // Only initialize if the expected country/province inputs exist.
+      var countryEl = document.getElementById('address_country');
+      var provinceEl = document.getElementById('address_province');
+      if (countryEl && provinceEl) {
+        new Shopify.CountryProvinceSelector('address_country', 'address_province', {
+          hideElement: 'address_province_container'
+        });
+      }
+    }
 
     // Updating province label.
     var countriesSelect = container.querySelector(selectors.addressCountry);
     var addressProvinceLabelEl = container.querySelector(selectors.addressProvinceLabel);
 
-    if (typeof Countries !== 'undefined') {
+    if (typeof Countries !== 'undefined' && countriesSelect && addressProvinceLabelEl) {
       Countries.updateProvinceLabel(countriesSelect.value,addressProvinceLabelEl);
 
-			countriesSelect.addEventListener('change', function() {
+      countriesSelect.addEventListener('change', function() {
         Countries.updateProvinceLabel(countriesSelect.value,addressProvinceLabelEl);
       });
     }
 
     // When any of the calculator buttons is clicked, get rates.
-    let button = container.querySelector(selectors.submitButton);
+    var button = container.querySelector(selectors.submitButton);
+
+    if (!button) return false;
 
     button.addEventListener('click', function(e) {
       e.preventDefault();

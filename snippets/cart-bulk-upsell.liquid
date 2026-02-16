@@ -7,187 +7,346 @@
   - Does NOT create or apply any new discounts; it only informs and nudges.
 {% endcomment %}
 
-{%- if cart.item_count > 0 and settings.upsell_bulk_product != blank -%}
-  {%- assign upsell_product = all_products[settings.upsell_bulk_product] -%}
-  {%- if upsell_product -%}
-    {%- assign upsell_variant = upsell_product.selected_or_first_available_variant -%}
+{%- if cart.item_count > 0 -%}
+  {%- if settings.upsell_bulk_collection != blank or settings.upsell_bulk_product != blank -%}
+  {%- comment %}
+    Support selecting an upsell collection (preferred) or fall back to a single product.
+    If a collection is set, pick the first product from that collection.
+  {%- endcomment -%}
+  {%- assign upsell_rendered = '' -%}
+  {%- assign upsell_collection = '' -%}
+  {%- if settings.upsell_bulk_collection != blank -%}
+    {%- assign upsell_collection = collections[settings.upsell_bulk_collection] -%}
+  {%- endif -%}
 
-    {%- comment %}
-      Build tiers array from theme settings.
-      These are purely informational and should mirror existing bulk discounts.
-    {%- endcomment -%}
-    {%- assign tiers_json = '' -%}
-
-    {%- assign tier1_min = settings.upsell_bulk_tier1_min | default: 0 | plus: 0 -%}
-    {%- assign tier1_disc = settings.upsell_bulk_tier1_discount | default: 0 | plus: 0 -%}
-    {%- if tier1_min > 0 and tier1_disc > 0 -%}
-      {%- assign fragment = '{"min_qty":' | append: tier1_min | append: ',"discount":' | append: tier1_disc | append: '}' -%}
+  {%- comment %}
+    Build tiers array from theme settings (shared for all rendered cards).
+  {%- endcomment -%}
+  {%- assign tiers_json = '' -%}
+  {%- assign tier1_min = settings.upsell_bulk_tier1_min | default: 0 | plus: 0 -%}
+  {%- assign tier1_disc = settings.upsell_bulk_tier1_discount | default: 0 | plus: 0 -%}
+  {%- if tier1_min > 0 and tier1_disc > 0 -%}
+    {%- assign fragment = '{"min_qty":' | append: tier1_min | append: ',"discount":' | append: tier1_disc | append: '}' -%}
+    {%- assign tiers_json = fragment -%}
+  {%- endif -%}
+  {%- assign tier2_min = settings.upsell_bulk_tier2_min | default: 0 | plus: 0 -%}
+  {%- assign tier2_disc = settings.upsell_bulk_tier2_discount | default: 0 | plus: 0 -%}
+  {%- if tier2_min > 0 and tier2_disc > 0 -%}
+    {%- assign fragment = '{"min_qty":' | append: tier2_min | append: ',"discount":' | append: tier2_disc | append: '}' -%}
+    {%- if tiers_json != '' -%}
+      {%- assign tiers_json = tiers_json | append: ',' | append: fragment -%}
+    {%- else -%}
       {%- assign tiers_json = fragment -%}
     {%- endif -%}
-
-    {%- assign tier2_min = settings.upsell_bulk_tier2_min | default: 0 | plus: 0 -%}
-    {%- assign tier2_disc = settings.upsell_bulk_tier2_discount | default: 0 | plus: 0 -%}
-    {%- if tier2_min > 0 and tier2_disc > 0 -%}
-      {%- assign fragment = '{"min_qty":' | append: tier2_min | append: ',"discount":' | append: tier2_disc | append: '}' -%}
-      {%- if tiers_json != '' -%}
-        {%- assign tiers_json = tiers_json | append: ',' | append: fragment -%}
-      {%- else -%}
-        {%- assign tiers_json = fragment -%}
-      {%- endif -%}
-    {%- endif -%}
-
-    {%- assign tier3_min = settings.upsell_bulk_tier3_min | default: 0 | plus: 0 -%}
-    {%- assign tier3_disc = settings.upsell_bulk_tier3_discount | default: 0 | plus: 0 -%}
-    {%- if tier3_min > 0 and tier3_disc > 0 -%}
-      {%- assign fragment = '{"min_qty":' | append: tier3_min | append: ',"discount":' | append: tier3_disc | append: '}' -%}
-      {%- if tiers_json != '' -%}
-        {%- assign tiers_json = tiers_json | append: ',' | append: fragment -%}
-      {%- else -%}
-        {%- assign tiers_json = fragment -%}
-      {%- endif -%}
-    {%- endif -%}
-
+  {%- endif -%}
+  {%- assign tier3_min = settings.upsell_bulk_tier3_min | default: 0 | plus: 0 -%}
+  {%- assign tier3_disc = settings.upsell_bulk_tier3_discount | default: 0 | plus: 0 -%}
+  {%- if tier3_min > 0 and tier3_disc > 0 -%}
+    {%- assign fragment = '{"min_qty":' | append: tier3_min | append: ',"discount":' | append: tier3_disc | append: '}' -%}
     {%- if tiers_json != '' -%}
-      <div
-        class="cart-bulk-upsell js-cart-bulk-upsell"
-        data-upsell-variant-id="{{ upsell_variant.id }}"
-        data-tiers='[{{ tiers_json }}]'
-      >
-        <div class="cart-bulk-upsell__inner">
-          <div class="cart-bulk-upsell__product">
-            <div class="cart-bulk-upsell__image-wrapper">
-              {%- if upsell_product.featured_image -%}
-                {{ upsell_product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', class: 'cart-bulk-upsell__image' }}
-              {%- else -%}
-                <span class="cart-bulk-upsell__placeholder">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</span>
-              {%- endif -%}
-            </div>
-            <div class="cart-bulk-upsell__text">
-              <p class="cart-bulk-upsell__eyebrow">Perfect with your order</p>
-              <p class="cart-bulk-upsell__title">
-                {{ upsell_product.title }}
-              </p>
-              <p class="cart-bulk-upsell__headline">
-                {{ settings.upsell_bulk_headline | default: 'Last-minute savings available' }}
-              </p>
-              <p class="cart-bulk-upsell__message js-cart-bulk-upsell-message" aria-live="polite"></p>
-            </div>
-          </div>
-
-          <div class="cart-bulk-upsell__cta">
-            <button
-              type="button"
-              class="cart-bulk-upsell__button js-cart-bulk-upsell-add"
-            >
-              {{ settings.upsell_bulk_button_label | default: 'Add to cart' }}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <style>
-        .cart-bulk-upsell {
-          margin-top: 1rem;
-          margin-bottom: 1rem;
-          padding: 0.85rem 1.1rem;
-          border-radius: 999px;
-          border: 1px solid rgba(0, 0, 0, 0.04);
-          background: rgba(0, 0, 0, 0.02);
-          font-size: 0.9rem;
-        }
-        .cart-bulk-upsell__inner {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 1rem;
-        }
-        .cart-bulk-upsell__product {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          min-width: 0;
-        }
-        .cart-bulk-upsell__image-wrapper {
-          flex-shrink: 0;
-          width: 56px;
-          height: 56px;
-          border-radius: 999px;
-          overflow: hidden;
-          background: #f4f1ea;
-        }
-        .cart-bulk-upsell__image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
-        }
-        .cart-bulk-upsell__text {
-          display: flex;
-          flex-direction: column;
-          gap: 0.1rem;
-          min-width: 0;
-        }
-        .cart-bulk-upsell__eyebrow {
-          margin: 0;
-          font-size: 0.7rem;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: rgba(0, 0, 0, 0.55);
-        }
-        .cart-bulk-upsell__title {
-          margin: 0;
-          font-size: 0.85rem;
-          font-weight: 600;
-          color: #111;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .cart-bulk-upsell__headline {
-          margin: 0;
-          font-size: 0.85rem;
-          font-weight: 500;
-        }
-        .cart-bulk-upsell__message {
-          margin: 0;
-          color: rgba(0, 0, 0, 0.7);
-          font-size: 0.8rem;
-        }
-        .cart-bulk-upsell__cta {
-          flex-shrink: 0;
-        }
-        .cart-bulk-upsell__button {
-          white-space: nowrap;
-          padding: 0.5rem 1.2rem;
-          border-radius: 999px;
-          border: 0;
-          background: #111;
-          color: #fff;
-          font-size: 0.8rem;
-          font-weight: 600;
-          cursor: pointer;
-        }
-        .cart-bulk-upsell__button:hover {
-          background: #000;
-        }
-        @media (max-width: 749px) {
-          .cart-bulk-upsell {
-            border-radius: 0.75rem;
-          }
-          .cart-bulk-upsell__inner {
-            align-items: flex-start;
-            flex-direction: column;
-          }
-          .cart-bulk-upsell__cta {
-            width: 100%;
-          }
-          .cart-bulk-upsell__button {
-            width: 100%;
-            text-align: center;
-          }
-        }
-      </style>
+      {%- assign tiers_json = tiers_json | append: ',' | append: fragment -%}
+    {%- else -%}
+      {%- assign tiers_json = fragment -%}
     {%- endif -%}
   {%- endif -%}
+
+  {%- if upsell_collection and upsell_collection.products_count > 0 -%}
+    {%- assign collection_limit = settings.upsell_bulk_collection_limit | default: 6 | plus: 0 -%}
+    {%- assign display_limit = settings.upsell_bulk_display_limit | default: 3 | plus: 0 -%}
+    {%- assign layout = settings.upsell_bulk_layout | default: 'grid' -%}
+
+    <div class="cart-bulk-upsell-wrapper cart-bulk-upsell--{{ layout }}">
+      {%- for upsell_product in upsell_collection.products limit: collection_limit -%}
+        {%- assign upsell_variant = upsell_product.selected_or_first_available_variant -%}
+        {%- if upsell_variant and tiers_json != '' and forloop.index0 < display_limit -%}
+          <div
+            class="cart-bulk-upsell js-cart-bulk-upsell"
+            data-upsell-variant-id="{{ upsell_variant.id }}"
+            data-tiers='[{{ tiers_json }}]'
+          >
+            <div class="cart-bulk-upsell__inner">
+              <div class="cart-bulk-upsell__product">
+                <div class="cart-bulk-upsell__image-wrapper">
+                  {%- if upsell_product.featured_image -%}
+                    {{ upsell_product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', class: 'cart-bulk-upsell__image' }}
+                  {%- else -%}
+                    <span class="cart-bulk-upsell__placeholder">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</span>
+                  {%- endif -%}
+                </div>
+                <div class="cart-bulk-upsell__text">
+                  <p class="cart-bulk-upsell__eyebrow">Perfect with your order</p>
+                  <p class="cart-bulk-upsell__title">
+                    {{ upsell_product.title }}
+                  </p>
+                  <p class="cart-bulk-upsell__headline">
+                    {{ settings.upsell_bulk_headline | default: 'Last-minute savings available' }}
+                  </p>
+                  <p class="cart-bulk-upsell__message js-cart-bulk-upsell-message" aria-live="polite"></p>
+                </div>
+              </div>
+
+              <div class="cart-bulk-upsell__cta">
+                <button
+                  type="button"
+                  class="cart-bulk-upsell__button js-cart-bulk-upsell-add"
+                >
+                  {{ settings.upsell_bulk_button_label | default: 'Add to cart' }}
+                </button>
+              </div>
+            </div>
+          </div>
+          {%- assign upsell_rendered = 'true' -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    {%- if settings.upsell_bulk_product != blank and tiers_json != '' -%}
+      {%- assign upsell_product = all_products[settings.upsell_bulk_product] -%}
+      {%- if upsell_product -%}
+        {%- assign upsell_variant = upsell_product.selected_or_first_available_variant -%}
+        <div
+          class="cart-bulk-upsell js-cart-bulk-upsell"
+          data-upsell-variant-id="{{ upsell_variant.id }}"
+          data-tiers='[{{ tiers_json }}]'
+        >
+          <div class="cart-bulk-upsell__inner">
+            <div class="cart-bulk-upsell__product">
+              <div class="cart-bulk-upsell__image-wrapper">
+                {%- if upsell_product.featured_image -%}
+                  {{ upsell_product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', class: 'cart-bulk-upsell__image' }}
+                {%- else -%}
+                  <span class="cart-bulk-upsell__placeholder">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</span>
+                {%- endif -%}
+              </div>
+              <div class="cart-bulk-upsell__text">
+                <p class="cart-bulk-upsell__eyebrow">Perfect with your order</p>
+                <p class="cart-bulk-upsell__title">
+                  {{ upsell_product.title }}
+                </p>
+                <p class="cart-bulk-upsell__headline">
+                  {{ settings.upsell_bulk_headline | default: 'Last-minute savings available' }}
+                </p>
+                <p class="cart-bulk-upsell__message js-cart-bulk-upsell-message" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div class="cart-bulk-upsell__cta">
+              <button
+                type="button"
+                class="cart-bulk-upsell__button js-cart-bulk-upsell-add"
+              >
+                {{ settings.upsell_bulk_button_label | default: 'Add to cart' }}
+              </button>
+            </div>
+          </div>
+        </div>
+        {%- assign upsell_rendered = 'true' -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- if upsell_rendered != '' and tiers_json != '' -%}
+    <style>
+      .cart-bulk-upsell {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding: 0.85rem 1.1rem;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        background: rgba(0, 0, 0, 0.02);
+        font-size: 0.9rem;
+      }
+      /* Use grid only before Slick initializes; Slick will handle layout after init */
+      .cart-bulk-upsell-wrapper.cart-bulk-upsell--grid:not(.slick-initialized) {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        align-items: start;
+      }
+      .cart-bulk-upsell-wrapper.cart-bulk-upsell--list {
+        display: block;
+      }
+      .cart-bulk-upsell {
+        width: 100%;
+      }
+      .cart-bulk-upsell__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      .cart-bulk-upsell__product {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 0;
+      }
+      .cart-bulk-upsell__image-wrapper {
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: #f4f1ea;
+      }
+      .cart-bulk-upsell__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .cart-bulk-upsell__text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+        min-width: 0;
+      }
+      .cart-bulk-upsell__eyebrow {
+        margin: 0;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(0, 0, 0, 0.55);
+      }
+      .cart-bulk-upsell__title {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #111;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .cart-bulk-upsell__headline {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+      .cart-bulk-upsell__message {
+        margin: 0;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 0.8rem;
+      }
+      .cart-bulk-upsell__cta {
+        flex-shrink: 0;
+      }
+      .cart-bulk-upsell__button {
+        white-space: nowrap;
+        {% comment %} padding: 0.5rem 1.2rem; {% endcomment %}
+        border-radius: 999px;
+        border: 0;
+        background: #111;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .cart-bulk-upsell__button:hover {
+        background: #000;
+      }
+      @media (max-width: 749px) {
+        .cart-bulk-upsell {
+          border-radius: 0.75rem;
+        }
+        .cart-bulk-upsell__inner {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .cart-bulk-upsell__cta {
+          width: 100%;
+        }
+        .cart-bulk-upsell__button {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  {%- endif -%}
+  {%- if layout == 'grid' -%}
+    <script>
+      (function () {
+        // Poll for jQuery + Slick, initialize when available
+        function initBulkSlickOnce() {
+          var attempts = 0;
+          var maxAttempts = 60; // ~6 seconds
+          var delay = 100;
+
+          function tryInit() {
+            attempts++;
+            if (typeof jQuery !== 'undefined' && jQuery.fn && typeof jQuery.fn.slick === 'function') {
+              var $w = jQuery('.cart-bulk-upsell-wrapper.cart-bulk-upsell--grid');
+              if ($w.length && !$w.hasClass('slick-initialized')) {
+                $w.slick({
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                  arrows: true,
+                  dots: false,
+                  adaptiveHeight: true,
+                  responsive: [
+                    {
+                      breakpoint: 750,
+                      settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                      }
+                    }
+                  ]
+                });
+              }
+              return;
+            }
+            if (attempts < maxAttempts) {
+              setTimeout(tryInit, delay);
+            } else {
+              if (window.console) console.warn('Cart bulk upsell: Slick not available.');
+            }
+          }
+
+          tryInit();
+        }
+
+        document.addEventListener('DOMContentLoaded', initBulkSlickOnce);
+        document.addEventListener('shopify:section:load', initBulkSlickOnce);
+        document.addEventListener('shopify:section:select', initBulkSlickOnce);
+        // Also try after a short delay for AJAX updates
+        setTimeout(initBulkSlickOnce, 500);
+      })();
+    </script>
+  {%- endif -%}
+  <script>
+    (function () {
+      function onUpsellClick(e) {
+        var btn = e.target.closest && e.target.closest('.js-cart-bulk-upsell-add');
+        if (!btn) return;
+        e.preventDefault();
+        var container = btn.closest('.cart-bulk-upsell');
+        if (!container) return;
+        var variantId = container.getAttribute('data-upsell-variant-id');
+        if (!variantId) return;
+
+        btn.disabled = true;
+        WAU.ThemeCart.addItem(parseInt(variantId, 10), { quantity: 1 })
+          .then(function () {
+            // Navigate to cart page so the cart is fully refreshed
+            if (document.documentElement.lang === "nl") {
+              window.location.href = "/nl/cart";
+            } else if (document.documentElement.lang === "de") {
+              window.location.href = "/de/cart";
+            } else {
+              window.location.href = "/cart";
+            }
+          })
+          .catch(function (err) {
+            console.error('Cart bulk upsell add error', err);
+            btn.disabled = false;
+          });
+      }
+
+      if (!document.body.dataset.bulkUpsellDelegation) {
+        document.addEventListener('click', onUpsellClick, false);
+        document.body.dataset.bulkUpsellDelegation = 'true';
+      }
+    })();
+  </script>
+{%- endif -%}
 {%- endif -%}
 

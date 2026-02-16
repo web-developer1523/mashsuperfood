@@ -338,3 +338,44 @@
       </div>
     </div>
   </form>
+  <script>
+    // Ensure cart remove buttons trigger an immediate page reload after successful AJAX removal.
+    (function () {
+      function delegateRemoveClick(e) {
+        var btn = e.target.closest && e.target.closest('.js-cart-remove');
+        if (!btn) return;
+        e.preventDefault();
+        // Prefer using the line number (data-line-item) to build a /cart/change URL for this exact line.
+        var line = btn.getAttribute('data-line-item') || btn.dataset.lineItem;
+        if (line) {
+          // Use routes.cart_change_url for correct path
+          window.location.href = '{{ routes.cart_change_url }}?line=' + encodeURIComponent(line) + '&quantity=0';
+          return;
+        }
+        // If no line attribute, fallback to ThemeCart.removeItem by key
+        var itemKey = btn.getAttribute('data-item-key');
+        if (!itemKey) return;
+        btn.classList.add('disabled');
+        try {
+          if (window.WAU && window.WAU.ThemeCart && typeof window.WAU.ThemeCart.removeItem === 'function') {
+            window.WAU.ThemeCart.removeItem(itemKey).then(function () {
+              window.location.href = window.location.pathname;
+            }).catch(function (err) {
+              console.error('Cart remove error', err);
+              btn.classList.remove('disabled');
+            });
+          } else {
+            window.location.reload();
+          }
+        } catch (e) {
+          console.error(e);
+          btn.classList.remove('disabled');
+        }
+      }
+
+      if (!document.body.dataset.cartRemoveDelegated) {
+        document.addEventListener('click', delegateRemoveClick, false);
+        document.body.dataset.cartRemoveDelegated = 'true';
+      }
+    })();
+  </script>
