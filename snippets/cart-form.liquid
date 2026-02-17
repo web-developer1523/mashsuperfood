@@ -311,8 +311,8 @@
           {%- else -%}
             {% if cart.total_discounts > 0 %}
               <div class="cart_savings">
-                <p class="title inline-block w50 a-left mb0 onsale">{{ 'cart.general.savings' | t }}</p>
-                <p class="cart-savings-amount inline-block w50 a-right mb0 onsale">{{ cart.total_discounts | money }}</p>
+                <p class="title inline-block w50 a-left mb0 onsale" style="color: #262b2c !important;">{{ 'cart.general.savings' | t }}</p>
+                <p class="cart-savings-amount inline-block w50 a-right mb0 onsale" style="color: #262b2c !important;">{{ cart.total_discounts | money }}</p>
               </div>
             {% endif %}
           {%- endif -%}
@@ -341,35 +341,43 @@
   <script>
     // Ensure cart remove buttons trigger an immediate page reload after successful AJAX removal.
     (function () {
+      var moneyFormat = "{{ shop.money_format | escape }}";
+      function formatMoney(cents) {
+        if (typeof cents !== 'number') cents = Number(cents) || 0;
+        var amount = (cents / 100).toFixed(2);
+        if (moneyFormat && moneyFormat.indexOf('{{amount}}') !== -1) {
+          return moneyFormat.replace('{{amount}}', amount);
+        }
+        return amount;
+      }
       function delegateRemoveClick(e) {
         var btn = e.target.closest && e.target.closest('.js-cart-remove');
         if (!btn) return;
         e.preventDefault();
-        // Prefer using the line number (data-line-item) to build a /cart/change URL for this exact line.
-        var line = btn.getAttribute('data-line-item') || btn.dataset.lineItem;
-        if (line) {
-          // Use routes.cart_change_url for correct path
-          window.location.href = '{{ routes.cart_change_url }}?line=' + encodeURIComponent(line) + '&quantity=0';
-          return;
-        }
-        // If no line attribute, fallback to ThemeCart.removeItem by key
+
         var itemKey = btn.getAttribute('data-item-key');
-        if (!itemKey) return;
-        btn.classList.add('disabled');
-        try {
-          if (window.WAU && window.WAU.ThemeCart && typeof window.WAU.ThemeCart.removeItem === 'function') {
-            window.WAU.ThemeCart.removeItem(itemKey).then(function () {
-              window.location.href = window.location.pathname;
-            }).catch(function (err) {
+        var line = btn.getAttribute('data-line-item') || btn.dataset.lineItem;
+
+        // Simple, reliable flow: prefer ThemeCart.removeItem by key and then reload.
+        if (itemKey && window.WAU && window.WAU.ThemeCart && typeof WAU.ThemeCart.removeItem === 'function') {
+          btn.classList.add('disabled');
+          WAU.ThemeCart.removeItem(itemKey)
+            .then(function () {
+              window.location.reload();
+            })
+            .catch(function (err) {
               console.error('Cart remove error', err);
               btn.classList.remove('disabled');
+              // As a final fallback, reload to recover consistent state
+              window.location.reload();
             });
-          } else {
-            window.location.reload();
-          }
-        } catch (e) {
-          console.error(e);
-          btn.classList.remove('disabled');
+          return;
+        }
+
+        // Fallback: use line number redirect (legacy/no-js behavior)
+        if (line) {
+          window.location.href = '{{ routes.cart_change_url }}?line=' + encodeURIComponent(line) + '&quantity=0';
+          return;
         }
       }
 

@@ -50,33 +50,34 @@
     {%- endif -%}
   {%- endif -%}
 
-  {%- if upsell_collection and upsell_collection.products_count > 0 -%}
-    {%- assign collection_limit = settings.upsell_bulk_collection_limit | default: 6 | plus: 0 -%}
+  {%- if cart.items and cart.items.size > 0 -%}
     {%- assign display_limit = settings.upsell_bulk_display_limit | default: 3 | plus: 0 -%}
     {%- assign layout = settings.upsell_bulk_layout | default: 'grid' -%}
 
     <div class="cart-bulk-upsell-wrapper cart-bulk-upsell--{{ layout }}">
-      {%- for upsell_product in upsell_collection.products limit: collection_limit -%}
-        {%- assign upsell_variant = upsell_product.selected_or_first_available_variant -%}
-        {%- if upsell_variant and tiers_json != '' and forloop.index0 < display_limit -%}
+      {%- for item in cart.items limit: display_limit -%}
+        {%- assign upsell_variant_id = item.variant_id -%}
+        {%- if upsell_variant_id and tiers_json != '' -%}
           <div
             class="cart-bulk-upsell js-cart-bulk-upsell"
-            data-upsell-variant-id="{{ upsell_variant.id }}"
+            data-upsell-variant-id="{{ upsell_variant_id }}"
             data-tiers='[{{ tiers_json }}]'
           >
             <div class="cart-bulk-upsell__inner">
               <div class="cart-bulk-upsell__product">
                 <div class="cart-bulk-upsell__image-wrapper">
-                  {%- if upsell_product.featured_image -%}
-                    {{ upsell_product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', class: 'cart-bulk-upsell__image' }}
+                  {%- if item.image -%}
+                    {{ item.image | image_url: width: 120 | image_tag: loading: 'lazy', class: 'cart-bulk-upsell__image' }}
+                  {%- elsif item.product and item.product.featured_image -%}
+                    {{ item.product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', class: 'cart-bulk-upsell__image' }}
                   {%- else -%}
                     <span class="cart-bulk-upsell__placeholder">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</span>
                   {%- endif -%}
                 </div>
                 <div class="cart-bulk-upsell__text">
-                  <p class="cart-bulk-upsell__eyebrow">Perfect with your order</p>
+                  <p class="cart-bulk-upsell__eyebrow">In your cart</p>
                   <p class="cart-bulk-upsell__title">
-                    {{ upsell_product.title }}
+                    {{ item.product.title }}
                   </p>
                   <p class="cart-bulk-upsell__headline">
                     {{ settings.upsell_bulk_headline | default: 'Last-minute savings available' }}
@@ -90,7 +91,7 @@
                   type="button"
                   class="cart-bulk-upsell__button js-cart-bulk-upsell-add"
                 >
-                  {{ settings.upsell_bulk_button_label | default: 'Add to cart' }}
+                  {{ settings.upsell_bulk_button_label | default: 'Add one more' }}
                 </button>
               </div>
             </div>
@@ -243,6 +244,20 @@
       .cart-bulk-upsell__button:hover {
         background: #000;
       }
+      .cart-bulk-upsell__savings-wrap {
+        display: inline-block;
+        margin-top: 0.25rem;
+        color: #0b6b3a;
+        font-weight: 600;
+      }
+      .cart-bulk-upsell__savings-total {
+        color: #0b6b3a;
+        margin-right: 0.35rem;
+      }
+      .cart-bulk-upsell__savings-per {
+        color: rgba(0,0,0,0.65);
+        font-weight: 500;
+      }
       @media (max-width: 749px) {
         .cart-bulk-upsell {
           border-radius: 0.75rem;
@@ -314,6 +329,132 @@
   {%- endif -%}
   <script>
     (function () {
+      // Configuration
+      var DISCOUNT_RATE = 0.20; // 20%
+      var DISCOUNT_THRESHOLD = 3; // 3+ items unlock discount
+      var moneyFormat = "{{ shop.money_format | escape }}";
+
+      function formatMoney(cents) {
+        if (typeof cents !== 'number') cents = Number(cents) || 0;
+        var amount = (cents / 100).toFixed(2);
+        if (moneyFormat && moneyFormat.indexOf('{{amount}}') !== -1) {
+          return moneyFormat.replace('{{amount}}', amount);
+        }
+        // Fallback: plain amount
+        return amount;
+      }
+
+      // Define visible tiers: min quantity => discount percent and code (product-quantity based)
+      var TIERS = [
+        { min: 2, discount: 10, code: 'BULK10' },
+        { min: 3, discount: 15, code: 'BULK15' },
+        { min: 4, discount: 20, code: 'BULK20' }
+      ];
+
+      function updateAllMessages(cart) {
+        var containers = document.querySelectorAll('.js-cart-bulk-upsell');
+        var itemCount = (cart && typeof cart.item_count === 'number') ? cart.item_count : 0;
+        var cartTotalCents = (cart && cart.total_price) ? cart.total_price : 0;
+
+        var MAX_TIER_MIN = TIERS[TIERS.length - 1].min;
+
+        function getNextTier(qty) {
+          for (var i = 0; i < TIERS.length; i++) {
+            if (TIERS[i].min > qty) return TIERS[i];
+          }
+          return null;
+        }
+
+        function getAppliedDiscount(qty) {
+          // Highest tier that is <= qty
+          for (var i = TIERS.length - 1; i >= 0; i--) {
+            if (qty >= TIERS[i].min) return TIERS[i].discount;
+          }
+          return 0;
+        }
+
+        var appliedDiscountPercent = getAppliedDiscount(itemCount);
+        var appliedDiscountRate = appliedDiscountPercent / 100;
+        var totalSavingsCents = Math.round(cartTotalCents * appliedDiscountRate);
+        var perItemSavingsCents = itemCount > 0 ? Math.round((cartTotalCents / itemCount) * appliedDiscountRate) : 0;
+
+        containers.forEach(function (container) {
+          var msgEl = container.querySelector('.js-cart-bulk-upsell-message');
+          if (!msgEl) return;
+
+          var main = '';
+          var secondary = '';
+          var savingsHtml = '';
+
+          // For messages, compute the qty of this specific variant in the cart (per-card)
+          var variantId = container.getAttribute('data-upsell-variant-id');
+          var variantQty = 0;
+          if (cart && cart.items && variantId) {
+            cart.items.forEach(function (itm) {
+              if (String(itm.variant_id) === String(variantId)) variantQty += itm.quantity;
+            });
+          }
+
+          if (variantQty < MAX_TIER_MIN) {
+            var next = getNextTier(variantQty);
+            if (next) {
+              var missing = next.min - variantQty;
+              var bagWord = missing === 1 ? 'bag' : 'bags';
+              main = 'Add ' + missing + ' more ' + bagWord + ' and get ' + next.discount + '% off this product';
+            } else {
+              main = 'Add items to unlock discounts';
+            }
+          } else {
+            main = TIERS[TIERS.length - 1].discount + '% off applied to this product';
+          }
+
+          // Show per-item + total savings once highest discount applies (4+)
+          {% comment %} if (itemCount >= MAX_TIER_MIN && cartTotalCents > 0 && appliedDiscountPercent > 0) {
+            savingsHtml = '<div class="cart-bulk-upsell__savings-wrap" role="status" aria-live="polite">';
+            savingsHtml += '<strong class="cart-bulk-upsell__savings-total">You save ' + formatMoney(totalSavingsCents) + '</strong>';
+            savingsHtml += ' <span class="cart-bulk-upsell__savings-per">(' + formatMoney(perItemSavingsCents) + ' per bag)</span>';
+            savingsHtml += '</div>';
+          } {% endcomment %}
+
+          var html = '<span class="cart-bulk-upsell__message-main">' + main + '</span>';
+          if (savingsHtml) html += '<br>' + savingsHtml;
+          if (secondary) {
+            html += '<br><small class="cart-bulk-upsell__secondary">' + secondary + '</small>';
+          }
+
+          msgEl.innerHTML = html;
+        });
+      }
+
+    // Helper to get desired discount code for a qty
+    function desiredDiscountCode(qty) {
+      var code = null;
+      for (var i = TIERS.length - 1; i >= 0; i--) {
+        if (qty >= TIERS[i].min) {
+          code = TIERS[i].code;
+          break;
+        }
+      }
+      return code;
+    }
+
+      function fetchCartAndUpdate() {
+        // Use Shopify's cart endpoint to get live cart state
+        fetch('/cart.js', { credentials: 'same-origin' })
+          .then(function (res) { return res.json(); })
+          .then(function (cart) {
+            updateAllMessages(cart);
+          })
+          .catch(function (err) {
+            // If fetch fails, try to use the existing cart object if present
+            if (window.cart) {
+              updateAllMessages(window.cart);
+            } else {
+              console.warn('Cart bulk upsell: unable to fetch cart', err);
+            }
+          });
+      }
+
       function onUpsellClick(e) {
         var btn = e.target.closest && e.target.closest('.js-cart-bulk-upsell-add');
         if (!btn) return;
@@ -326,6 +467,8 @@
         btn.disabled = true;
         WAU.ThemeCart.addItem(parseInt(variantId, 10), { quantity: 1 })
           .then(function () {
+            // After adding, refresh messages briefly (in case cart drawer updated via AJAX)
+            fetchCartAndUpdate();
             // Navigate to cart page so the cart is fully refreshed
             if (document.documentElement.lang === "nl") {
               window.location.href = "/nl/cart";
@@ -341,11 +484,111 @@
           });
       }
 
+      // Initialize: delegate click handler once and update messages on load.
       if (!document.body.dataset.bulkUpsellDelegation) {
         document.addEventListener('click', onUpsellClick, false);
         document.body.dataset.bulkUpsellDelegation = 'true';
       }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        fetchCartAndUpdate();
+      });
+
+      // Also update when Shopify sections are reloaded/selected (AJAX theme events)
+      document.addEventListener('shopify:section:load', fetchCartAndUpdate);
+      document.addEventListener('shopify:section:select', fetchCartAndUpdate);
     })();
+  </script>
+  <script>
+    // Prevent built-in WAU.CartUpsell from overwriting our custom messaging
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.WAU && WAU.CartUpsell) {
+        // Keep originals in case we need to restore later
+        WAU.CartUpsell.__original = {
+          init: WAU.CartUpsell.init,
+          _render: WAU.CartUpsell._render,
+          _update: WAU.CartUpsell._update
+        };
+        WAU.CartUpsell.init = function () { /* noop - custom messaging handles UI */ };
+        WAU.CartUpsell._render = function () { /* noop */ };
+        WAU.CartUpsell._update = function () { /* noop */ };
+      }
+    });
+  </script>
+  <script>
+    // Wrap ThemeCart add methods to apply discount codes automatically when thresholds are reached
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!window.WAU || !WAU.ThemeCart) return;
+
+      function getCartPath() {
+        if (document.documentElement.lang === "nl") return "/nl/cart";
+        if (document.documentElement.lang === "de") return "/de/cart";
+        return "/cart";
+      }
+
+      function getCodeForQty(qty) {
+        return desiredDiscountCode(qty);
+      }
+
+      // Wrap addItem
+      if (typeof WAU.ThemeCart.addItem === 'function' && !WAU.ThemeCart.__addItemWrapped) {
+        WAU.ThemeCart.__addItemWrapped = WAU.ThemeCart.addItem;
+        WAU.ThemeCart.addItem = function (id, options) {
+          return WAU.ThemeCart.__addItemWrapped(id, options).then(function (res) {
+            return WAU.ThemeCart.getCart().then(function (cart) {
+              try {
+                // compute quantity of this specific variant in the updated cart
+                var variantQty = 0;
+                if (cart && cart.items) {
+                  cart.items.forEach(function (itm) {
+                    if (String(itm.variant_id) === String(id)) variantQty += itm.quantity;
+                  });
+                }
+                var code = getCodeForQty(variantQty);
+                if (code && window.location.search.indexOf('discount=' + code) === -1) {
+                  window.location.href = getCartPath() + '?discount=' + code;
+                }
+              } catch (e) {
+                // ignore
+              }
+              return res;
+            });
+          });
+        };
+      }
+
+      // Wrap addItemFromForm
+      if (typeof WAU.ThemeCart.addItemFromForm === 'function' && !WAU.ThemeCart.__addItemFromFormWrapped) {
+        WAU.ThemeCart.__addItemFromFormWrapped = WAU.ThemeCart.addItemFromForm;
+        WAU.ThemeCart.addItemFromForm = function (form) {
+          return WAU.ThemeCart.__addItemFromFormWrapped(form).then(function (res) {
+            return WAU.ThemeCart.getCart().then(function (cart) {
+              try {
+                // attempt to read variant id from form
+                var formEl = form instanceof HTMLFormElement ? form : document.querySelector('form');
+                var variantId = null;
+                try {
+                  var fd = new FormData(formEl);
+                  variantId = fd.get('id') || fd.get('variant');
+                } catch (e) {}
+
+                var variantQty = 0;
+                if (variantId && cart && cart.items) {
+                  cart.items.forEach(function (itm) {
+                    if (String(itm.variant_id) === String(variantId)) variantQty += itm.quantity;
+                  });
+                }
+                var code = getCodeForQty(variantQty);
+                if (code && window.location.search.indexOf('discount=' + code) === -1) {
+                  window.location.href = getCartPath() + '?discount=' + code;
+                }
+              } catch (e) {}
+              return res;
+            });
+          });
+        };
+      }
+    });
   </script>
 {%- endif -%}
 {%- endif -%}
