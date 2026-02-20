@@ -141,6 +141,11 @@
       "increase": "Erhöhe die Menge für {{ product }}",
       "decrease": "Verringere die Menge für {{ product }}",
       "or": "oder"
+    },
+    "bulk": {
+      "next": "Fügen Sie {missing} weitere {bagWord} hinzu und erhalten Sie {discount} % Rabatt auf dieses Produkt.",
+      "unlocked": "Sie haben einen Rabatt von {discount} % auf dieses Produkt freigeschaltet.",
+      "secondary": "Fügen Sie eine weitere Tasche hinzu – Sie erhalten ebenfalls {Rabatt} % Rabatt."
     }
   },
   "collections": {

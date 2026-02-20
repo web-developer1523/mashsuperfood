@@ -594,12 +594,6 @@
         "default": "Last-minute savings available"
       },
       {
-        "type": "text",
-        "id": "upsell_bulk_button_label",
-        "label": "Upsell button label",
-        "default": "Add to cart"
-      },
-      {
         "type": "paragraph",
         "content": "Configure tiers to mirror your existing bulk discount rules. These are display-only and do not create any new discounts."
       },

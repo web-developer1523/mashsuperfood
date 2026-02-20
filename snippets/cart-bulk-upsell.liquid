@@ -50,6 +50,75 @@
     {%- endif -%}
   {%- endif -%}
 
+  {%- comment %}
+    Prepare editable message defaults safely (avoid quoting conflicts)
+  {%- endcomment -%}
+  {%- capture upsell_msg_next_default -%}Add {missing} more {bagWord} and get {discount}% off this product{%- endcapture -%}
+  {%- capture upsell_msg_unlocked_default -%}You've unlocked {discount}% off this product{%- endcapture -%}
+  {%- capture upsell_msg_secondary_default -%}Add one more bag — it will also get {discount}% off{%- endcapture -%}
+  {%- capture upsell_eyebrow_default -%}In your cart{%- endcapture -%}
+  {%- if settings.upsell_eyebrow != blank -%}
+    {%- assign upsell_eyebrow = settings.upsell_eyebrow -%}
+  {%- else -%}
+    {%- assign upsell_eyebrow = upsell_eyebrow_default -%}
+  {%- endif -%}
+  {%- assign trans_eyebrow = 'cart.bulk.eyebrow' | t -%}
+  {%- if trans_eyebrow != 'cart.bulk.eyebrow' and trans_eyebrow != blank -%}
+    {%- assign upsell_eyebrow = trans_eyebrow -%}
+  {%- endif -%}
+
+  {%- if settings.upsell_msg_next != blank -%}
+    {%- assign upsell_msg_next = settings.upsell_msg_next -%}
+  {%- else -%}
+    {%- assign upsell_msg_next = upsell_msg_next_default -%}
+  {%- endif -%}
+
+  {%- comment %} Prefer locale translation if provided (key: cart.bulk.next) {% endcomment -%}
+  {%- assign trans_next = 'cart.bulk.next' | t -%}
+  {%- if trans_next != 'cart.bulk.next' and trans_next != blank -%}
+    {%- assign upsell_msg_next = trans_next -%}
+  {%- endif -%}
+
+  {%- if settings.upsell_msg_unlocked != blank -%}
+    {%- assign upsell_msg_unlocked = settings.upsell_msg_unlocked -%}
+  {%- else -%}
+    {%- assign upsell_msg_unlocked = upsell_msg_unlocked_default -%}
+  {%- endif -%}
+
+  {%- comment %} Prefer locale translation if provided (key: cart.bulk.unlocked) {% endcomment -%}
+  {%- assign trans_unlocked = 'cart.bulk.unlocked' | t -%}
+  {%- if trans_unlocked != 'cart.bulk.unlocked' and trans_unlocked != blank -%}
+    {%- assign upsell_msg_unlocked = trans_unlocked -%}
+  {%- endif -%}
+
+  {%- if settings.upsell_msg_secondary != blank -%}
+    {%- assign upsell_msg_secondary = settings.upsell_msg_secondary -%}
+  {%- else -%}
+    {%- assign upsell_msg_secondary = upsell_msg_secondary_default -%}
+  {%- endif -%}
+
+  {%- comment %} Prefer locale translation if provided (key: cart.bulk.secondary) {% endcomment -%}
+  {%- assign trans_secondary = 'cart.bulk.secondary' | t -%}
+  {%- if trans_secondary != 'cart.bulk.secondary' and trans_secondary != blank -%}
+    {%- assign upsell_msg_secondary = trans_secondary -%}
+  {%- endif -%}
+
+  {%- comment %} Bag word translations (singular / plural) {% endcomment -%}
+  {%- capture upsell_bag_singular_default -%}bag{%- endcapture -%}
+  {%- capture upsell_bag_plural_default -%}bags{%- endcapture -%}
+  {%- assign trans_bag_singular = 'cart.bulk.bag_singular' | t -%}
+  {%- assign trans_bag_plural = 'cart.bulk.bag_plural' | t -%}
+  {%- if trans_bag_singular != 'cart.bulk.bag_singular' and trans_bag_singular != blank -%}
+    {%- assign upsell_bag_singular = trans_bag_singular -%}
+  {%- else -%}
+    {%- assign upsell_bag_singular = upsell_bag_singular_default -%}
+  {%- endif -%}
+  {%- if trans_bag_plural != 'cart.bulk.bag_plural' and trans_bag_plural != blank -%}
+    {%- assign upsell_bag_plural = trans_bag_plural -%}
+  {%- else -%}
+    {%- assign upsell_bag_plural = upsell_bag_plural_default -%}
+  {%- endif -%}
+
   {%- if cart.items and cart.items.size > 0 -%}
     {%- assign display_limit = settings.upsell_bulk_display_limit | default: 3 | plus: 0 -%}
     {%- assign layout = settings.upsell_bulk_layout | default: 'grid' -%}
@@ -62,6 +131,13 @@
             class="cart-bulk-upsell js-cart-bulk-upsell"
             data-upsell-variant-id="{{ upsell_variant_id }}"
             data-tiers='[{{ tiers_json }}]'
+            data-msg-next="{{ upsell_msg_next | escape }}"
+            data-msg-unlocked="{{ upsell_msg_unlocked | escape }}"
+            data-msg-secondary="{{ upsell_msg_secondary | escape }}"
+            data-upsell-headline="{{ settings.upsell_bulk_headline | escape }}"
+            data-upsell-button-label="{{ settings.upsell_bulk_button_label | escape }}"
+            data-bag-singular="{{ upsell_bag_singular | escape }}"
+            data-bag-plural="{{ upsell_bag_plural | escape }}"
           >
             <div class="cart-bulk-upsell__inner">
               <div class="cart-bulk-upsell__product">
@@ -75,11 +151,11 @@
                   {%- endif -%}
                 </div>
                 <div class="cart-bulk-upsell__text">
-                  <p class="cart-bulk-upsell__eyebrow">In your cart</p>
+                  <p class="cart-bulk-upsell__eyebrow">{{ upsell_eyebrow }}</p>
                   <p class="cart-bulk-upsell__title">
                     {{ item.product.title }}
                   </p>
-                  <p class="cart-bulk-upsell__headline">
+                  <p class="cart-bulk-upsell__headline" data-upsell-headline="{{ settings.upsell_bulk_headline | escape }}">
                     {{ settings.upsell_bulk_headline | default: 'Last-minute savings available' }}
                   </p>
                   <p class="cart-bulk-upsell__message js-cart-bulk-upsell-message" aria-live="polite"></p>
@@ -109,6 +185,13 @@
           class="cart-bulk-upsell js-cart-bulk-upsell"
           data-upsell-variant-id="{{ upsell_variant.id }}"
           data-tiers='[{{ tiers_json }}]'
+          data-msg-next="{{ upsell_msg_next | escape }}"
+          data-msg-unlocked="{{ upsell_msg_unlocked | escape }}"
+          data-msg-secondary="{{ upsell_msg_secondary | escape }}"
+          data-upsell-headline="{{ settings.upsell_bulk_headline | escape }}"
+          data-upsell-button-label="{{ settings.upsell_bulk_button_label | escape }}"
+          data-bag-singular="{{ upsell_bag_singular | escape }}"
+          data-bag-plural="{{ upsell_bag_plural | escape }}"
         >
           <div class="cart-bulk-upsell__inner">
             <div class="cart-bulk-upsell__product">
@@ -124,7 +207,7 @@
                 <p class="cart-bulk-upsell__title">
                   {{ upsell_product.title }}
                 </p>
-                <p class="cart-bulk-upsell__headline">
+                <p class="cart-bulk-upsell__headline" data-upsell-headline="{{ settings.upsell_bulk_headline | escape }}">
                   {{ settings.upsell_bulk_headline | default: 'Last-minute savings available' }}
                 </p>
                 <p class="cart-bulk-upsell__message js-cart-bulk-upsell-message" aria-live="polite"></p>
@@ -345,10 +428,10 @@
       }
 
       // Define visible tiers: min quantity => discount percent and code (product-quantity based)
+      // Align visible tiers with backend discount rules (per-product quantity)
       var TIERS = [
-        { min: 2, discount: 10, code: 'BULK10' },
-        { min: 3, discount: 15, code: 'BULK15' },
-        { min: 4, discount: 20, code: 'BULK20' }
+        { min: 2, discount: 15, code: 'BULK15' },
+        { min: 3, discount: 20, code: 'BULK20' }
       ];
 
       function updateAllMessages(cart) {
@@ -399,13 +482,20 @@
             var next = getNextTier(variantQty);
             if (next) {
               var missing = next.min - variantQty;
-              var bagWord = missing === 1 ? 'bag' : 'bags';
-              main = 'Add ' + missing + ' more ' + bagWord + ' and get ' + next.discount + '% off this product';
+              var bagSing = container.getAttribute('data-bag-singular') || 'bag';
+              var bagPlur = container.getAttribute('data-bag-plural') || 'bags';
+              var bagWord = missing === 1 ? bagSing : bagPlur;
+              // Use customizable message templates from data attributes when available
+              var template = container.getAttribute('data-msg-next') || 'Add {missing} more {bagWord} and get {discount}% off this product';
+              main = template.replace(/{missing}/g, missing).replace(/{bagWord}/g, bagWord).replace(/{discount}/g, next.discount);
             } else {
               main = 'Add items to unlock discounts';
             }
           } else {
-            main = TIERS[TIERS.length - 1].discount + '% off applied to this product';
+            var unlockedTemplate = container.getAttribute('data-msg-unlocked') || "You've unlocked {discount}% off this product";
+            main = unlockedTemplate.replace(/{discount}/g, TIERS[TIERS.length - 1].discount);
+            var secondaryTemplate = container.getAttribute('data-msg-secondary') || 'Add one more bag — it will also get {discount}% off';
+            secondary = secondaryTemplate.replace(/{discount}/g, TIERS[TIERS.length - 1].discount);
           }
 
           // Show per-item + total savings once highest discount applies (4+)
@@ -444,6 +534,8 @@
           .then(function (res) { return res.json(); })
           .then(function (cart) {
             updateAllMessages(cart);
+            // Apply any section-level overrides provided by the page (Customizer)
+            applySectionOverrides();
           })
           .catch(function (err) {
             // If fetch fails, try to use the existing cart object if present
@@ -493,6 +585,40 @@
       document.addEventListener('DOMContentLoaded', function () {
         fetchCartAndUpdate();
       });
+
+      // If the cart section was edited in the customizer, the section exposes settings
+      // via window.CART_SECTION_SETTINGS — use them to override message templates.
+      function applySectionOverrides() {
+        try {
+          if (!window.CART_SECTION_SETTINGS) return;
+          var s = window.CART_SECTION_SETTINGS;
+          // only override if no server-side/translated value exists
+          document.querySelectorAll('.js-cart-bulk-upsell').forEach(function (container) {
+            if (s.upsell_msg_next && !(container.dataset.msgNext && container.dataset.msgNext.trim())) container.dataset.msgNext = s.upsell_msg_next;
+            if (s.upsell_msg_unlocked && !(container.dataset.msgUnlocked && container.dataset.msgUnlocked.trim())) container.dataset.msgUnlocked = s.upsell_msg_unlocked;
+            if (s.upsell_msg_secondary && !(container.dataset.msgSecondary && container.dataset.msgSecondary.trim())) container.dataset.msgSecondary = s.upsell_msg_secondary;
+            if (s.upsell_bag_singular && !(container.dataset.bagSingular && container.dataset.bagSingular.trim())) container.dataset.bagSingular = s.upsell_bag_singular;
+            if (s.upsell_bag_plural && !(container.dataset.bagPlural && container.dataset.bagPlural.trim())) container.dataset.bagPlural = s.upsell_bag_plural;
+            // Update visible text elements (headline / button / eyebrow) when section settings change
+            try {
+              if (s.upsell_bulk_headline) {
+                var headlineEl = container.querySelector('.cart-bulk-upsell__headline');
+                if (headlineEl) headlineEl.textContent = s.upsell_bulk_headline;
+              }
+              if (s.upsell_bulk_button_label) {
+                var btnEl = container.querySelector('.cart-bulk-upsell__button');
+                if (btnEl) btnEl.textContent = s.upsell_bulk_button_label;
+              }
+              if (s.upsell_eyebrow) {
+                var eyebrowEl = container.querySelector('.cart-bulk-upsell__eyebrow');
+                if (eyebrowEl) eyebrowEl.textContent = s.upsell_eyebrow;
+              }
+            } catch (e) { /* ignore individual element update errors */ }
+          });
+          // Re-run update to reflect new templates
+          fetchCartAndUpdate();
+        } catch (e) { /* ignore */ }
+      }
 
       // Also update when Shopify sections are reloaded/selected (AJAX theme events)
       document.addEventListener('shopify:section:load', fetchCartAndUpdate);

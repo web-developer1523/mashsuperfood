@@ -55,6 +55,14 @@
       "free_shipping_qualified": "Uw bestelling komt in aanmerking voor gratis binnenlandse verzending!",
       "free_shipping_exclusions": "(Internationaal uitgesloten)"
     }
+    ,
+    "bulk": {
+      "next": "Voeg nog {missing} {bagWord} toe en krijg {discount}% korting op dit product",
+      "unlocked": "Je hebt {discount}% korting op dit product vrijgespeeld",
+      "secondary": "Voeg nog één zak toe — deze krijgt ook {discount}% korting",
+      "bag_singular": "zak",
+      "bag_plural": "zakken"
+    }
   },
   "collections": {
     "general": {

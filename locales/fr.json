@@ -140,7 +140,12 @@
       "input_label": "Quantité pour {{ product }}",
       "increase": "Augmenter la quantité de {{ product }}",
       "decrease": "Réduire la quantité de {{ product }}",
-      "or":"ou"
+      "or": "ou"
+    },
+    "bulk": {
+      "next": "Ajoutez {missing} autres {bagWord} et obtenez {discount}% de réduction sur ce produit",
+      "unlocked": "Vous bénéficiez d'une réduction de {discount}% sur ce produit",
+      "secondary": "Ajoutez un sac supplémentaire — il bénéficiera également d'une réduction de {discount}%"
     }
   },
   "collections": {
@@ -199,7 +204,7 @@
       "no_results": "Aucun résultat trouvé",
       "use_fewer_filters": "Ue moins de filtres.",
       "type_to_filter": "Tapez à filtrer",
-      "match_all":"Tout associer"
+      "match_all": "Tout associer"
     }
   },
   "customer": {
@@ -231,7 +236,7 @@
       "city": "Ville",
       "country": "Pays",
       "province": "Province",
-      "zip": "Code postal \/ Zip",
+      "zip": "Code postal / Zip",
       "phone": "Téléphone",
       "set_default": "Définir comme adresse par défaut",
       "add": "Ajoutez l'adresse",
@@ -317,7 +322,7 @@
       "view_full": "Voir tous les détails",
       "sale_price": "Prix soldé",
       "regular_price": "Prix ordinaire",
-      "view_all":"Voir tout"
+      "view_all": "Voir tout"
     },
     "product": {
       "designer": "Designer",
@@ -326,7 +331,7 @@
       "unavailable": "Non disponible",
       "compare_at": "Comparer à",
       "include_taxes": "Taxes incluses.",
-      "shipping_policy_html": "<a href=\"{{ link }}\">Frais d'expédition<\/a> calculés lors du paiement.",
+      "shipping_policy_html": "<a href=\"{{ link }}\">Frais d'expédition</a> calculés lors du paiement.",
       "pre_order": "Pré-commander",
       "add_to_cart": "Ajouter au panier",
       "view_options": "Voir les options",
@@ -340,12 +345,12 @@
       "view_cart": "Voir le panier",
       "continue": "Continer les achats",
       "quantity": "Quantité",
-      "required":"obligatoire",
+      "required": "obligatoire",
       "product_details": "Détails du produit",
       "product_info": "Information sur le produit",
       "product_type": "Type de produit",
       "brand": "Marque",
-      "product":"Produit",
+      "product": "Produit",
       "collection": "Collection",
       "product_description": "Description du produit",
       "product_more_details": "En détail",
@@ -374,7 +379,7 @@
       "pick_up_available": "Ramassage disponible",
       "pick_up_currently_unavailable": "Ramassage actuellement indisponible",
       "pick_up_available_at_html": "Ramassage disponible à {{ location_name }}",
-      "pick_up_unavailable_at_html": "Ramassage actuellement indisponible à <strong>{{ location_name }}<\/strong>",
+      "pick_up_unavailable_at_html": "Ramassage actuellement indisponible à <strong>{{ location_name }}</strong>",
       "pickup": "Ramasser"
     }
   },

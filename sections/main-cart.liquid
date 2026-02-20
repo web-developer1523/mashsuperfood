@@ -149,6 +149,10 @@
   </div>
   <div class="ajax-cart__form-wrapper cart-wrapper js-ajax-cart-content">
   </div>
+  <script>
+    // Expose this section's settings to client-side scripts so snippets rendered via AJAX can use them.
+    window.CART_SECTION_SETTINGS = {{ section.settings | json }};
+  </script>
   {%- unless request.design_mode -%}
     {%- if additional_checkout_buttons -%}
       <div class="ajax-cart__footer-wrapper grid__wrapper edge">
@@ -176,6 +180,43 @@
       "type": "url",
       "id": "link",
       "label": "Continue shopping link"
+    },
+    {
+      "type": "text",
+      "id": "upsell_msg_next",
+      "label": "Upsell — Next tier message",
+      "default": "Add {missing} more {bagWord} and get {discount}% off this product"
+    },
+    {
+      "type": "text",
+      "id": "upsell_msg_unlocked",
+      "label": "Upsell — Unlocked message",
+      "default": "You've unlocked {discount}% off this product"
+    },
+    {
+      "type": "text",
+      "id": "upsell_msg_secondary",
+      "label": "Upsell — Secondary unlocked line",
+      "default": "Add one more bag — it will also get {discount}% off"
+    }
+    ,
+    {
+      "type": "text",
+      "id": "upsell_bulk_headline",
+      "label": "Upsell headline",
+      "default": "Last-minute savings available"
+    },
+    {
+      "type": "text",
+      "id": "upsell_bulk_button_label",
+      "label": "Upsell button label",
+      "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "upsell_eyebrow",
+      "label": "Upsell eyebrow text",
+      "default": "In your cart"
     }
   ]
 }

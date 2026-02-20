@@ -141,6 +141,15 @@
       "decrease": "Decrease quantity for {{ product }}",
       "or": "or"
     }
+    ,
+    "bulk": {
+      "next": "Add {missing} more {bagWord} and get {discount}% off this product",
+      "unlocked": "You've unlocked {discount}% off this product",
+      "secondary": "Add one more bag — it will also get {discount}% off",
+      "eyebrow": "In your cart",
+      "bag_singular": "bag",
+      "bag_plural": "bags"
+    }
   },
   "collections": {
     "general": {
