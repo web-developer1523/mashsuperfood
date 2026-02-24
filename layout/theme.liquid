@@ -1321,18 +1321,18 @@ html[lang="nl"] .appstle_subscription_wrapper_option .single_pack_option input +
 .template-product .ajax-submit.js-ajax-submit span:nth-child(2) {
   display: none;
 }
-.template-product .ajax-submit.js-ajax-submit {
+{% comment %} .template-product .ajax-submit.js-ajax-submit {
     background: #2A6D2E;
 }
 .template-product .ajax-submit.js-ajax-submit::after {
   background-color: #2a6d2e !important;
-}
-.template-cart button#checkout {
+} {% endcomment %}
+{% comment %} .template-cart button#checkout {
   background: #2A6D2E;
 }
 .template-cart button#checkout::after {
   background-color: #2a6d2e !important;
-}
+} {% endcomment %}
 @media only screen and (max-width: 575px) {
 
   .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .inserted-block {

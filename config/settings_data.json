@@ -939,7 +939,7 @@
     "focus_border_style": "solid",
     "image_ratio": "vertical",
     "product_grid_padding": false,
-    "secondary_images_hover": true,
+    "secondary_images_hover": false,
     "product_grid_video": false,
     "show_collection_sizes": false,
     "product_variants": "dropdowns",

@@ -19,7 +19,15 @@
     "main": {
       "type": "main-cart",
       "settings": {
-        "link": ""
+        "link": "",
+        "upsell_msg_next": "Add {missing} more {bagWord} and get {discount}% off this product",
+        "upsell_msg_unlocked": "You've unlocked {discount}% off this product",
+        "upsell_msg_secondary": "Add one more bag — it will also get {discount}% off",
+        "upsell_bulk_headline": "Last-minute savings available",
+        "upsell_bulk_button_label": "Add to cart",
+        "upsell_bulk_button_bg_color": "#303030",
+        "upsell_bulk_button_text_color": "#faf4e8",
+        "upsell_eyebrow": "In your cart"
       }
     }
   },

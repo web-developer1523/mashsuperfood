@@ -145,7 +145,8 @@
     "bulk": {
       "next": "Ajoutez {missing} autres {bagWord} et obtenez {discount}% de réduction sur ce produit",
       "unlocked": "Vous bénéficiez d'une réduction de {discount}% sur ce produit",
-      "secondary": "Ajoutez un sac supplémentaire — il bénéficiera également d'une réduction de {discount}%"
+      "secondary": "Ajoutez un sac supplémentaire — il bénéficiera également d'une réduction de {discount}%",
+      "eyebrow": "Dans votre panier"
     }
   },
   "collections": {

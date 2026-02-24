@@ -172,6 +172,14 @@
     grid-template-columns: repeat(1,1fr) !important;
 }
 </style>
+<style>
+  /* Upsell bulk button colors from section settings */
+  section[data-section-id="{{ section.id }}"] .cart-bulk-upsell__button {
+    background-color: {{ section.settings.upsell_bulk_button_bg_color | default: '#000000' }};
+    color: {{ section.settings.upsell_bulk_button_text_color | default: '#ffffff' }};
+    border-color: {{ section.settings.upsell_bulk_button_bg_color | default: '#000000' }};
+  }
+</style>
 {% schema %}
 {
   "name": "Cart",
@@ -212,6 +220,18 @@
       "label": "Upsell button label",
       "default": "Add to cart"
     },
+  {
+    "type": "color",
+    "id": "upsell_bulk_button_bg_color",
+    "label": "Upsell bulk button background",
+    "default": "#000000"
+  },
+  {
+    "type": "color",
+    "id": "upsell_bulk_button_text_color",
+    "label": "Upsell bulk button text color",
+    "default": "#ffffff"
+  },
     {
       "type": "text",
       "id": "upsell_eyebrow",

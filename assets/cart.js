@@ -982,75 +982,88 @@ WAU.AjaxCart = {
   //   });
   // },
   addToCart: function addToCart(addToCartForm, formContext, config, isQuickview, quickAdd) {
-    console.log('🛒 Add to cart process started');
-    console.log('Form:', addToCartForm);
-    console.log('Context:', formContext);
-    console.log('Config:', config);
-    console.log('Is Quickview:', isQuickview);
-    console.log('Quick Add:', quickAdd);
-    
     var selectors = {
       addToCart: '.js-ajax-submit',
-      addToCartText: '[data-add-to-cart-text]',
-      cartAddedMsg: '.js-added-msg'
-    } 
-  
-    let context;
-  
-    if ( isQuickview ) { 
-      context = document.getElementById('quickview-form');
-      console.log('📱 Quickview context detected');
-    } else { 
-      context = formContext;
-      console.log('🌐 Regular product page context');
-    }
-  
-    // ... rest of your existing validation code
-  
-    console.log('⏳ Adding product to cart...');
-    
-    WAU.ThemeCart.addItemFromForm(addToCartForm).then(item => {
-      console.log('✅ Product successfully added to cart!');
-      console.log('Added item:', item);
-      console.log('Item ID:', item.id);
-      console.log('Item quantity:', item.quantity);
-      console.log('Item properties:', item.properties);
-      
-      // Re-enable add to cart button
-      context.querySelector(selectors.addToCartText).innerHTML = config.added_to_cart;
-      context.querySelector(selectors.addToCart).classList.remove('disabled');
-      context.querySelector(selectors.addToCart).removeAttribute('disabled', 'disabled');
-  
-      setTimeout(function(){
-        if ( context.querySelector(selectors.addToCart) ) context.querySelector(selectors.addToCartText).innerHTML = config.add_to_cart;
-      }, 3000);
-  
-      WAU.ThemeCart.getCart().then(Cart => {
-        console.log('🛍️ Cart updated after addition');
-        console.log('Total items in cart:', Cart.item_count);
-        console.log('Cart total:', Cart.total_price);
-        console.log('Cart items:', Cart.items);
-        if (document.documentElement.lang === "nl") {
-          window.location.href="/nl/cart";
-        } else if(document.documentElement.lang === "de") {
-          window.location.href="/de/cart";
-        }else{
-          window.location.href="/cart";
-        }
-       
-  
-        // ... rest of your existing cart handling logic
-        
-        WAU.AjaxCart.updateView(config, Cart);
-      });
-    }).catch(error => {
-      console.error('❌ Error adding product to cart:', error);
-      console.error('Error status:', error.status);
-      
-      if (error.status == 422) {
-        console.error('Validation error - product might be out of stock or invalid');
-        // ... rest of your existing error handling
+      addToCartText: '[data-add-to-cart-text]'
+    };
+
+    var context = isQuickview ? document.getElementById('quickview-form') : formContext;
+    var formData = new FormData(addToCartForm);
+    var variantId = parseInt(formData.get('id'), 10) || null;
+    var quantity = parseInt(formData.get('quantity'), 10) || 1;
+
+    // Detect any non-empty properties
+    var hasNonEmptyProperties = false;
+    for (var entry of formData.entries()) {
+      var k = entry[0], v = entry[1];
+      if (k.indexOf('properties[') === 0 && v !== null && v !== '') {
+        hasNonEmptyProperties = true;
+        break;
       }
+    }
+
+    // Simple flow: always check live cart and merge by variant_id + selling plan (so subscriptions stay separate).
+    function getSellingPlanIdFromFormData(fd) {
+      return fd.get('selling_plan') || fd.get('selling_plan_id') || fd.get('selling_plan[]') || '';
+    }
+
+    var incomingSellingPlanId = getSellingPlanIdFromFormData(formData);
+
+    WAU.ThemeCart.getCart().then(function(cart) {
+      if (!variantId) {
+        return WAU.ThemeCart.addItemFromForm(addToCartForm);
+      }
+
+      var existing = null;
+      cart.items.forEach(function(it) {
+        var itSellingPlanId = '';
+        if (it.selling_plan_allocation && it.selling_plan_allocation.selling_plan && it.selling_plan_allocation.selling_plan.id) {
+          itSellingPlanId = String(it.selling_plan_allocation.selling_plan.id);
+        }
+        if (Number(it.variant_id) === variantId && String(itSellingPlanId) === String(incomingSellingPlanId)) {
+          existing = it;
+        }
+      });
+
+      if (existing) {
+        var newQty = (existing.quantity || 0) + quantity;
+        return WAU.ThemeCart.updateItem(existing.key, { quantity: newQty });
+      }
+
+      // No existing variant (or different selling plan) — add normally
+      if (hasNonEmptyProperties) {
+        return WAU.ThemeCart.addItemFromForm(addToCartForm);
+      }
+      return WAU.ThemeCart.addItem(variantId, { quantity: quantity });
+    }).then(function() {
+      // Refresh cart and view, then redirect to cart page
+      return WAU.ThemeCart.getCart();
+    }).then(function(Cart) {
+      WAU.AjaxCart.updateView(config, Cart);
+      if (document.documentElement.lang === "nl") {
+        window.location.href = "/nl/cart";
+      } else if (document.documentElement.lang === "de") {
+        window.location.href = "/de/cart";
+      } else {
+        window.location.href = "/cart";
+      }
+    }).catch(function(err) {
+      console.error('Error in addToCart flow', err);
+      // Fallback: submit full form then update
+      WAU.ThemeCart.addItemFromForm(addToCartForm).then(function() {
+        return WAU.ThemeCart.getCart();
+      }).then(function(Cart) {
+        WAU.AjaxCart.updateView(config, Cart);
+        if (document.documentElement.lang === "nl") {
+          window.location.href = "/nl/cart";
+        } else if (document.documentElement.lang === "de") {
+          window.location.href = "/de/cart";
+        } else {
+          window.location.href = "/cart";
+        }
+      }).catch(function(e) {
+        console.error('Fallback addFromForm failed', e);
+      });
     });
   },
   getAjaxCart: function getAjaxCart(response) {
@@ -1072,6 +1085,65 @@ WAU.AjaxCart = {
 
     return html;
   },
+  // Merge duplicate lines by variant_id (ignore properties). Sequential updates to avoid races.
+  consolidateDuplicates: function consolidateDuplicates(cart) {
+    return new Promise(function(resolve, reject) {
+      if (!cart || !cart.items || !cart.items.length) return resolve(cart);
+
+      var groups = {};
+      cart.items.forEach(function(item) {
+        var spId = '';
+        if (item.selling_plan_allocation && item.selling_plan_allocation.selling_plan && item.selling_plan_allocation.selling_plan.id) {
+          spId = String(item.selling_plan_allocation.selling_plan.id);
+        }
+        var mapKey = String(item.variant_id) + '|' + spId;
+        if (!groups[mapKey]) groups[mapKey] = [];
+        groups[mapKey].push(item);
+      });
+
+      var groupKeys = Object.keys(groups);
+      if (!groupKeys.length) return resolve(cart);
+
+      var sequence = Promise.resolve();
+      groupKeys.forEach(function(mapKey) {
+        sequence = sequence.then(function() {
+          var items = groups[mapKey];
+          if (items.length <= 1) return Promise.resolve();
+
+          var totalQty = items.reduce(function(sum, it) { return sum + (it.quantity || 0); }, 0);
+          var keeper = items[0];
+          var others = items.slice(1);
+
+          var p = Promise.resolve();
+          if ((keeper.quantity || 0) !== totalQty) {
+            p = p.then(function() {
+              return WAU.ThemeCart.updateItem(keeper.key, { quantity: totalQty }).catch(function(err) {
+                console.warn('Failed updating keeper quantity for key', keeper.key, err);
+              });
+            });
+          }
+
+          others.forEach(function(it) {
+            p = p.then(function() {
+              return WAU.ThemeCart.updateItem(it.key, { quantity: 0 }).catch(function(err) {
+                console.warn('Failed removing duplicate line', it.key, err);
+              });
+            });
+          });
+
+          return p;
+        });
+      });
+
+      sequence.then(function() {
+        return WAU.ThemeCart.getCart();
+      }).then(function(newCart) {
+        resolve(newCart);
+      }).catch(function(err) {
+        reject(err);
+      });
+    });
+  },
   initializeAjaxCart: function initializeAjaxCart(config) {
     let data, url;
     url = config.cart_url + '/?view=ajax';
@@ -1087,11 +1159,28 @@ WAU.AjaxCart = {
       });
 
     }).then(response => {
-      // Init shipping calc
-      if ( config.show_calculator && document.querySelector('body').classList.contains('template-cart')) {
-        setTimeout(function(){
-          ShippingCalculator.init();
-        }, 1000);
+      // If on the cart page, consolidate duplicate variant lines then render the view
+      if (document.querySelector('body').classList.contains('template-cart')) {
+        WAU.ThemeCart.getCart().then(function(cart) {
+          return WAU.AjaxCart.consolidateDuplicates(cart);
+        }).then(function(updatedCart) {
+          WAU.AjaxCart.updateView(config, updatedCart);
+        }).catch(function(err) {
+          console.error('Failed consolidating duplicates on init', err);
+          // Fallback: init shipping calc if needed
+          if ( config.show_calculator ) {
+            setTimeout(function(){
+              ShippingCalculator.init();
+            }, 1000);
+          }
+        });
+      } else {
+        // Init shipping calc for non-cart pages (if applicable)
+        if ( config.show_calculator && document.querySelector('body').classList.contains('template-cart')) {
+          setTimeout(function(){
+            ShippingCalculator.init();
+          }, 1000);
+        }
       }
     }).catch(error => {
       console.log(error)
