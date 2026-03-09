@@ -125,6 +125,12 @@
 
     <div class="cart-bulk-upsell-wrapper cart-bulk-upsell--{{ layout }}">
       {%- for item in cart.items limit: display_limit -%}
+        {%- comment %}Check if the product handle is "free-bamboo-spoon" and skip if it is{% endcomment -%}
+        {%- assign product_handle = item.product.handle -%}
+        {%- if product_handle == "free-bamboo-spoon" -%}
+          {%- continue -%}
+        {%- endif -%}
+        
         {%- assign upsell_variant_id = item.variant_id -%}
         {%- if upsell_variant_id and tiers_json != '' -%}
           <div
@@ -179,60 +185,64 @@
   {%- else -%}
     {%- if settings.upsell_bulk_product != blank and tiers_json != '' -%}
       {%- assign upsell_product = all_products[settings.upsell_bulk_product] -%}
+    
       {%- if upsell_product -%}
-        {%- assign upsell_variant = upsell_product.selected_or_first_available_variant -%}
-        <div
-          class="cart-bulk-upsell js-cart-bulk-upsell"
-          data-upsell-variant-id="{{ upsell_variant.id }}"
-          data-tiers='[{{ tiers_json }}]'
-          data-msg-next="{{ upsell_msg_next | escape }}"
-          data-msg-unlocked="{{ upsell_msg_unlocked | escape }}"
-          data-msg-secondary="{{ upsell_msg_secondary | escape }}"
-          data-upsell-headline="{{ settings.upsell_bulk_headline | escape }}"
-          data-upsell-button-label="{{ settings.upsell_bulk_button_label | escape }}"
-          data-bag-singular="{{ upsell_bag_singular | escape }}"
-          data-bag-plural="{{ upsell_bag_plural | escape }}"
-        >
-          <div class="cart-bulk-upsell__inner">
-            <div class="cart-bulk-upsell__product">
-              <div class="cart-bulk-upsell__image-wrapper">
-                {%- if upsell_product.featured_image -%}
-                  {{ upsell_product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', class: 'cart-bulk-upsell__image' }}
-                {%- else -%}
-                  <span class="cart-bulk-upsell__placeholder">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</span>
-                {%- endif -%}
+        {%- comment %}Check if the product handle is "free-bamboo-spoon" and skip if it is{% endcomment -%}
+        {%- if upsell_product.handle != "free-bamboo-spoon" -%}
+          {%- assign upsell_variant = upsell_product.selected_or_first_available_variant -%}
+          <div
+            class="cart-bulk-upsell js-cart-bulk-upsell"
+            data-upsell-variant-id="{{ upsell_variant.id }}"
+            data-tiers='[{{ tiers_json }}]'
+            data-msg-next="{{ upsell_msg_next | escape }}"
+            data-msg-unlocked="{{ upsell_msg_unlocked | escape }}"
+            data-msg-secondary="{{ upsell_msg_secondary | escape }}"
+            data-upsell-headline="{{ settings.upsell_bulk_headline | escape }}"
+            data-upsell-button-label="{{ settings.upsell_bulk_button_label | escape }}"
+            data-bag-singular="{{ upsell_bag_singular | escape }}"
+            data-bag-plural="{{ upsell_bag_plural | escape }}"
+          >
+            <div class="cart-bulk-upsell__inner">
+              <div class="cart-bulk-upsell__product">
+                <div class="cart-bulk-upsell__image-wrapper">
+                  {%- if upsell_product.featured_image -%}
+                    {{ upsell_product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', class: 'cart-bulk-upsell__image' }}
+                  {%- else -%}
+                    <span class="cart-bulk-upsell__placeholder">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</span>
+                  {%- endif -%}
+                </div>
+                <div class="cart-bulk-upsell__text">
+                  <p class="cart-bulk-upsell__eyebrow">Perfect with your order</p>
+                  <p class="cart-bulk-upsell__title">
+                    {{ upsell_product.title }}
+                  </p>
+                  <p class="cart-bulk-upsell__headline" data-upsell-headline="{{ settings.upsell_bulk_headline | escape }}">
+                    {{ settings.upsell_bulk_headline | default: 'Last-minute savings available' }}
+                  </p>
+                  <p class="cart-bulk-upsell__message js-cart-bulk-upsell-message" aria-live="polite"></p>
+                </div>
               </div>
-              <div class="cart-bulk-upsell__text">
-                <p class="cart-bulk-upsell__eyebrow">Perfect with your order</p>
-                <p class="cart-bulk-upsell__title">
-                  {{ upsell_product.title }}
-                </p>
-                <p class="cart-bulk-upsell__headline" data-upsell-headline="{{ settings.upsell_bulk_headline | escape }}">
-                  {{ settings.upsell_bulk_headline | default: 'Last-minute savings available' }}
-                </p>
-                <p class="cart-bulk-upsell__message js-cart-bulk-upsell-message" aria-live="polite"></p>
-              </div>
-            </div>
 
-            <div class="cart-bulk-upsell__cta">
-              <button
-                type="button"
-                class="cart-bulk-upsell__button js-cart-bulk-upsell-add"
-              >
-                {{ settings.upsell_bulk_button_label | default: 'Add to cart' }}
-              </button>
+              <div class="cart-bulk-upsell__cta">
+                <button
+                  type="button"
+                  class="cart-bulk-upsell__button js-cart-bulk-upsell-add"
+                >
+                  {{ settings.upsell_bulk_button_label | default: 'Add to cart' }}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        {%- assign upsell_rendered = 'true' -%}
+          {%- assign upsell_rendered = 'true' -%}
+        {%- endif -%}
       {%- endif -%}
     {%- endif -%}
   {%- endif -%}
   {%- if upsell_rendered != '' and tiers_json != '' -%}
     <style>
       .cart-bulk-upsell {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
+        {% comment %} margin-top: 1rem;
+        margin-bottom: 1rem; {% endcomment %}
         padding: 0.85rem 1.1rem;
         border-radius: 999px;
         border: 1px solid rgba(0, 0, 0, 0.04);
@@ -321,7 +331,7 @@
         background: #111;
         color: #fff;
         font-size: 0.8rem;
-        font-weight: 600;
+        {% comment %} font-weight: 600; {% endcomment %}
         cursor: pointer;
       }
       .cart-bulk-upsell__button:hover {
@@ -557,18 +567,64 @@
         if (!variantId) return;
 
         btn.disabled = true;
-        WAU.ThemeCart.addItem(parseInt(variantId, 10), { quantity: 1 })
+
+        // Add quantity to existing line if variant already in cart; otherwise add new line
+        function addOrUpdateQuantity() {
+          return fetch('/cart.js', { credentials: 'same-origin' })
+            .then(function (res) { return res.json(); })
+            .then(function (cart) {
+              var variantIdStr = String(variantId);
+              var lineIndex = -1;
+              var currentQty = 0;
+              if (cart.items && cart.items.length) {
+                for (var i = 0; i < cart.items.length; i++) {
+                  if (String(cart.items[i].variant_id) === variantIdStr) {
+                    lineIndex = i + 1; // 1-based line for Shopify API
+                    currentQty = cart.items[i].quantity;
+                    break;
+                  }
+                }
+              }
+              if (lineIndex > 0) {
+                // Update existing line: increase quantity by 1
+                return fetch('/cart/change.js', {
+                  method: 'POST',
+                  credentials: 'same-origin',
+                  headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                  body: JSON.stringify({ line: lineIndex, quantity: currentQty + 1 })
+                }).then(function (res) { return res.json(); });
+              } else {
+                // Variant not in cart: add as new line
+                return fetch('/cart/add.js', {
+                  method: 'POST',
+                  credentials: 'same-origin',
+                  headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                  body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
+                }).then(function (res) { return res.json(); });
+              }
+            });
+        }
+
+        addOrUpdateQuantity()
           .then(function () {
-            // After adding, refresh messages briefly (in case cart drawer updated via AJAX)
             fetchCartAndUpdate();
-            // Navigate to cart page so the cart is fully refreshed
-            if (document.documentElement.lang === "nl") {
-              window.location.href = "/nl/cart";
-            } else if (document.documentElement.lang === "de") {
-              window.location.href = "/de/cart";
-            } else {
-              window.location.href = "/cart";
-            }
+            var cartPath = "/cart";
+            if (document.documentElement.lang === "nl") cartPath = "/nl/cart";
+            else if (document.documentElement.lang === "de") cartPath = "/de/cart";
+            return fetch('/cart.js', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (cart) {
+              var variantQty = 0;
+              if (cart && cart.items) {
+                cart.items.forEach(function (itm) {
+                  if (String(itm.variant_id) === String(variantId)) variantQty += itm.quantity;
+                });
+              }
+              var code = desiredDiscountCode(variantQty);
+              if (code && window.location.search.indexOf('discount=' + code) === -1) {
+                window.location.href = cartPath + '?discount=' + code;
+              } else {
+                window.location.href = cartPath;
+              }
+            }).catch(function () { window.location.href = cartPath; });
           })
           .catch(function (err) {
             console.error('Cart bulk upsell add error', err);
@@ -718,4 +774,3 @@
   </script>
 {%- endif -%}
 {%- endif -%}
-

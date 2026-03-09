@@ -27,6 +27,19 @@
         "section_padding": "none"
       }
     },
+    "16260997139ae0f76a": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "MASH Premium superdrinks",
+        "collection": "mash®-matcha",
+        "display_type": "carousel",
+        "items_per_row": 5,
+        "mobile_items_per_row": "2",
+        "items_per_page": 8,
+        "show_view_all": true,
+        "section_padding": "both"
+      }
+    },
     "ss_video_slider_9YTxRm": {
       "type": "ss-video-slider",
       "blocks": {
@@ -165,19 +178,6 @@
         "content_width": 1200,
         "border_thickness": 0,
         "lazy": true
-      }
-    },
-    "16260997139ae0f76a": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "MASH Premium superdrinks",
-        "collection": "frontpage",
-        "display_type": "carousel",
-        "items_per_row": 5,
-        "mobile_items_per_row": "2",
-        "items_per_page": 8,
-        "show_view_all": true,
-        "section_padding": "both"
       }
     },
     "rich_text_mqm4EE": {

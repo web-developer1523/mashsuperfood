@@ -3,7 +3,7 @@
 <noscript><link rel="stylesheet" href="{{ 'section-main-cart.css' | asset_url }}"></noscript>
 
 {% comment %} Cart template {% endcomment %}
-<section class="cart-page ajax-cart__page-wrapper pt8 mb8 cart-type--{{ settings.cart_type }} cart__section--main"
+<section class="cart-page ajax-cart__page-wrapper mb8 cart-type--{{ settings.cart_type }} cart__section--main"
   data-section-id="{{ section.id }}"
   data-section-type="cart-template"
   data-section-loaded="false">
@@ -168,8 +168,14 @@
 
 </section>
 <style>
-  section.cart-page .ajax-cart__header-wrapper {
+  {% comment %} section.cart-page .ajax-cart__header-wrapper {
     grid-template-columns: repeat(1,1fr) !important;
+} {% endcomment %}
+.ajax-cart__info-wrapper ul {
+  margin-bottom: 10px;
+}
+.total p.title.a-left {
+  margin-bottom: 0 !important;
 }
 </style>
 <style>
@@ -232,12 +238,17 @@
     "label": "Upsell bulk button text color",
     "default": "#ffffff"
   },
-    {
-      "type": "text",
-      "id": "upsell_eyebrow",
-      "label": "Upsell eyebrow text",
-      "default": "In your cart"
-    }
+  {
+    "type": "text",
+    "id": "upsell_eyebrow",
+    "label": "Upsell eyebrow text",
+    "default": "In your cart"
+  },
+  {
+    "type": "product",
+    "id": "free_product",
+    "label": "Free Product"
+  }
   ]
 }
 {% endschema %}

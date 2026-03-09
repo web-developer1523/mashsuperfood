@@ -20,12 +20,13 @@
     },
     "featured_collection_Dja3Kb": {
       "type": "featured-collection",
+      "disabled": true,
       "name": "Featured collection",
       "settings": {
-        "title": "MASH. Premium Product line",
-        "collection": "frontpage",
+        "title": "MASH Premium Accessories",
+        "collection": "accesories",
         "display_type": "carousel",
-        "items_per_row": 5,
+        "items_per_row": 4,
         "mobile_items_per_row": "2",
         "items_per_page": 7,
         "show_view_all": true,
@@ -48,7 +49,6 @@
         "a8162060-cb0e-4be7-91eb-83a96e11ad84",
         "a693520f-e2ed-48e0-aaae-58e0dc5dcc3f"
       ],
-      "disabled": true,
       "settings": {
         "items_per_page": 30,
         "items_per_row": 4,
