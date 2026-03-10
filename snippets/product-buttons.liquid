@@ -75,6 +75,10 @@
       <strong>{{ 'cart.general.cart_error' | t }}</strong> {{ 'cart.general.update_qty_error' | t }}
     </div>
 
+    {% if whisk_addon_handle != blank %}
+      {% render 'matcha-whisk-addon', addon_product: whisk_addon_product, addon_product_handle: whisk_addon_handle, addon_label: whisk_addon_label %}
+    {% endif %}
+
     <button
      type="submit"
      name="add"
@@ -97,3 +101,31 @@
     {% endif %}
   </div>
 {% endform %}
+<style>
+  .product__add-container {
+    display: flex;
+    flex-direction: column;
+  }
+  input#formVariantId{
+    order: 1;
+  }
+  .note.note-success {
+    order: 2;
+}
+.note.note-error {
+  order: 3;
+}
+div#appstle_subscription_widget0 {
+  order: 4;
+}
+.matcha-whisk-addon {
+  order: 5;
+  margin-bottom: 20px;
+}
+button.ajax-submit.js-ajax-submit {
+  order: 6;
+}
+.product-additional-buttons.mb2 {
+  order: 7;
+}
+</style>

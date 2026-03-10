@@ -127,7 +127,7 @@
       {%- for item in cart.items limit: display_limit -%}
         {%- comment %}Check if the product handle is "free-bamboo-spoon" and skip if it is{% endcomment -%}
         {%- assign product_handle = item.product.handle -%}
-        {%- if product_handle == "free-bamboo-spoon" -%}
+        {%- if product_handle == "free-bamboo-spoon" or product_handle == "mash®-matcha-bamboo-whisk" -%}
           {%- continue -%}
         {%- endif -%}
         

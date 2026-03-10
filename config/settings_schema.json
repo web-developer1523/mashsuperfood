@@ -548,6 +548,16 @@
       },
       {
         "type": "header",
+        "content": "Matcha whisk add-on"
+      },
+      {
+        "type": "product",
+        "id": "matcha_whisk_product",
+        "label": "Whisk product (cart add-on)",
+        "info": "When cart contains Matcha, show \"Add Whisk\" option. Use same product as on product page (e.g. product ID 10686241243463)."
+      },
+      {
+        "type": "header",
         "content": "Bulk discount upsell"
       },
       {

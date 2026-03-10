@@ -297,6 +297,29 @@
       </ul>
     {% endfor %}
   </div>
+{%- liquid
+  assign gift_product = all_products['free-bamboo-spoon']
+  assign matcha_whisk_product = all_products[settings.matcha_whisk_product]
+  assign cart_has_whisk = false
+  if settings.matcha_whisk_product != blank
+    for item in cart.items
+      if item.product.handle == settings.matcha_whisk_product
+        assign cart_has_whisk = true
+        break
+      endif
+    endfor
+  endif
+  assign show_matcha_whisk_addon = false
+  if settings.matcha_whisk_product != blank and cart_has_whisk == false
+    assign show_matcha_whisk_addon = true
+  endif
+-%}
+{%- if show_matcha_whisk_addon -%}
+  <div class="matcha-whisk-addon-cart mb3 mt2">
+    <p class="mb1 sm">{{ 'cart.general.add_matcha_whisk' | t | default: 'Pair your Matcha with a bamboo whisk:' }}</p>
+    {% render 'matcha-whisk-addon', addon_product: matcha_whisk_product, addon_product_handle: settings.matcha_whisk_product, addon_label: 'Add Whisk' %}
+  </div>
+{%- endif -%}
 {% assign gift_product = all_products['free-bamboo-spoon'] %}
 <div class="free-gift-progress">
   <img
@@ -330,18 +353,25 @@
       return translations[locale] || translations.en;
     }
   
-    function updateFreeGiftMessage(cartTotal) {
+    function updateFreeGiftMessage(cart) {
+      var cartTotal = cart.total_price;
       var remaining = GOAL - cartTotal;
       var textElement = document.getElementById('free-gift-text');
-  
+      var progressEl = textElement && textElement.closest('.free-gift-progress');
+
       var locale = Shopify.locale || 'en';
       var t = getTranslations(locale);
-  
+
       if (remaining > 0) {
         var remainingFormatted = (remaining / 100).toFixed(2);
         textElement.innerHTML = t.remaining(remainingFormatted);
+        if (progressEl) progressEl.style.display = '';
+      } else if (cartHasGift(cart)) {
+        textElement.innerHTML = '';
+        if (progressEl) progressEl.style.display = 'none';
       } else {
         textElement.innerHTML = t.success;
+        if (progressEl) progressEl.style.display = '';
       }
     }
   
@@ -391,14 +421,14 @@
       fetch('/cart.js')
         .then(res => res.json())
         .then(cart => {
-          updateFreeGiftMessage(cart.total_price);
+          updateFreeGiftMessage(cart);
           handleGift(cart);
         });
     }
-  
+
     document.addEventListener('cart:updated', function (event) {
       let cart = event.detail.cart;
-      updateFreeGiftMessage(cart.total_price);
+      updateFreeGiftMessage(cart);
       handleGift(cart);
     });
   

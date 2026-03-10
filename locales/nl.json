@@ -510,6 +510,9 @@
         "third_party_address_error": "Er is een fout opgetreden tijdens het laden van de adresselectie. Voer uw adres hieronder handmatig in.",
         "third_party_payment_timeout": "Betaalmethoden kunnen niet worden geladen. Probeer het opnieuw of gebruik een andere betaalmethode.",
         "third_party_payment_error": "Er is een fout opgetreden tijdens het laden van de betaalmethode. Gebruik een andere betaalmethode."
+      },
+      "split_delivery": {
+        "items_for_shipping": "Artikelen voor verzending"
       }
     }
   },

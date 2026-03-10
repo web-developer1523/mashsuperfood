@@ -1,0 +1,150 @@
+{% comment %}
+  Matcha Whisk add-on: "Add Whisk +X,XX" for product pages and cart.
+  Expects: addon_product (optional Product object), addon_product_handle (product handle – used when all_products doesn't include the product)
+{% endcomment %}
+{%- assign addon_variant = addon_product.selected_or_first_available_variant -%}
+{%- if addon_product != blank and addon_product.available and addon_variant != blank -%}
+<div class="matcha-whisk-addon mt3 mb2" data-matcha-whisk-addon>
+  <label class="matcha-whisk-addon__label flex v-center">
+    <input
+      type="checkbox"
+      class="matcha-whisk-addon__checkbox"
+      name="add_whisk"
+      value="{{ addon_variant.id }}"
+      data-variant-id="{{ addon_variant.id }}"
+    >
+    <span class="matcha-whisk-addon__text">{{ addon_label | default: 'Add Whisk' }} {{ addon_variant.price | money }}</span>
+  </label>
+</div>
+{%- elsif addon_product_handle != blank -%}
+<div class="matcha-whisk-addon mt3 mb2" data-matcha-whisk-addon data-product-handle="{{ addon_product_handle | escape }}">
+  <label class="matcha-whisk-addon__label flex v-center">
+    <input
+      type="checkbox"
+      class="matcha-whisk-addon__checkbox"
+      name="add_whisk"
+      data-variant-id=""
+      disabled
+    >
+    <span class="matcha-whisk-addon__text">{{ addon_label | default: 'Add Whisk' }} <span class="matcha-whisk-addon__price">...</span></span>
+  </label>
+</div>
+{%- endif -%}
+{%- if addon_product != blank and addon_product.available and addon_variant != blank -%}
+<script>
+  (function () {
+    var container = document.querySelector('[data-matcha-whisk-addon]:not([data-product-handle])');
+    if (!container) return;
+    var checkbox = container.querySelector('.matcha-whisk-addon__checkbox');
+    if (!checkbox) return;
+
+    checkbox.addEventListener('change', function () {
+      if (!this.checked) return;
+      var variantId = this.getAttribute('data-variant-id');
+      if (!variantId) return;
+      this.disabled = true;
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
+      })
+        .then(function (res) { return res.json().then(function (data) { return res.ok ? data : Promise.reject(data); }); })
+        .then(function () {
+          checkbox.checked = true;
+          if (typeof window.WAU !== 'undefined' && window.WAU.ThemeCart && typeof window.WAU.ThemeCart.refresh === 'function') {
+            window.WAU.ThemeCart.refresh();
+          }
+          document.dispatchEvent(new CustomEvent('cart:updated', { detail: {} }));
+          if (window.location.pathname === '/cart' || window.location.pathname.indexOf('/cart') !== -1) {
+            window.location.reload();
+          }
+        })
+        .catch(function (err) {
+          console.error('Matcha whisk add-on error', err);
+          checkbox.checked = false;
+        })
+        .finally(function () {
+          checkbox.disabled = false;
+        });
+    });
+  })();
+</script>
+{%- elsif addon_product_handle != blank -%}
+<script>
+  (function () {
+    var container = document.querySelector('[data-matcha-whisk-addon][data-product-handle]');
+    if (!container) return;
+    var handle = container.getAttribute('data-product-handle');
+    if (!handle) return;
+
+    fetch('/products/' + handle + '.js')
+      .then(function (res) { return res.json(); })
+      .then(function (product) {
+        if (!product || !product.variants || product.variants.length === 0) return;
+        var variant = product.variants[0];
+        var checkbox = container.querySelector('.matcha-whisk-addon__checkbox');
+        var priceEl = container.querySelector('.matcha-whisk-addon__price');
+        if (!checkbox || !priceEl) return;
+
+        checkbox.setAttribute('data-variant-id', variant.id);
+        checkbox.removeAttribute('disabled');
+        var priceFormatted = (variant.price / 100).toFixed(2);
+        priceEl.textContent = '€' + priceFormatted.replace('.', ',');
+
+        checkbox.addEventListener('change', function () {
+          if (!this.checked) return;
+          var variantId = this.getAttribute('data-variant-id');
+          if (!variantId) return;
+          this.disabled = true;
+
+          fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
+          })
+            .then(function (res) { return res.json().then(function (data) { return res.ok ? data : Promise.reject(data); }); })
+            .then(function () {
+              checkbox.checked = true;
+              if (typeof window.WAU !== 'undefined' && window.WAU.ThemeCart && typeof window.WAU.ThemeCart.refresh === 'function') {
+                window.WAU.ThemeCart.refresh();
+              }
+              document.dispatchEvent(new CustomEvent('cart:updated', { detail: {} }));
+              if (window.location.pathname === '/cart' || window.location.pathname.indexOf('/cart') !== -1) {
+                window.location.reload();
+              }
+            })
+            .catch(function (err) {
+              console.error('Matcha whisk add-on error', err);
+              checkbox.checked = false;
+            })
+            .finally(function () {
+              checkbox.disabled = false;
+            });
+        });
+      })
+      .catch(function (err) {
+        var priceEl = container.querySelector('.matcha-whisk-addon__price');
+        if (priceEl) priceEl.textContent = '';
+      });
+  })();
+</script>
+{%- endif -%}
+<style>
+  .matcha-whisk-addon__label {
+    cursor: pointer;
+    gap: 10px;
+    display: flex;
+    align-items: center;
+  }
+  .matcha-whisk-addon__checkbox {
+    width: 18px;
+    height: 18px;
+  }
+  .matcha-whisk-addon__checkbox:disabled {
+    cursor: not-allowed;
+  }
+  .matcha-whisk-addon__text {
+    font-weight: 500;
+  }
+</style>

@@ -45,6 +45,13 @@
             "show_gift_card_recipient": false
           }
         },
+        "matcha_whisk_addon": {
+          "type": "matcha_whisk_addon",
+          "settings": {
+            "addon_product": "",
+            "addon_label": "Add Whisk"
+          }
+        },
         "social-share": {
           "type": "social_share",
           "settings": {
@@ -57,6 +64,7 @@
         "price",
         "variants",
         "quantity",
+        "matcha_whisk_addon",
         "buttons",
         "social-share"
       ],

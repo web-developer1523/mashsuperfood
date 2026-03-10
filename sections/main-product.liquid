@@ -375,7 +375,23 @@ fill:#cca918;
 
                   %}
                 </div><!-- /.product-block -->
+            {% when 'matcha_whisk_addon' %}
+              {%- comment -%} Rendered inside product-buttons; block kept for theme customizer settings {% endcomment -%}
             {% when 'buttons' %}
+              {%- liquid
+                assign whisk_addon_handle = blank
+                assign whisk_addon_label = 'Add Whisk'
+                for bl in section.blocks
+                  if bl.type == 'matcha_whisk_addon' and bl.settings.addon_product != blank
+                    assign whisk_addon_handle = bl.settings.addon_product
+                    if bl.settings.addon_label != blank
+                      assign whisk_addon_label = bl.settings.addon_label
+                    endif
+                    break
+                  endif
+                endfor
+                assign whisk_addon_product = all_products[whisk_addon_handle]
+              -%}
               <div {{ block.shopify_attributes }}>
                 {%
                   render 'product-buttons',
@@ -387,9 +403,13 @@ fill:#cca918;
                   call_to_action: call_to_action,
                   secondary_button: secondary_button,
                   show_price_in_button: block.settings.show_price_in_button,
-                  show_gift_card_recipient: block.settings.show_gift_card_recipient
+                  show_gift_card_recipient: block.settings.show_gift_card_recipient,
+                  whisk_addon_product: whisk_addon_product,
+                  whisk_addon_handle: whisk_addon_handle,
+                  whisk_addon_label: whisk_addon_label
                 %}
               </div>
+
             {% when 'product_pickup' %}
               {% render 'snip-product-pickup-availability', product: product, current_variant: current_variant, block: block, shop: shop, routes: routes %}
             {% when 'description' %}
@@ -1080,6 +1100,25 @@ fill:#cca918;
           "id": "required",
           "label": "Required",
           "default": false
+        }
+      ]
+    },
+    {
+      "type": "matcha_whisk_addon",
+      "name": "Matcha whisk add-on",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "product",
+          "id": "addon_product",
+          "label": "Whisk product",
+          "info": "Product ID 10686241243463 – select the bamboo whisk product. Shown on Matcha product pages only."
+        },
+        {
+          "type": "text",
+          "id": "addon_label",
+          "label": "Add-on label",
+          "default": "Add Whisk"
         }
       ]
     },

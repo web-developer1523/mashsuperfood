@@ -22,6 +22,7 @@
         "price",
         "variants",
         "quantity",
+        "matcha_whisk_addon",
         "buttons",
         "social-share"
       ]

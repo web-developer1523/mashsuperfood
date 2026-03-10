@@ -55,6 +55,13 @@
             "show_gift_card_recipient": false
           }
         },
+        "matcha_whisk_addon": {
+          "type": "matcha_whisk_addon",
+          "settings": {
+            "addon_product": "mash-japanese-ceramic-bamboo-whisk-holder-for-matcha-tea",
+            "addon_label": "Add Whisk"
+          }
+        },
         "social-share": {
           "type": "social_share",
           "disabled": true,
@@ -69,6 +76,7 @@
         "price",
         "variants",
         "quantity",
+        "matcha_whisk_addon",
         "buttons",
         "social-share"
       ],
