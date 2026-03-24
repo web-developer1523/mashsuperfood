@@ -1,7 +1,7 @@
 {% comment %} Header Assets {% endcomment %}
 <link
   rel="preload"
-  href="{{ 'section-header.css' | asset_url }}"
+  href="{{ 'section-header.aio.min.css' | asset_url }}"
   as="style"
   onload="this.onload=null;this.rel='stylesheet'"
 >
@@ -78,7 +78,7 @@
   class="section-header header-section no-section-animation"
   data-section-id="{{ section.id }}"
   data-section-type="header"
-  data-asset-url="{{ 'section-header.js' | asset_url }}"
+  data-asset-url="{{ 'section-header.aio.min.js' | asset_url }}"
 >
   <section class="section-header__main-bar main-bar w100 devices-hide js-theme-header {{ sticky }}" {{ sticky_js }}>
     <div class="grid__wrapper {{ layout_style }}">
@@ -109,7 +109,7 @@
         <div
           id="predictiveSearch"
           data-section-type="predictive-search"
-          data-asset-url="{{ 'section-predictive-search.js' | asset_url }}"
+          data-asset-url="{{ 'section-predictive-search.aio.min.js' | asset_url }}"
           data-routes="{{ routes.predictive_search_url | default: '/search/suggest' }}"
           data-input-selector='input[name="q"]'
           data-results-selector="#predictive-search"

@@ -1,0 +1,11 @@
+{% if template == 'index' %}
+{% render 'avada-seo-hyperspeed-homepage'%}
+{% elsif template contains 'product' %}
+{% render 'avada-seo-hyperspeed-products'%}
+{% elsif template contains 'collection' %}
+{% render 'avada-seo-hyperspeed-collections'%}
+{% elsif template contains 'blog' or template contains 'article' %}
+{% render 'avada-seo-hyperspeed-articles'%}
+{% elsif template contains 'page' %}
+{% render 'avada-seo-hyperspeed-pages'%}
+{% endif %}

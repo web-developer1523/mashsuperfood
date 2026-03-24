@@ -1,5 +1,5 @@
 {% comment %} Cart Assets {% endcomment %}
-<link rel="preload" href="{{ 'section-main-cart.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'section-main-cart.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'section-main-cart.css' | asset_url }}"></noscript>
 
 {% comment %} Cart template {% endcomment %}
@@ -23,7 +23,7 @@
 
       const translations = {
         en: {
-          beforeCutoff: "<div class='timer-block'><img  src='https://cdn.shopify.com/s/files/1/0895/3973/9975/files/IMG_3386_1.png'/> Order within <span class='countdown-time'>%time%</span> and we will ship your order <strong>today</strong>!</div>",
+          beforeCutoff: "<div class='timer-block'><img  loading="lazy"  src='https://cdn.shopify.com/s/files/1/0895/3973/9975/files/IMG_3386_1.png'/> Order within <span class='countdown-time'>%time%</span> and we will ship your order <strong>today</strong>!</div>",
           afterCutoff: "⚠️ <strong>Order before 10pm</strong> and we will ship your order <strong>tomorrow</strong>!"
         },
         de: {
@@ -136,7 +136,7 @@
         <span class="ajax-cart__header__continue-link-text sm-hide vib-center">{{ 'products.product.continue' | t }}</span>
       </a>
     </div>
-    <div class="span-4 sm-span-4 auto v-center">
+    <div class="span-4 sm-span-4 auto v-center cart-heading">
       <h1 class="section-heading a-center mb0">{{ 'cart.general.title' | t }}</h1>
     </div>
     <div class="span-4 sm-span-4 auto a-right v-center">
@@ -176,6 +176,39 @@
 }
 .total p.title.a-left {
   margin-bottom: 0 !important;
+}
+.ajax-cart__page-wrapper {
+  min-height: auto;
+}  
+.free-gift-progress p#free-gift-text {
+  text-wrap: wrap !important;
+}
+@media screen and (max-width: 575px){
+
+  .ajax-cart__header-wrapper .span-4.sm-span-4.auto.v-center .section-heading {
+    font-size: 16px;
+    word-break: inherit;
+}
+.ajax-cart__header-wrapper .sm-span-4.a-left {
+  grid-column: auto / span 2 !important;
+}
+
+.ajax-cart__header-wrapper .sm-span-4.a-right {
+  grid-column: auto / span 3 !important;
+}
+
+.ajax-cart__header-wrapper .sm-span-4.auto.v-center.cart-heading {
+  grid-column: auto / span 7 !important;
+}
+html[lang="nl"] .ajax-cart__header-wrapper .sm-span-4.a-right {
+  grid-column: auto / span 4 !important;
+}
+html[lang="nl"] .ajax-cart__header-wrapper .sm-span-4.auto.v-center.cart-heading {
+  grid-column: auto / span 6 !important;
+}
+.ajax-cart__buttons-additional {
+  padding: 0px 10px;
+}
 }
 </style>
 <style>

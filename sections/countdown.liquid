@@ -1,5 +1,5 @@
 {% comment %} Countdown Section Assets {% endcomment %}
-<link rel="preload" href="{{ 'section-countdown.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'section-countdown.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'section-countdown.css' | asset_url }}"></noscript>
 
 {% comment %}Countdown Section Logic {% endcomment %}
@@ -92,7 +92,7 @@
   data-section-type="countdown"
   data-section-loaded="false"
   data-base-url="{{ shop.url}}{{ routes.root_url }}"
-  data-asset-url="{{ 'countdown.js' | asset_url }}"
+  data-asset-url="{{ 'countdown.aio.min.js' | asset_url }}"
   data-launch-date="{{ timestamp }}">
 
   {% if has_image %}

@@ -1,14 +1,14 @@
 {% comment %} Collection Page Assets {% endcomment %}
 <link
   rel="preload"
-  href="{{ 'section-main-collection.css' | asset_url }}"
+  href="{{ 'section-main-collection.aio.min.css' | asset_url }}"
   as="style"
   onload="this.onload=null;this.rel='stylesheet'"
 >
 <noscript><link rel="stylesheet" href="{{ 'section-main-collection.css' | asset_url }}"></noscript>
 <link
   rel="preload"
-  href="{{ 'component-product-grid.css' | asset_url }}"
+  href="{{ 'component-product-grid.aio.min.css' | asset_url }}"
   as="style"
   onload="this.onload=null;this.rel='stylesheet'"
 >
@@ -93,7 +93,7 @@
   data-section-id="{{ section.id }}"
   data-filter-appearance="{{ section.settings.filter_appearance }}"
   data-section-type="collection"
-  data-asset-url="{{ 'section-main-collection.js' | asset_url }}"
+  data-asset-url="{{ 'section-main-collection.aio.min.js' | asset_url }}"
   data-collection-handle="{{ collection.handle }}"
   data-empty="{{ empty_collection }}"
 >

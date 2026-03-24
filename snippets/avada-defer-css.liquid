@@ -20,12 +20,14 @@ E.g. {% render 'avada-defer-css' with filename: 'filename', pages: 'index','prod
   {%- endif -%}
 {%- else -%}
   {%- if local -%}
-    <link
-      rel="stylesheet"
-      href="{{ filename | asset_url}}">
+    <!-- AVADA SPEEDUP PRELOAD START -->
+<link href="{{ filename | asset_url}}" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ filename | asset_url}}"></noscript>
+<!-- AVADA SPEEDUP PRELOAD END -->
   {%- else -%}
-    <link
-      rel="stylesheet"
-      href="{{ filename }}">
+    <!-- AVADA SPEEDUP PRELOAD START -->
+<link href="{{ filename }}" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ filename }}"></noscript>
+<!-- AVADA SPEEDUP PRELOAD END -->
   {%- endif -%}
 {%- endif -%}

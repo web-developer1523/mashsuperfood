@@ -1,7 +1,7 @@
 {% layout 'giftcard' %}
 
 {% comment %} Giftcard Assets {% endcomment %}
-{{ 'section-main-giftcard.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'section-main-giftcard.aio.min.css' | asset_url | stylesheet_tag: preload: true }}
 
 <section
 id="giftcard-page"
@@ -51,7 +51,7 @@ data-section-loaded="false">
           {% assign image_height = '570' | divided_by: 1.5 %}
           {{ section.settings.gift_card_image | image_url: width: image_width, height: image_height | image_tag: alt: section.settings.gift_card_image.alt, class: 'gift-card__image' }}
         {% else %}
-          <img 
+          <img  loading="lazy" 
             class="gift-card__image"
             src="{{ 'gift-card/card.svg' | shopify_asset_url }}"
             alt=""
@@ -112,7 +112,7 @@ data-section-loaded="false">
       <div class="gift-card-wallet">
         {% if gift_card.pass_url %}
           <a href="{{ gift_card.pass_url }}"
-           ><img
+           ><img  loading="lazy"
              id="apple-wallet-badge"
             
              src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"

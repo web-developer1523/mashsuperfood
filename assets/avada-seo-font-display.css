@@ -1,0 +1,4 @@
+/**
+ * Consolidated font declarations with font-display: swap
+ * Improves FCP and LCP by preventing Flash of Invisible Text (FOIT)
+ */

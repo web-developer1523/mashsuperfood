@@ -1,4 +1,8 @@
 {%- capture avada-seo-snippets -%}
+{%- include 'avada-seo-critical-css' %}
+{%- include 'avada-seo-hyperspeed-condition' -%}
+{{ 'avada-seo-font-display.css' | asset_url | stylesheet_tag: preload: true }}
+{%- include 'avada-seo-preconnect' -%}
 {%- include 'avada-seo-status' -%}
 {%- if avadaSeoStatus -%}
 {%- include 'avada-seo-other' -%}
@@ -6,5 +10,5 @@
 {%- endif -%}
 {%- endcapture -%}
 {%- unless avada-seo-snippets contains 'Liquid error' -%}
-{{ avada-seo-snippets }}
+  {{ avada-seo-snippets }}
 {%- endunless -%}

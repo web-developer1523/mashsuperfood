@@ -100,9 +100,9 @@
 -%}
 
 {% comment %} Product Page Assets {% endcomment %}
-<link rel="preload" href="{{ 'section-main-product.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'section-main-product.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'section-main-product.css' | asset_url }}"></noscript>
-<link rel="preload" href="{{ 'component-accordions.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'component-accordions.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'component-accordions.css' | asset_url }}"></noscript>
 
 {%- if has_media -%}
@@ -154,7 +154,7 @@
   {% if section.settings.click_to_enlarge %}
   data-click-to-enlarge="true".
   {% endif %}
-  data-asset-url="{{ 'section-product.js' | asset_url }}"
+  data-asset-url="{{ 'section-product.aio.min.js' | asset_url }}"
   data-product-complementary-products="true"
   data-initial-variant="{{ current_variant.featured_media.id }}">
 
@@ -392,6 +392,25 @@ fill:#cca918;
                 endfor
                 assign whisk_addon_product = all_products[whisk_addon_handle]
               -%}
+              <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                  const locale = Shopify?.locale || "en";
+              
+                  const translations = {
+                    en: "Add premium bamboo Matcha whisk",
+                    de: "Premium-Bambus-Matcha-Besen hinzufügen",
+                    nl: "Voeg premium bamboe Matcha-garde toe",
+                    fr: "Ajouter un fouet Matcha en bambou premium"
+                  };
+              
+                  const textEl = document.querySelector(".matcha-whisk-addon__text");
+                  if (!textEl) return;
+
+                  // Set translated text only
+                  textEl.textContent = translations[locale] || translations["en"];
+                });
+              </script>
+
               <div {{ block.shopify_attributes }}>
                 {%
                   render 'product-buttons',
@@ -423,7 +442,7 @@ fill:#cca918;
                       {% if product.description contains '[#' %}
                         {{ product.description | split: '[#' | first }}
                       {% else %}
-                        {{ product.description | replace: '<img', '<img' }}
+                        {{ product.description | replace: '<img  loading="lazy"', '<img' }}
                       {% endif %}
                     {% endcapture %}
                     {%
@@ -440,7 +459,7 @@ fill:#cca918;
                   {% if product.description contains '[#' %}
                     {{ product.description | split: '[#' | first }}
                   {% else %}
-                    {{ product.description }}
+                    {{ product.description | replace: '<img', '<img loading="lazy"' | replace: '<iframe', '<iframe loading="lazy"' | replace: '<video>', '<video preload="none">' | replace: '<video ', '<video preload="none" ' }}
                   {% endif %}
                 </div>
                 {% endif %}
@@ -550,7 +569,7 @@ fill:#cca918;
 
                   const translations = {
                     en: {
-                      beforeCutoff: "<div class='timer-block'><img  src='https://cdn.shopify.com/s/files/1/0895/3973/9975/files/IMG_3386_1.png'/> Order within <span class='countdown-time'>%time%</span> and we will ship your order <strong>today</strong>!</div>",
+                      beforeCutoff: "<div class='timer-block'><img  loading="lazy"  src='https://cdn.shopify.com/s/files/1/0895/3973/9975/files/IMG_3386_1.png'/> Order within <span class='countdown-time'>%time%</span> and we will ship your order <strong>today</strong>!</div>",
                       afterCutoff: "⚠️ <strong>Order before 10pm</strong> and we will ship your order <strong>tomorrow</strong>!"
                     },
                     de: {

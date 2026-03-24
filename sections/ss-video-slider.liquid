@@ -8,10 +8,10 @@
   ---------------------------------------------------------
 {% endcomment %}
 
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
->
+<!-- AVADA SPEEDUP PRELOAD START -->
+<link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"></noscript>
+<!-- AVADA SPEEDUP PRELOAD END -->
 
 {%- liquid
   assign padding_horizontal = section.settings.padding_horizontal
@@ -802,7 +802,7 @@
                   {% assign loop = '&loop=1&playlist=' | append: video_id %}
                   {%- if block.settings.video == null and block.settings.video_url != null -%}
                     {%- if block.settings.video_url.type == 'youtube' -%}
-                      <iframe
+                      <iframe  loading="lazy"
                         {% if lazy %}
                           data-
                         {% endif -%}
@@ -814,7 +814,7 @@
                         class="lazy"
                       ></iframe>
                     {%- else -%}
-                      <iframe
+                      <iframe  loading="lazy"
                         {% if lazy %}
                           data-
                         {% endif -%}
@@ -855,7 +855,7 @@
                         {% if stars_icon != blank %}
                           {% assign custom_stars_cound = block.settings.stars_count | round: 0 %}
                           {% for item in (1..custom_stars_cound) %}
-                            <img
+                            <img  loading="lazy"
                               src="{{ stars_icon | image_url }}"
                               alt="{{ stars_icon.alt }}"
                               {% if lazy %}

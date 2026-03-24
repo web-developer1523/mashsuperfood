@@ -32,6 +32,7 @@
 {%- liquid
 
   assign product_form_id = 'product-buttons-form-' | append: section.id
+  assign whisk_addon_allowed_ids = '10164012548423' | split: ','
 
 -%}
 
@@ -75,7 +76,8 @@
       <strong>{{ 'cart.general.cart_error' | t }}</strong> {{ 'cart.general.update_qty_error' | t }}
     </div>
 
-    {% if whisk_addon_handle != blank %}
+    {% assign current_product_id = product.id | append: '' %}
+    {% if whisk_addon_handle != blank and whisk_addon_allowed_ids contains current_product_id %}
       {% render 'matcha-whisk-addon', addon_product: whisk_addon_product, addon_product_handle: whisk_addon_handle, addon_label: whisk_addon_label %}
     {% endif %}
 
@@ -91,7 +93,11 @@
         {% endif %}
          <span data-add-to-cart-text>
            {{ call_to_action }}
+           <svg style="margin-top: -2px;" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 16 16" fill="#f2eee6" class="bi bi-arrow-right-short">
+            <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+          </svg>
          </span>
+
      </button>
 
     {% if settings.product_show_payment_button %}
@@ -102,6 +108,13 @@
   </div>
 {% endform %}
 <style>
+
+  button.ajax-submit.js-ajax-submit svg {
+    fill: #f2eee6;
+}
+  button.ajax-submit.js-ajax-submit {
+    font-weight: 600;
+}
   .product__add-container {
     display: flex;
     flex-direction: column;
@@ -119,8 +132,8 @@ div#appstle_subscription_widget0 {
   order: 4;
 }
 .matcha-whisk-addon {
-  order: 5;
-  margin-bottom: 20px;
+  order: 2;
+  {% comment %} margin-bottom: 20px; {% endcomment %}
 }
 button.ajax-submit.js-ajax-submit {
   order: 6;
@@ -128,4 +141,23 @@ button.ajax-submit.js-ajax-submit {
 .product-additional-buttons.mb2 {
   order: 7;
 }
+.product-template .product__section-right .product-block--price {
+  display: none;
+}
+@media only screen and (max-width: 575px) {
+  html.js[lang="de"] button.ajax-submit.js-ajax-submit{
+    display: inline-flex;
+  }
+  html.js[lang="nl"] button.ajax-submit.js-ajax-submit{
+    display: inline-block;
+  }
+  span[data-add-to-cart-text] {
+    text-align: right;
+    max-width: 100% !important;
+    display: inline-block;
+    align-items: center;
+    line-height: inherit;
+  } 
+}
+
 </style>

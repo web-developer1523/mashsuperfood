@@ -47,7 +47,7 @@
   {% for article in blog.articles limit: items_per_page %}
     {%- liquid
       assign has_image = false
-      if article.image or article.content contains '<img'
+      if article.image or article.content contains '<img  loading='lazy''
         assign has_image = true
       endif
 
@@ -90,11 +90,11 @@
                fetchpriority: fetchpriority,
                width: 600 %}
           </a>
-        {%- elsif article.content != blank and article.content contains "<img  loading='lazy'" -%}
+        {%- elsif article.content != blank and article.content contains "<img  loading='lazy'  loading='lazy'" -%}
           {%- assign has_image = true -%}
           {%- assign src = article.content | split: ' src="' | last | split: '"' | first -%}
           <a class="inline-block mb0 w100" href="{{ article.url }}">
-            <img src="{{ src }}"
+            <img  loading='lazy' src="{{ src }}"
               width="{{ src.width }}"
               height="{{ src.height }}"
               alt="{{ article.title }}"

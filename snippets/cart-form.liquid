@@ -322,9 +322,11 @@
 {%- endif -%}
 {% assign gift_product = all_products['free-bamboo-spoon'] %}
 <div class="free-gift-progress">
-  <img
+  <img  loading="lazy"
     src="{{ gift_product.featured_image | image_url: width: 200 }}"
     alt="{{ gift_product.title }}"
+    width="200"
+    height="200"
     class="gift-image"
   >
   <p id="free-gift-text"></p>
@@ -492,7 +494,7 @@
           <ul class="accordion-content2 sub closed">
             {% render 'cart-shipping-calculator', cart %}
           </ul>
-          <script src="{{ 'cart-shipping-calc.js' | asset_url }}" defer></script>
+          <script src="{{ 'cart-shipping-calc.aio.min.js' | asset_url }}" defer></script>
         {% endif %}
       </ul>
       {% if settings.show_shipping_countdown %}
@@ -564,7 +566,12 @@
           </p>
         </div>
       </div>
-     
+      <div
+        class="min-order-message{% if cart.total_price >= 2000 %} hide{% endif %}"
+        id="min-order-message"
+        role="alert"
+        aria-live="polite"
+      ></div>
       <div class="ajax-cart__buttons">
         <a
           class="ajax-cart__button-view_cart button btn-outline btn-sng-outline btn-full"
@@ -577,6 +584,7 @@
           type="submit"
           name="checkout"
           id="checkout"
+          {% if cart.total_price < 2000 %}disabled="disabled" aria-disabled="true"{% endif %}
         >
           {{ 'cart.general.checkout' | t }}
           <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 16 16" fill="#f2eee6" class="bi bi-arrow-right-short">
@@ -584,6 +592,7 @@
           </svg>
         </button>
       </div>
+
       {% render 'cart-bulk-upsell', cart: cart %}
     </div>
   </div>
@@ -592,6 +601,13 @@
   .ajax-cart__page-wrapper .ajax-cart__buttons .ajax-cart__button-submit{
     font-weight:600;
   }
+
+  #min-order-message {
+    color: #262b2c;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 </style>
 
 <script>
@@ -641,6 +657,206 @@
       document.addEventListener('click', delegateRemoveClick, false);
       document.body.dataset.cartRemoveDelegated = 'true';
     }
+  })();
+</script>
+
+{% comment %} <script>
+  (function () {
+    // Minimum order value enforcement for checkout.
+    var MIN_ORDER_CENTS = 2000; // €20
+
+    var checkoutBtn = document.getElementById('checkout');
+    var messageEl = document.getElementById('min-order-message');
+    var formEl = document.querySelector('form.js-cart-form');
+
+    if (!checkoutBtn || !messageEl || !formEl) return;
+
+    // Start with server-rendered value so the initial disabled state is correct.
+    var currentCartTotal = {{ cart.total_price | json }};
+
+    function renderMessage(totalCents) {
+      var total = typeof totalCents === 'number' ? totalCents : Number(totalCents) || 0;
+      if (total >= MIN_ORDER_CENTS) {
+        messageEl.classList.add('hide');
+        messageEl.innerHTML = '';
+        checkoutBtn.disabled = false;
+        checkoutBtn.removeAttribute('aria-disabled');
+        return;
+      }
+
+      var remaining = Math.max(0, MIN_ORDER_CENTS - total);
+      var remainingEuros = (remaining / 100).toFixed(2);
+
+      messageEl.innerHTML =
+        'Minimum order value is &euro;20. Add &euro;' +
+        remainingEuros +
+        ' more to checkout.';
+      messageEl.classList.remove('hide');
+      checkoutBtn.disabled = true;
+      checkoutBtn.setAttribute('aria-disabled', 'true');
+    }
+
+    function updateFromCart(cart) {
+      if (!cart || typeof cart.total_price === 'undefined') return;
+      currentCartTotal = cart.total_price;
+      renderMessage(currentCartTotal);
+    }
+
+    function fetchCart() {
+      return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+        .then(function (res) {
+          return res.json();
+        });
+    }
+
+    // Initial client-side sync.
+    renderMessage(currentCartTotal);
+    fetchCart()
+      .then(updateFromCart)
+      .catch(function () {
+        // If fetch fails, keep server-rendered state (do not block checkout based on missing data).
+      });
+
+    document.addEventListener('cart:updated', function (event) {
+      var cart = event && event.detail ? event.detail.cart : null;
+      updateFromCart(cart);
+    });
+
+    // Extra guard: block checkout click immediately if we know the cart is below min.
+    checkoutBtn.addEventListener(
+      'click',
+      function (e) {
+        if (currentCartTotal < MIN_ORDER_CENTS) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      },
+      true
+    );
+
+    // Primary guard: block any form submit attempt until the cart meets the minimum.
+    formEl.addEventListener(
+      'submit',
+      function (e) {
+        if (currentCartTotal >= MIN_ORDER_CENTS) return;
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Refresh total once at submit time to avoid stale state.
+        fetchCart()
+          .then(function (cart) {
+            updateFromCart(cart);
+            if (currentCartTotal >= MIN_ORDER_CENTS) {
+              formEl.submit(); // bypass submit event to avoid loops
+            }
+          })
+          .catch(function () {
+            renderMessage(currentCartTotal);
+          });
+      },
+      true
+    );
+  })();
+</script> {% endcomment %}
+<script>
+  (function () {
+    var MIN_ORDER_CENTS = 2000; // €20
+
+    var checkoutBtn = document.getElementById('checkout');
+    var messageEl = document.getElementById('min-order-message');
+    var formEl = document.querySelector('form.js-cart-form');
+
+    if (!checkoutBtn || !messageEl || !formEl) return;
+
+    var currentCartTotal = {{ cart.total_price | json }};
+
+    // Detect Shopify locale
+    var locale = Shopify?.locale || "en";
+
+    var translations = {
+      en: "Minimum order value is €20. Add €%amount% more to checkout.",
+      de: "Der Mindestbestellwert beträgt 20 €. Fügen Sie noch €%amount% hinzu, um zur Kasse zu gehen.",
+      nl: "Het minimale bestelbedrag is €20. Voeg nog €%amount% toe om af te rekenen.",
+      fr: "Le montant minimum de commande est de 20 €. Ajoutez encore €%amount% pour passer à la caisse."
+    };
+
+    function renderMessage(totalCents) {
+      var total = typeof totalCents === 'number' ? totalCents : Number(totalCents) || 0;
+
+      if (total >= MIN_ORDER_CENTS) {
+        messageEl.classList.add('hide');
+        messageEl.innerHTML = '';
+        checkoutBtn.disabled = false;
+        checkoutBtn.removeAttribute('aria-disabled');
+        return;
+      }
+
+      var remaining = Math.max(0, MIN_ORDER_CENTS - total);
+      var remainingEuros = (remaining / 100).toFixed(2);
+
+      var text = translations[locale] || translations["en"];
+      messageEl.innerHTML = text.replace("%amount%", remainingEuros);
+
+      messageEl.classList.remove('hide');
+      checkoutBtn.disabled = true;
+      checkoutBtn.setAttribute('aria-disabled', 'true');
+    }
+
+    function updateFromCart(cart) {
+      if (!cart || typeof cart.total_price === 'undefined') return;
+      currentCartTotal = cart.total_price;
+      renderMessage(currentCartTotal);
+    }
+
+    function fetchCart() {
+      return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+        .then(function (res) {
+          return res.json();
+        });
+    }
+
+    renderMessage(currentCartTotal);
+
+    fetchCart()
+      .then(updateFromCart)
+      .catch(function () {});
+
+    document.addEventListener('cart:updated', function (event) {
+      var cart = event && event.detail ? event.detail.cart : null;
+      updateFromCart(cart);
+    });
+
+    checkoutBtn.addEventListener(
+      'click',
+      function (e) {
+        if (currentCartTotal < MIN_ORDER_CENTS) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      },
+      true
+    );
+
+    formEl.addEventListener(
+      'submit',
+      function (e) {
+        if (currentCartTotal >= MIN_ORDER_CENTS) return;
+        e.preventDefault();
+        e.stopPropagation();
+
+        fetchCart()
+          .then(function (cart) {
+            updateFromCart(cart);
+            if (currentCartTotal >= MIN_ORDER_CENTS) {
+              formEl.submit();
+            }
+          })
+          .catch(function () {
+            renderMessage(currentCartTotal);
+          });
+      },
+      true
+    );
   })();
 </script>
 <style>
@@ -710,7 +926,7 @@ p#free-gift-text {
 }
 p#free-gift-text {
     font-size: 11.9px;
-    font-weight: 700;
+    font-weight: 400;
     text-wrap: auto;
 }
 .free-gift-progress img {

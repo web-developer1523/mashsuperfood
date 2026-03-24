@@ -1,7 +1,7 @@
 {% comment %} Featured Collection Assets {% endcomment %}
-<link rel="preload" href="{{ 'section-featured-collection.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'section-featured-collection.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'section-featured-collection.css' | asset_url }}"></noscript>
-<link rel="preload" href="{{ 'component-product-grid.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'component-product-grid.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'component-product-grid.css' | asset_url }}"></noscript>
 
 {% comment %} Featured Collection Logic {% endcomment %}
@@ -118,7 +118,7 @@
   data-section-id="{{ section.id }}"
   data-section-type="carousel"
   data-section-loaded="false"
-  data-asset-url="{{ 'carousel.js' | asset_url }}"
+  data-asset-url="{{ 'carousel.aio.min.js' | asset_url }}"
   data-items-per-page="{{ section.settings.items_per_page }}">
 
   <div class="grid__wrapper relative section-featured-collection__wrapper--{%- if carousel -%}carousel{%- else -%}grid{%- endif -%}">

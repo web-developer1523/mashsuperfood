@@ -1,0 +1,11 @@
+{% if template == 'index' %}
+{% render 'avada-seo-critical-css-homepage'%}
+{% elsif template contains 'product' %}
+{% render 'avada-seo-critical-css-products'%}
+{% elsif template contains 'collection' %}
+{% render 'avada-seo-critical-css-collections'%}
+{% elsif template contains 'blog' or template contains 'article' %}
+{% render 'avada-seo-critical-css-articles'%}
+{% elsif template contains 'page' %}
+{% render 'avada-seo-critical-css-pages'%}
+{% endif %}

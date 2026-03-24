@@ -3,6 +3,7 @@
   Expects: addon_product (optional Product object), addon_product_handle (product handle – used when all_products doesn't include the product)
 {% endcomment %}
 {%- assign addon_variant = addon_product.selected_or_first_available_variant -%}
+{%- assign addon_thumb_image = addon_variant.featured_media.preview_image | default: addon_variant.image | default: addon_product.featured_image | default: addon_product.images.first -%}
 {%- if addon_product != blank and addon_product.available and addon_variant != blank -%}
 <div class="matcha-whisk-addon mt3 mb2" data-matcha-whisk-addon>
   <label class="matcha-whisk-addon__label flex v-center">
@@ -13,7 +14,18 @@
       value="{{ addon_variant.id }}"
       data-variant-id="{{ addon_variant.id }}"
     >
-    <span class="matcha-whisk-addon__text">{{ addon_label | default: 'Add Whisk' }} {{ addon_variant.price | money }}</span>
+    <span class="matcha-whisk-addon__thumb">
+      {%- if addon_thumb_image != blank -%}
+        {{
+          addon_thumb_image
+          | image_url: width: 64, height: 64, crop: 'center'
+          | image_tag: loading: 'lazy', alt: addon_product.title, class: 'matcha-whisk-addon__thumb-img', width: 32, height: 32
+        }}
+      {%- else -%}
+        <span class="matcha-whisk-addon__thumb-placeholder" aria-hidden="true"></span>
+      {%- endif -%}
+    </span>
+    <span class="matcha-whisk-addon__text">{{ addon_label | default: 'Add premium bamboo Matcha whisk' }} {{ addon_variant.price | money }}</span>
   </label>
 </div>
 {%- elsif addon_product_handle != blank -%}
@@ -26,7 +38,10 @@
       data-variant-id=""
       disabled
     >
-    <span class="matcha-whisk-addon__text">{{ addon_label | default: 'Add Whisk' }} <span class="matcha-whisk-addon__price">...</span></span>
+    <span class="matcha-whisk-addon__thumb">
+      <span class="matcha-whisk-addon__thumb-placeholder" aria-hidden="true"></span>
+    </span>
+    <span class="matcha-whisk-addon__text">{{ addon_label | default: 'Add premium bamboo Matcha whisk' }} <span class="matcha-whisk-addon__price"></span></span>
   </label>
 </div>
 {%- endif -%}
@@ -78,19 +93,40 @@
     var handle = container.getAttribute('data-product-handle');
     if (!handle) return;
 
-    fetch('/products/' + handle + '.js')
-      .then(function (res) { return res.json(); })
+    fetch('/products/' + encodeURIComponent(handle) + '.js')
+      .then(function (res) {
+        return res.json().then(function (data) {
+          return res.ok ? data : Promise.reject(data);
+        });
+      })
       .then(function (product) {
         if (!product || !product.variants || product.variants.length === 0) return;
         var variant = product.variants[0];
         var checkbox = container.querySelector('.matcha-whisk-addon__checkbox');
         var priceEl = container.querySelector('.matcha-whisk-addon__price');
+        var thumbWrap = container.querySelector('.matcha-whisk-addon__thumb');
         if (!checkbox || !priceEl) return;
 
         checkbox.setAttribute('data-variant-id', variant.id);
         checkbox.removeAttribute('disabled');
         var priceFormatted = (variant.price / 100).toFixed(2);
         priceEl.textContent = '€' + priceFormatted.replace('.', ',');
+        if (thumbWrap) {
+          var imageSrc = '';
+          if (variant.featured_image && variant.featured_image.src) {
+            imageSrc = variant.featured_image.src;
+          } else if (typeof product.featured_image === 'string' && product.featured_image) {
+            imageSrc = product.featured_image;
+          } else if (product.featured_image && product.featured_image.src) {
+            imageSrc = product.featured_image.src;
+          } else if (product.images && product.images.length > 0) {
+            imageSrc = typeof product.images[0] === 'string' ? product.images[0] : (product.images[0].src || '');
+          }
+
+          if (imageSrc) {
+            thumbWrap.innerHTML = '<img class="matcha-whisk-addon__thumb-img" src="' + imageSrc + '" alt="Matcha whisk" loading="lazy" width="32" height="32">';
+          }
+        }
 
         checkbox.addEventListener('change', function () {
           if (!this.checked) return;
@@ -126,6 +162,7 @@
       .catch(function (err) {
         var priceEl = container.querySelector('.matcha-whisk-addon__price');
         if (priceEl) priceEl.textContent = '';
+        console.error('Matcha whisk addon fetch error', err);
       });
   })();
 </script>
@@ -146,5 +183,27 @@
   }
   .matcha-whisk-addon__text {
     font-weight: 500;
+  }
+  .matcha-whisk-addon__thumb {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+  }
+  .matcha-whisk-addon__thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .matcha-whisk-addon__thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 </style>
