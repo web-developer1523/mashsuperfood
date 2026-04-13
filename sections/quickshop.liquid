@@ -62,7 +62,7 @@
   {% comment %} Product Quickshop Assets {% endcomment %}
   <link
     rel="preload"
-    href="{{ 'section-main-product.aio.min.css' | asset_url }}"
+    href="{{ 'section-main-product.css' | asset_url }}"
     as="style"
     onload="this.onload=null;this.rel='stylesheet'"
   >
@@ -71,7 +71,7 @@
 
 <link
   rel="preload"
-  href="{{ 'component-quickshop.aio.min.css' | asset_url }}"
+  href="{{ 'component-quickshop.css' | asset_url }}"
   as="style"
   onload="this.onload=null;this.rel='stylesheet'"
 >
@@ -380,7 +380,7 @@
   </div>
 {%- endif -%}
 
-<script src="{{ 'product-quickshop.aio.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-quickshop.js' | asset_url }}" defer="defer"></script>
 <style>
   {%- if section.settings.enable_quick_add -%}
     .product-listing__quickview-trigger svg.quickview-trigger--search {

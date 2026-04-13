@@ -1,7 +1,7 @@
 {% comment %} Addresses Assets {% endcomment %}
 <link
   rel="preload"
-  href="{{ 'section-customers.aio.min.css' | asset_url }}"
+  href="{{ 'section-customers.css' | asset_url }}"
   as="style"
   onload="this.onload=null;this.rel='stylesheet'"
 >
@@ -11,7 +11,7 @@
 <section
   class="account-addresses pt9 pb9 no-section-animation"
   data-section-type="customer"
-  data-asset-url="{{ 'section-customers.aio.min.js' | asset_url }}"
+  data-asset-url="{{ 'section-customers.js' | asset_url }}"
 >
   <div class="grid__wrapper">
     <h1 class="span-12 auto a-center mb8">{{ 'customer.addresses.title' | t }}</h1>

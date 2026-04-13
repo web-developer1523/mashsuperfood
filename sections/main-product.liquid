@@ -100,9 +100,9 @@
 -%}
 
 {% comment %} Product Page Assets {% endcomment %}
-<link rel="preload" href="{{ 'section-main-product.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'section-main-product.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'section-main-product.css' | asset_url }}"></noscript>
-<link rel="preload" href="{{ 'component-accordions.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'component-accordions.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'component-accordions.css' | asset_url }}"></noscript>
 
 {%- if has_media -%}
@@ -154,7 +154,7 @@
   {% if section.settings.click_to_enlarge %}
   data-click-to-enlarge="true".
   {% endif %}
-  data-asset-url="{{ 'section-product.aio.min.js' | asset_url }}"
+  data-asset-url="{{ 'section-product.js' | asset_url }}"
   data-product-complementary-products="true"
   data-initial-variant="{{ current_variant.featured_media.id }}">
 
@@ -395,6 +395,7 @@ fill:#cca918;
               <script>
                 document.addEventListener("DOMContentLoaded", function () {
                   const locale = Shopify?.locale || "en";
+                  const whiskPrice = {{ whisk_addon_product.price | money | json }};
               
                   const translations = {
                     en: "Add premium bamboo Matcha whisk",
@@ -406,8 +407,8 @@ fill:#cca918;
                   const textEl = document.querySelector(".matcha-whisk-addon__text");
                   if (!textEl) return;
 
-                  // Set translated text only
-                  textEl.textContent = translations[locale] || translations["en"];
+                  const baseText = translations[locale] || translations["en"];
+                  textEl.textContent = whiskPrice ? `${baseText} (${whiskPrice})` : baseText;
                 });
               </script>
 
@@ -442,7 +443,7 @@ fill:#cca918;
                       {% if product.description contains '[#' %}
                         {{ product.description | split: '[#' | first }}
                       {% else %}
-                        {{ product.description | replace: '<img  loading="lazy"', '<img' }}
+                        {{ product.description | replace: '<img ', '<img' }}
                       {% endif %}
                     {% endcapture %}
                     {%
@@ -459,7 +460,7 @@ fill:#cca918;
                   {% if product.description contains '[#' %}
                     {{ product.description | split: '[#' | first }}
                   {% else %}
-                    {{ product.description | replace: '<img', '<img loading="lazy"' | replace: '<iframe', '<iframe loading="lazy"' | replace: '<video>', '<video preload="none">' | replace: '<video ', '<video preload="none" ' }}
+                    {{ product.description | replace: '<img', '<img' | replace: '<iframe', '<iframe' | replace: '<video>', '<video preload="none">' | replace: '<video ', '<video' }}
                   {% endif %}
                 </div>
                 {% endif %}

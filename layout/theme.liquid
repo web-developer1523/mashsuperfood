@@ -18,10 +18,10 @@
     {%- endunless -%}
 
     <!-- Preload onDomain stylesheets and script libraries -->
-    <link rel="preload" href="{{ 'theme.aio.min.css' | asset_url }}" as="style">
-    <link rel="preload" href="{{ 'theme.aio.min.js' | asset_url }}" as="script">
-    <link rel="preload" href="{{ 'vendor-flickity.aio.min.js' | asset_url }}" as="script">
-    <link rel="preload" href="{{ 'vendor-masonry.aio.min.js' | asset_url }}" as="script">
+    <link rel="preload" href="{{ 'theme.css' | asset_url }}" as="style">
+    <link rel="preload" href="{{ 'theme.js' | asset_url }}" as="script">
+    <link rel="preload" href="{{ 'vendor-flickity.js' | asset_url }}" as="script">
+    <link rel="preload" href="{{ 'vendor-masonry.js' | asset_url }}" as="script">
 
     {% if settings.favicon %}
       <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 32, height: 32 }}" type="image/png">
@@ -49,10 +49,10 @@
 {{ 'theme.css' | asset_url | stylesheet_tag: preload }}
 <!-- AVADA SPEEDUP PRELOAD END -->
     <!-- AVADA SPEEDUP PRELOAD START -->
-{{ 'slick.aio.min.css' | asset_url | stylesheet_tag: preload }}
+{{ 'slick.css' | asset_url | stylesheet_tag: preload }}
 <!-- AVADA SPEEDUP PRELOAD END -->
     <!-- AVADA SPEEDUP PRELOAD START -->
-{{ 'slick-theme.aio.min.css' | asset_url | stylesheet_tag: preload }}
+{{ 'slick-theme.css' | asset_url | stylesheet_tag: preload }}
 <!-- AVADA SPEEDUP PRELOAD END -->
 
     {%- unless settings.main_font.system? -%}
@@ -146,20 +146,20 @@
 
     <script type="text/javascript">
       var jsAssets = {
-        "zoom": {{ 'vendor-zoom.aio.min.js' | asset_url | json }},
+        "zoom": {{ 'vendor-zoom.js' | asset_url | json }},
         "flickity": {{ 'vendor-flickity.js' | asset_url | json }},
-        "product": {{ 'product.aio.min.js' | asset_url | json }},
-        "productModel": {{ 'product-model.aio.min.js' | asset_url | json }},
-        "productVideo": {{ 'product-video.aio.min.js' | asset_url | json }},
-        "productPickupAvailability": {{ 'pickup-availability.aio.min.js' | asset_url | json }},
-        "productComplementaryProducts": {{ 'complementary-products.aio.min.js' | asset_url | json }}
+        "product": {{ 'product.js' | asset_url | json }},
+        "productModel": {{ 'product-model.js' | asset_url | json }},
+        "productVideo": {{ 'product-video.js' | asset_url | json }},
+        "productPickupAvailability": {{ 'pickup-availability.js' | asset_url | json }},
+        "productComplementaryProducts": {{ 'complementary-products.js' | asset_url | json }}
       }
     </script>
 
-    <script src="{{ 'cart.aio.min.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 
     {%- if settings.product_grid_video -%}
-      <script src="{{ 'vendor-video.aio.min.js' | asset_url }}" defer></script>
+      <script src="{{ 'vendor-video.js' | asset_url }}" defer></script>
     {%- endif -%}
 
     {%- render 'snip-photoswipe' -%}
@@ -171,7 +171,7 @@
     ></aside>
 
     <wau-popover-loader
-      data-asset-url="{{ 'vendor-popover-polyfill.aio.min.js' | asset_url }}"
+      data-asset-url="{{ 'vendor-popover-polyfill.js' | asset_url }}"
       data-css-class="popover"
     ></wau-popover-loader>
     <script>
@@ -1217,6 +1217,46 @@
   </script>
   {% comment %} end price change {% endcomment %}
 <style>
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) {
+    position: relative;padding: 10px 10px 30px!important;
+  }
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .processed-for-saving {position: absolute;right: 12px;bottom: 5px;}
+
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .appstle_subscription_radio_wrapper {
+    position: static;
+    }
+
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .appstle_subscription_wrapper_option  .saving-text {
+  display: none;
+  }
+  
+
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(2) {
+    position: relative;padding: 10px 10px 30px!important;
+  }
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(2) .processed-for-saving {position: absolute;right: 12px;bottom: 5px;}
+
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(2) .appstle_subscription_radio_wrapper {
+    position: static;
+    }
+
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(2) .appstle_subscription_wrapper_option  .saving-text {
+  display: none;
+  }
+  {% comment %} .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .processed-for-saving {
+    position: relative;
+    left: 465px;
+}
+.appstle_subscription_wrapper_option .single_pack_option:nth-child(2) .processed-for-saving {
+  position: relative;
+  left: 465px;
+} {% endcomment %}
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .saving-text {
+    display:none;
+  }
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(2) .saving-text {
+    display:none;
+  }
   .product-loop__item[data-alpha="MASH® Matcha Bamboo Spoon Gift"] {
     display: none;
 }
@@ -1343,6 +1383,22 @@ html[lang="nl"] .appstle_subscription_wrapper_option .single_pack_option input +
   background-color: #2a6d2e !important;
 } {% endcomment %}
 @media only screen and (max-width: 575px) {
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(1){
+    padding:10px !important;
+  }
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .processed-for-saving{
+      position: sticky;
+      right: 0; 
+      bottom: 0; 
+  }
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(2){
+    padding:10px !important;
+  }
+  .appstle_subscription_wrapper_option .single_pack_option:nth-child(2) .processed-for-saving{
+      position: sticky;
+      right: 0; 
+      bottom: 0; 
+  }
 
   .appstle_subscription_wrapper_option .single_pack_option:nth-child(1) .inserted-block {
     {% comment %} position: absolute;
@@ -1771,6 +1827,293 @@ const wait = setInterval(() => {
       
       });
       </script>
-  
+      {% comment %} <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const MINIMUM_ORDER_VALUE = 20;
+          let cachedCartTotal = null;
+          let lastUpdateTime = 0;
+          
+          // Get current product price instantly from DOM
+          function getProductPrice() {
+            const priceElement = document.querySelector('[data-regular-price]');
+            if (priceElement) {
+              const priceText = priceElement.innerText.trim();
+              const priceMatch = priceText.match(/[\d.,]+/);
+              if (priceMatch) {
+                return parseFloat(priceMatch[0].replace(',', '.'));
+              }
+            }
+            return 0;
+          }
+          
+          // Get current quantity instantly from DOM
+          function getQuantity() {
+            const qtyInput = document.querySelector('.formQty, [name="quantity"]');
+            if (qtyInput && qtyInput.value) {
+              return parseInt(qtyInput.value) || 1;
+            }
+            return 1;
+          }
+          
+          // Fast cart check with cache
+          async function getCartTotalFast() {
+            // Return cached value if less than 500ms old
+            const now = Date.now();
+            if (cachedCartTotal !== null && (now - lastUpdateTime) < 500) {
+              return cachedCartTotal;
+            }
+            
+            try {
+              const response = await fetch('/cart.js', {
+                headers: { 'Cache-Control': 'no-cache' }
+              });
+              const cart = await response.json();
+              cachedCartTotal = cart.total_price / 100;
+              lastUpdateTime = now;
+              return cachedCartTotal;
+            } catch (error) {
+              console.error('Error fetching cart:', error);
+              return cachedCartTotal || 0;
+            }
+          }
+          
+          // Fast check if product is in cart
+          async function isProductInCartFast() {
+            try {
+              const response = await fetch('/cart.js');
+              const cart = await response.json();
+              const variantId = {{ product.selected_or_first_available_variant.id }};
+              return cart.items.some(item => item.id === variantId);
+            } catch (error) {
+              return false;
+            }
+          }
+          
+          // Disable all payment options instantly
+          function disablePaymentOptions(remainingAmount) {
+            // Disable Shop Pay button
+            const shopPayButton = document.querySelector('shop-pay-wallet-button');
+            if (shopPayButton && !shopPayButton.hasAttribute('disabled')) {
+              shopPayButton.setAttribute('disabled', 'disabled');
+              shopPayButton.style.opacity = '0.5';
+              shopPayButton.style.pointerEvents = 'none';
+            }
+            
+            // Disable Buy Now button
+            const buyNowButton = document.querySelector('.shopify-payment-button__button');
+            if (buyNowButton && !buyNowButton.disabled) {
+              buyNowButton.disabled = true;
+              buyNowButton.style.opacity = '0.5';
+              buyNowButton.style.cursor = 'not-allowed';
+              
+              if (!buyNowButton.getAttribute('data-original-text')) {
+                buyNowButton.setAttribute('data-original-text', buyNowButton.innerHTML);
+              }
+              
+              buyNowButton.innerHTML = `Buy Now (Add €${remainingAmount} more)`;
+            }
+            
+            // Disable More payment options link
+            const moreOptionsLink = document.querySelector('#more-payment-options-link, .shopify-payment-button__more-options');
+            if (moreOptionsLink && !moreOptionsLink.hasAttribute('data-disabled')) {
+              moreOptionsLink.setAttribute('data-disabled', 'true');
+              moreOptionsLink.style.opacity = '0.5';
+              moreOptionsLink.style.cursor = 'not-allowed';
+              moreOptionsLink.style.pointerEvents = 'none';
+              
+              if (!moreOptionsLink.getAttribute('data-original-text')) {
+                moreOptionsLink.setAttribute('data-original-text', moreOptionsLink.innerHTML);
+              }
+            }
+          }
+          
+          // Enable all payment options instantly
+          function enablePaymentOptions() {
+            const shopPayButton = document.querySelector('shop-pay-wallet-button');
+            if (shopPayButton) {
+              shopPayButton.removeAttribute('disabled');
+              shopPayButton.style.opacity = '1';
+              shopPayButton.style.pointerEvents = 'auto';
+            }
+            
+            const buyNowButton = document.querySelector('.shopify-payment-button__button');
+            if (buyNowButton) {
+              buyNowButton.disabled = false;
+              buyNowButton.style.opacity = '1';
+              buyNowButton.style.cursor = 'pointer';
+              
+              if (buyNowButton.getAttribute('data-original-text')) {
+                buyNowButton.innerHTML = buyNowButton.getAttribute('data-original-text');
+              }
+            }
+            
+            const moreOptionsLink = document.querySelector('#more-payment-options-link, .shopify-payment-button__more-options');
+            if (moreOptionsLink) {
+              moreOptionsLink.style.opacity = '1';
+              moreOptionsLink.style.cursor = 'pointer';
+              moreOptionsLink.style.pointerEvents = 'auto';
+              moreOptionsLink.removeAttribute('data-disabled');
+              
+              if (moreOptionsLink.getAttribute('data-original-text')) {
+                moreOptionsLink.innerHTML = moreOptionsLink.getAttribute('data-original-text');
+              }
+            }
+          }
+          
+          // Show/hide message instantly
+          function updateMessage(show, remainingAmount) {
+            const paymentContainer = document.querySelector('.product-additional-buttons');
+            if (!paymentContainer) return;
+            
+            let messageDiv = paymentContainer.querySelector('.min-order-message');
+            
+            if (show) {
+              if (!messageDiv) {
+                messageDiv = document.createElement('div');
+                messageDiv.className = 'min-order-message';
+                messageDiv.style.cssText = `
+                  padding: 12px;
+                  text-align: center;
+                  font-size: 14px;
+                `;
+                paymentContainer.appendChild(messageDiv);
+              }
+              messageDiv.innerHTML = `
+              Minimum order value is €${MINIMUM_ORDER_VALUE} 
+              `;
+              messageDiv.style.display = 'block';
+            } else {
+              if (messageDiv) {
+                messageDiv.style.display = 'none';
+              }
+            }
+          }
+          
+          // Main validation - optimized for speed
+          async function validateAndControlButton() {
+            const productPrice = getProductPrice();
+            const quantity = getQuantity();
+            const currentProductTotal = productPrice * quantity;
+            
+            // Get cart total (cached)
+            const cartTotal = await getCartTotalFast();
+            
+            // Check if product is already in cart (cached check)
+            let isInCart = false;
+            try {
+              const response = await fetch('/cart.js');
+              const cart = await response.json();
+              isInCart = cart.items.some(item => 
+                item.id === {{ product.selected_or_first_available_variant.id }}
+              );
+            } catch(e) {}
+            
+            // Calculate total (if product not in cart, add current product)
+            let total = cartTotal;
+            if (!isInCart) {
+              total += currentProductTotal;
+            }
+            
+            if (total < MINIMUM_ORDER_VALUE && total > 0) {
+              const remaining = (MINIMUM_ORDER_VALUE - total).toFixed(2);
+              updateMessage(true, remaining);
+              disablePaymentOptions(remaining);
+            } else {
+              updateMessage(false);
+              enablePaymentOptions();
+            }
+          }
+          
+          // Immediate validation on page load (no delay)
+          validateAndControlButton();
+          
+          // Debounced validation for user actions
+          let debounceTimer;
+          function debouncedValidate() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(validateAndControlButton, 50);
+          }
+          
+          // Listen for quantity changes instantly
+          const quantityInput = document.querySelector('.formQty, [name="quantity"]');
+          if (quantityInput) {
+            quantityInput.addEventListener('change', debouncedValidate);
+            quantityInput.addEventListener('input', debouncedValidate);
+          }
+          
+          // Listen for variant changes
+          const variantSelect = document.querySelector('[name="id"]');
+          if (variantSelect) {
+            variantSelect.addEventListener('change', debouncedValidate);
+          }
+          
+          // Fast periodic check (every 1 second instead of 2)
+          let lastTotal = 0;
+          setInterval(async () => {
+            const cartTotal = await getCartTotalFast();
+            if (cartTotal !== lastTotal) {
+              lastTotal = cartTotal;
+              validateAndControlButton();
+            }
+          }, 1000);
+          
+          // Watch for cart updates
+          document.addEventListener('cart:updated', debouncedValidate);
+          
+          // Watch for DOM changes to catch dynamic buttons
+          const observer = new MutationObserver(debouncedValidate);
+          const targetNode = document.querySelector('.product-additional-buttons') || document.body;
+          observer.observe(targetNode, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['disabled', 'class', 'style']
+          });
+          
+          // Pre-cache on page load
+          window.addEventListener('load', function() {
+            validateAndControlButton();
+          });
+        });
+      </script>
+      <style>/* Disabled Buy Now button styling */
+        .shopify-payment-button__button:disabled {
+          opacity: 0.6 !important;
+          cursor: not-allowed !important;
+        }
+        
+        /* Disabled More Payment Options link */
+        #more-payment-options-link[data-disabled="true"],
+        .shopify-payment-button__more-options[data-disabled="true"] {
+          opacity: 0.5 !important;
+          cursor: not-allowed !important;
+          pointer-events: none !important;
+          text-decoration: none !important;
+        }
+        
+        /* Disabled Shop Pay button */
+        shop-pay-wallet-button[disabled] {
+          opacity: 0.6;
+          pointer-events: none;
+        }
+        
+        /* Message animation */
+        .min-order-message {
+          animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+
+      </style> {% endcomment %}
   </body>
 </html>

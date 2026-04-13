@@ -1,5 +1,5 @@
 {% comment %} Slideshow Assets {% endcomment %}
-<link rel="preload" href="{{ 'section-slideshow.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'section-slideshow.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'section-slideshow.css' | asset_url }}"></noscript>
 
 {% comment %} Slideshow Logic {% endcomment %}
@@ -95,7 +95,7 @@
 <div
 class="global__section section-slideshow {{ section_padding }}"
 data-section-id="{{ section.id }}"
-data-asset-url="{{ 'carousel.aio.min.js' | asset_url }}"
+data-asset-url="{{ 'carousel.js' | asset_url }}"
 data-section-loaded="false"
 data-section-type="carousel">
   <div class="grid__wrapper {{ full_width }}">

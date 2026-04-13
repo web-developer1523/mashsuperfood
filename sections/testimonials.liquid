@@ -1,5 +1,5 @@
 {% comment %} Rich Text Assets {% endcomment %}
-<link rel="preload" href="{{ 'section-testimonials.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'section-testimonials.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'section-testimonials.css' | asset_url }}"></noscript>
 
 {% comment %} Testimonials logic {% endcomment %}
@@ -61,7 +61,7 @@
 <div
   class="global__section section--testimonials testimonials--{{ section.id }} {{ section_padding }}"
   data-section-id="{{ section.id }}"
-  data-asset-url="{{ 'carousel.aio.min.js' | asset_url }}"
+  data-asset-url="{{ 'carousel.js' | asset_url }}"
   data-section-type="carousel"
   data-section-loaded="false">
 
@@ -310,7 +310,7 @@
       </div><!-- /.span-12.auto -->
   </div>
 </div>
-{{ 'section-testimonials.aio.min.js' | asset_url | script_tag }}
+{{ 'section-testimonials.js' | asset_url | script_tag }}
 
 {% schema %}
 {

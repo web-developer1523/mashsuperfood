@@ -1153,6 +1153,11 @@
         "type": "shopify://apps/avada-seo-suite/blocks/avada-seo/15507c6e-1aa3-45d3-b698-7e175e033440",
         "disabled": false,
         "settings": {}
+      },
+      "1561686393582567663": {
+        "type": "shopify://apps/madgic-order-limit/blocks/limit-purchase/ad83b8ff-f1a1-4eae-9b2a-b6fe28459d93",
+        "disabled": false,
+        "settings": {}
       }
     }
   }

@@ -124,7 +124,7 @@
           }
 
           if (imageSrc) {
-            thumbWrap.innerHTML = '<img class="matcha-whisk-addon__thumb-img" src="' + imageSrc + '" alt="Matcha whisk" loading="lazy" width="32" height="32">';
+            thumbWrap.innerHTML = '<img class="matcha-whisk-addon__thumb-img" src="' + imageSrc + '" alt="Matcha whisk" width="32" height="32">';
           }
         }
 
@@ -175,14 +175,15 @@
     align-items: center;
   }
   .matcha-whisk-addon__checkbox {
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
   }
   .matcha-whisk-addon__checkbox:disabled {
     cursor: not-allowed;
   }
   .matcha-whisk-addon__text {
     font-weight: 500;
+    text-transform: capitalize;
   }
   .matcha-whisk-addon__thumb {
     width: 32px;

@@ -322,7 +322,7 @@
 {%- endif -%}
 {% assign gift_product = all_products['free-bamboo-spoon'] %}
 <div class="free-gift-progress">
-  <img  loading="lazy"
+  <img 
     src="{{ gift_product.featured_image | image_url: width: 200 }}"
     alt="{{ gift_product.title }}"
     width="200"
@@ -494,7 +494,7 @@
           <ul class="accordion-content2 sub closed">
             {% render 'cart-shipping-calculator', cart %}
           </ul>
-          <script src="{{ 'cart-shipping-calc.aio.min.js' | asset_url }}" defer></script>
+          <script src="{{ 'cart-shipping-calc.js' | asset_url }}" defer></script>
         {% endif %}
       </ul>
       {% if settings.show_shipping_countdown %}

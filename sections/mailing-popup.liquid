@@ -1,10 +1,10 @@
 {% comment %} Mailing Popup Assets {% endcomment %}
-<link rel="preload" href="{{ 'section-mailing-popup.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'section-mailing-popup.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'section-mailing-popup.css' | asset_url }}"></noscript>
 
 <div class="section-mailing-popup no-section-animation"
   data-section-id="{{ section.id }}"
-  data-asset-url="{{ 'section-mailing-popup.aio.min.js' | asset_url }}"
+  data-asset-url="{{ 'section-mailing-popup.js' | asset_url }}"
   data-section-type="mailing-popup">
   <div class="js-popup-overlay newsletter__popup-overlay"></div>
   <div class="js-popup newsletter__popup-container"

@@ -1,5 +1,5 @@
 {% comment %} Hero video with text Assets {% endcomment %}
-<link rel="preload" href="{{ 'section-video-with-text.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'section-video-with-text.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'section-video-with-text.css' | asset_url }}"></noscript>
 
 {% comment %} Hero video with text logic {% endcomment %}
@@ -138,7 +138,7 @@
 <div
   class="global__section section-video-with-text video-with-text-{{ section.id }} {{ class }} {% if section.settings.section_width == 'wide' %} py0 {% endif %}{{ section_padding }} {% if section.settings.color_header %}no-section-animation{% endif %}"
   data-section-id="{{ section.id }}"
-  data-asset-url="{{ 'section-featured-video.aio.min.js' | asset_url }}"
+  data-asset-url="{{ 'section-featured-video.js' | asset_url }}"
   data-section-type="featured-video">
 
   <div class="flex__wrapper {% if section.settings.desktop_video_placement == 'left' %}reverse{% endif %}">

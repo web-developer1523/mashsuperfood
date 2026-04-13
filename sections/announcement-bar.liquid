@@ -1,5 +1,5 @@
 {% comment %} Announcement Bar Assets {% endcomment %}
-<link rel="preload" href="{{ 'section-announcement-bar.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'section-announcement-bar.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'section-announcement-bar.css' | asset_url }}"></noscript>
 
 {% comment %} Announcement Bar Logic {% endcomment %}
@@ -23,7 +23,7 @@
 {% comment %} Announcement Template {% endcomment %}
 <div class="section-top-bar__wrapper sm-hide js-top-bar"
   data-section-id="{{ section.id }}"
-  data-asset-url="{{ 'carousel.aio.min.js' | asset_url }}"
+  data-asset-url="{{ 'carousel.js' | asset_url }}"
   data-section-type="announcement-bar">
   <div class="grid__wrapper wrapper-nest edge cg0 block-one--{{ has_phone }} block-two--{{ has_note }} block-three--{{ has_text }} ">
     {%- for block in section.blocks -%}

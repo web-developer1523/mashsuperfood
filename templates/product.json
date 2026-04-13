@@ -66,6 +66,10 @@
           "type": "social_share",
           "disabled": true,
           "settings": {}
+        },
+        "yuko_order_limits_order_limit_product_message_NhRDmV": {
+          "type": "shopify://apps/yuko-order-limits/blocks/order-limit-product-message/52f9f134-3e39-4eea-b253-74233a4918d4",
+          "settings": {}
         }
       },
       "block_order": [
@@ -78,7 +82,8 @@
         "quantity",
         "matcha_whisk_addon",
         "buttons",
-        "social-share"
+        "social-share",
+        "yuko_order_limits_order_limit_product_message_NhRDmV"
       ],
       "settings": {
         "form_bg_color": "#fdfdfd",

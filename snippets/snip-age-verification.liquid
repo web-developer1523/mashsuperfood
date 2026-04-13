@@ -1,5 +1,5 @@
 {% comment %} Image Carousel with Text Assets {% endcomment %}
-<link rel="preload" href="{{ 'component-age-verification.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'component-age-verification.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'component-age-verification.css' | asset_url }}"></noscript>
 
 {% assign age = settings.age_limit %}
@@ -8,7 +8,7 @@
   <div id="age-check-prompt" class="modal-prompt grid__wrapper a-center">
     <div class="site-logo span-12 auto relative lh0 mt7 mb7">
       {% if settings.age_logo != blank %}
-        <a class="inline-block lh0 mb0 shrink-wrap" href="{{ routes.root_url }}"><img  loading="lazy"  style="max-width: {{ settings.logo_max_width }}px;" src="{{ settings.age_logo | image_url: width: 800 }}" alt="{{ shop.name }}"></a>
+        <a class="inline-block lh0 mb0 shrink-wrap" href="{{ routes.root_url }}"><img   style="max-width: {{ settings.logo_max_width }}px;" src="{{ settings.age_logo | image_url: width: 800 }}" alt="{{ shop.name }}"></a>
       {% else %}
         <a class="inline-block v-center m0" style="font-size: {{ settings.logo_size }}px; color: var(--age-text-color) !important;" href="{{ routes.root_url }}">{{ shop.name }}</a>
       {% endif %}

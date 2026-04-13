@@ -8,7 +8,7 @@
               <li class="border py3 px3 mb3">
                 <div class="grid__wrapper edge">
                   <div class="gravatar span-1 auto">
-                    <img  loading="lazy" src="//www.gravatar.com/avatar/{{ comment.email | remove: ' ' | strip_newlines | downcase | md5 }}" alt="{{ comment.author }}">
+                    <img  src="//www.gravatar.com/avatar/{{ comment.email | remove: ' ' | strip_newlines | downcase | md5 }}" alt="{{ comment.author }}">
                   </div>
                   <div class="comment-details span-11 auto">
                     <h4 class="mb1">{{ comment.author }}</h4>

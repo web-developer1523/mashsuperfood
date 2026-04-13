@@ -90,7 +90,7 @@
 
 {% comment %} Featured Product Assets {% endcomment %}
 {%- unless template contains 'product' -%}
-  <link rel="preload" href="{{ 'section-main-product.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="{{ 'section-main-product.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="{{ 'section-main-product.css' | asset_url }}"></noscript>
 
   {%- if first_3d_model -%}
@@ -138,7 +138,7 @@
   {% if section.settings.click_to_enlarge %}
     data-click-to-enlarge="true".
   {% endif %}
-  data-asset-url="{{ 'section-featured-product.aio.min.js' | asset_url }}"
+  data-asset-url="{{ 'section-featured-product.js' | asset_url }}"
   data-product-gallery="thumbnail"
   data-initial-variant="{{ current_variant.featured_media.id }}"
   data-product-pickup-availability="true"

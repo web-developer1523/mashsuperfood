@@ -20,7 +20,7 @@
 
 -%}
 
-<link rel="preload" href="{{ 'component-product-grid.aio.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="{{ 'component-product-grid.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="{{ 'component-product-grid.css' | asset_url }}"></noscript>
 
 {%- if recommendations.performed -%}
@@ -102,7 +102,7 @@
     data-section-id="{{ section.id }}"
     data-section-type="product-recommendations"
     data-section-loaded="false"
-    data-asset-url="{{ 'section-product-recommendations.aio.min.js' | asset_url }}"></div>
+    data-asset-url="{{ 'section-product-recommendations.js' | asset_url }}"></div>
 {%- endif -%}
 
 {% schema %}
